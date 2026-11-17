@@ -1,4 +1,5 @@
 import hafsPages from './hafs-pages.json'
+import hafsIndex from './hafs-index.json'
 import type { Mushaf } from '../types'
 
 /**
@@ -18,6 +19,7 @@ export const mushafs: Mushaf[] = [
     // والصور 608-640 صفحات الفهرس في نهاية المصحف.
     coverPages: 3,
     quranPages: 604,
+    index: hafsIndex,
     sourcePdf: 'https://dn711503.ca.archive.org/0/items/Hafs-HD/mumtaz-1.pdf',
     accent: '#0f4c3a',
     note: '640 صفحة مصوّرة — المخزن الحالي على Blogger',

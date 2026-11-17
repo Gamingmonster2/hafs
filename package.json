@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "check:mushaf": "node scripts/check-mushaf.mjs",
-    "import:mushaf": "node scripts/import-from-repo.mjs"
+    "import:mushaf": "node scripts/import-from-repo.mjs",
+    "build:index": "node scripts/build-index.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",

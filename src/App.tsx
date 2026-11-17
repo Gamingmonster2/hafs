@@ -297,15 +297,11 @@ export default function App() {
 
       <PageIndexDrawer
         open={drawerOpen}
-        totalPages={totalPages}
-        coverPages={covers}
+        index={mushaf.index}
+        currentPage={pageNumber}
         quranPages={quranPages}
-        currentPage={page}
         onClose={() => setDrawerOpen(false)}
-        onSelect={(target) => {
-          goTo(target)
-          setDrawerOpen(false)
-        }}
+        onSelect={goToNumber}
       />
 
       <div className={toast ? 'toast is-visible' : 'toast'} role="status" aria-live="polite">

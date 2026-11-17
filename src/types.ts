@@ -15,10 +15,22 @@ export interface Mushaf {
   quranPages?: number
   /** رابط ملف PDF الأصلي إن وُجد */
   sourcePdf?: string
+  /** فهرس السور/Aجزاء إن وُجد */
+  index?: MushafIndex
   /** لون مميز للمصحف */
   accent: string
   /** ملاحظة اختيارية تظهر في فهرس المصاحف */
   note?: string
+}
+
+/** فهرس السور والأجزاء مأخوذ من ترقيم مصحف المدينة المعتمد */
+export interface MushafIndex {
+  source: string
+  sourceUrl?: string
+  generatedAt?: string
+  note?: string
+  surahs: { number: number; name: string; page: number; endPage: number }[]
+  juz: { number: number; page: number; verse: string | null }[]
 }
 
 export type Theme = 'light' | 'sepia' | 'dark'

@@ -1,39 +1,34 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { MushafIndex } from '../types'
 
 interface PageIndexDrawerProps {
   open: boolean
-  totalPages: number
-  /** عدد الصور التمهيدية (الأغلفة) */
-  coverPages: number
-  /** عدد صفحات القرآن الفعلية */
-  quranPages: number
+  index?: MushafIndex
+  /** رقم صفحة المصحف الحالي (بدون الأغلفة) */
   currentPage: number
+  quranPages: number
   onClose: () => void
-  /** يستقبل رقم الصورة داخل الملف */
+  /** يستقبل رقم صفحة المصحف */
   onSelect: (page: number) => void
 }
 
-interface Entry {
-  image: number
-  label: string
-  group: 'cover' | 'quran' | 'index'
-}
+type Tab = 'surah' | 'juz'
 
 export function PageIndexDrawer({
   open,
-  totalPages,
-  coverPages,
-  quranPages,
+  index,
   currentPage,
+  quranPages,
   onClose,
   onSelect,
 }: PageIndexDrawerProps) {
-  const [filter, setFilter] = useState('')
+  const [tab, setTab] = useState<Tab>('surah')
+  const [number, setNumber] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (open) {
-      setFilter('')
+      setNumber('')
       window.setTimeout(() => inputRef.current?.focus(), 40)
     }
   }, [open])
@@ -46,31 +41,17 @@ export function PageIndexDrawer({
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [open, onClose])
 
-  const entries = useMemo<Entry[]>(() => {
-    const result: Entry[] = []
-    for (let page = 1; page <= coverPages; page += 1) {
-      result.push({ image: page, label: `غلاف ${page}`, group: 'cover' })
-    }
-    for (let page = coverPages + 1; page <= coverPages + quranPages && page <= totalPages; page += 1) {
-      result.push({ image: page, label: String(page - coverPages), group: 'quran' })
-    }
-    for (let page = coverPages + quranPages + 1; page <= totalPages; page += 1) {
-      result.push({ image: page, label: `فهرس ${page - coverPages - quranPages}`, group: 'index' })
-    }
-    return result
-  }, [coverPages, quranPages, totalPages])
+  const currentSurah = useMemo(
+    () => index?.surahs.find((surah) => currentPage >= surah.page && currentPage <= surah.endPage),
+    [index, currentPage],
+  )
+  const currentJuz = useMemo(() => {
+    if (!index) return undefined
+    return [...index.juz].reverse().find((juz) => currentPage >= juz.page)
+  }, [index, currentPage])
 
-  const visible = useMemo(() => {
-    const trimmed = filter.trim()
-    if (!trimmed) return entries
-    return entries.filter((entry) => entry.label.includes(trimmed) || String(entry.image).includes(trimmed))
-  }, [entries, filter])
-
-  const groups: { id: Entry['group']; title: string }[] = [
-    { id: 'cover', title: 'الأغلفة' },
-    { id: 'quran', title: 'صفحات المصحف' },
-    { id: 'index', title: 'الفهرس في نهاية المصحف' },
-  ]
+  const jump = Number(number)
+  const canJump = Number.isFinite(jump) && jump >= 1 && jump <= quranPages
 
   return (
     <div className={open ? 'drawer-root is-open' : 'drawer-root'} aria-hidden={!open}>
@@ -81,43 +62,91 @@ export function PageIndexDrawer({
           <button type="button" className="icon-btn" onClick={onClose} aria-label="إغلاق الفهرس">✕</button>
         </div>
 
-        <div className="drawer__search">
+        <form
+          className="drawer__search"
+          onSubmit={(event) => {
+            event.preventDefault()
+            if (!canJump) return
+            onSelect(Math.trunc(jump))
+            onClose()
+          }}
+        >
           <input
             ref={inputRef}
             inputMode="numeric"
-            placeholder="ابحث برقم الصفحة…"
-            value={filter}
-            onChange={(event) => setFilter(event.target.value)}
-            aria-label="ابحث برقم الصفحة"
+            pattern="[0-9]*"
+            placeholder="رقم الصفحة للبحث السريع…"
+            value={number}
+            onChange={(event) => setNumber(event.target.value)}
+            aria-label="رقم الصفحة للبحث السريع"
           />
-        </div>
+          <button type="submit" className="mini-btn" disabled={!canJump}>اذهب</button>
+        </form>
 
-        <div className="drawer__grid">
-          {groups.map((group) => {
-            const items = visible.filter((entry) => entry.group === group.id)
-            if (items.length === 0) return null
-            return (
-              <section key={group.id} className="drawer__section">
-                <h3>{group.title}</h3>
-                <div className="drawer__cells">
-                  {items.map((entry) => (
-                    <button
-                      key={entry.image}
-                      type="button"
-                      title={`الصورة ${entry.image}`}
-                      className={entry.image === currentPage ? 'page-cell is-current' : 'page-cell'}
-                      onClick={() => onSelect(entry.image)}
-                      aria-current={entry.image === currentPage ? 'page' : undefined}
-                    >
-                      {entry.label}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )
-          })}
-          {visible.length === 0 && <p className="drawer__empty">لا توجد صفحة مطابقة.</p>}
-        </div>
+        {!index ? (
+          <p className="drawer__empty">لا يوجد فهرس لهذا المصحف بعد.</p>
+        ) : (
+          <>
+            <div className="drawer__tabs" role="tablist" aria-label="نوع الفهرس">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={tab === 'surah'}
+                className={tab === 'surah' ? 'is-active' : ''}
+                onClick={() => setTab('surah')}
+              >
+                السور
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={tab === 'juz'}
+                className={tab === 'juz' ? 'is-active' : ''}
+                onClick={() => setTab('juz')}
+              >
+                الأجزاء
+              </button>
+            </div>
+
+            <div className="drawer__list">
+              {tab === 'surah' &&
+                index.surahs.map((surah) => (
+                  <button
+                    key={surah.number}
+                    type="button"
+                    className={`index-row ${currentSurah?.number === surah.number ? 'is-current' : ''}`}
+                    onClick={() => {
+                      onSelect(surah.page)
+                      onClose()
+                    }}
+                  >
+                    <span className="index-row__num">{surah.number}</span>
+                    <span className="index-row__name">{surah.name}</span>
+                    <span className="index-row__page">ص {surah.page}</span>
+                  </button>
+                ))}
+
+              {tab === 'juz' &&
+                index.juz.map((juz) => (
+                  <button
+                    key={juz.number}
+                    type="button"
+                    className={`index-row ${currentJuz?.number === juz.number ? 'is-current' : ''}`}
+                    onClick={() => {
+                      onSelect(juz.page)
+                      onClose()
+                    }}
+                  >
+                    <span className="index-row__num">{juz.number}</span>
+                    <span className="index-row__name">الجزء {juz.number}</span>
+                    <span className="index-row__page">ص {juz.page}</span>
+                  </button>
+                ))}
+            </div>
+
+            {index.source && <p className="drawer__source">المصدر: {index.source}</p>}
+          </>
+        )}
       </aside>
     </div>
   )
