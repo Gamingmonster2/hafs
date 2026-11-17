@@ -1,0 +1,14 @@
+{
+  "name": "Quran Complex — مصاحف رقمية",
+  "short_name": "مصاحف",
+  "description": "قارئ مصاحف رقمية سريع ومريح",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ea",
+  "theme_color": "#0f4c3a",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

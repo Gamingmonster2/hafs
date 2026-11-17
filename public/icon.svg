@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Quran Complex">
+  <rect width="512" height="512" rx="96" fill="#0f4c3a"/>
+  <path d="M118 126c48-18 92-14 138 10 46-24 90-28 138-10v260c-48-18-92-14-138 10-46-24-90-28-138-10z" fill="none" stroke="#e9c46a" stroke-width="22" stroke-linejoin="round"/>
+  <path d="M256 136v260" stroke="#e9c46a" stroke-width="14"/>
+  <path d="M160 200h60M160 248h60M292 200h60M292 248h60" stroke="#f7f3ea" stroke-width="12" stroke-linecap="round" opacity=".85"/>
+</svg>
