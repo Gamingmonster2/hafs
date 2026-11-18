@@ -121,7 +121,7 @@ scripts/check-mushaf.mjs    فحص صحة الروابط
 ## معمارية النشر (مستودع واحد + بوابة Worker)
 
 - **المستودع `Gamingmonster2/hafs`** يحمل الكود وبيانات المصاحف الستة، ويُبنى مرة واحدة.
-- **`worker/index.js`** هو واجهة النطاق: صفحة هبوط Glassmorphism على `qurancomplex.ly`، وتوجيه ذكي للنطاقات الفرعية الستة إلى **نفس البناء الموحّد** (وليس إلى المستودعات القديمة المنفصلة).
+- **`worker/index.js`** هو واجهة النطاق: صفحة هبوط Glassmorphism على `qurancomplex.ly`، وتوجيه ذكي للنطاقات الفرعية الستة إلى **نفس البناء الموحّد** (وليس إلى المستودعات القديمة المنفصلة). التصميم يستخدم design tokens بأسلوب shadcn/ui وتأثيرات Magic UI (Aurora / Spotlight / Shine border) بصيغة CSS مدمجة تعمل في Worker واحد.
 - الكود يكتشف النطاق الفرعي تلقائياً ويفتح الرواية المناسبة (`mushafFromHost()` في `src/App.tsx`)، وتبقى القائمة المنسدلة ظاهرة للتنقّل بين الروايات، وتبقى `?mushaf=` و`?page=` تعملان أيضاً.
 - `wrangler.toml` يضبط المسارات و`READER_BASE` (مصدر التطبيق). الافتراضي معاينة GitHub Pages، وبعد إنشاء مشروع Cloudflare Pages يُفضَّل ضبطه على `https://<CF_PAGES_PROJECT>.pages.dev/`.
 

@@ -1,7 +1,7 @@
 /**
  * بوابة qurancomplex.ly: صفحة هبوط على النطاق الرئيسي، وتوجيه ذكي للنطاقات الفرعية.
- * النطاقات الفرعية تُخدم من بناء التطبيق الموحّد (كافة الروايات في مستودع واحد)،
- * ويتم اختيار الرواية تلقائياً داخل التطبيق من خلال اسم النطاق.
+ * التصميم يستخدم design tokens بأسلوب shadcn/ui وتأثيرات Magic UI
+ * (Aurora, Spotlight card, Shine border, layering) بصيغة CSS مدمجة تعمل في Worker واحد.
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
@@ -17,7 +17,7 @@ const ROUTES = {
   'douri.qurancomplex.ly': 'douri',
 }
 
-/** صفحة الهبوط للنطاق الرئيسي (مبنية على تصميم Glassmorphism الأصلي) */
+/** صفحة الهبوط للنطاق الرئيسي */
 const landingHtml = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -30,144 +30,328 @@ const landingHtml = `<!DOCTYPE html>
   <meta property="og:type" content="website">
   <title>مجمع القرآن الرقمي | QURAN COMPLEX</title>
   <link rel="canonical" href="https://qurancomplex.ly/">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
+    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
     :root {
-      --gold: #d4af37;
-      --bg: #fdfdfd;
-      --text: #222;
-      --card-bg: rgba(255, 255, 255, 0.7);
-      --border: rgba(212, 175, 55, 0.3);
-      --shadow: rgba(0, 0, 0, 0.05);
+      --bg: #f6f6f4;
+      --fg: #18181b;
+      --muted: #71717a;
+      --card: rgba(255, 255, 255, 0.62);
+      --card-border: rgba(255, 255, 255, 0.8);
+      --gold: #b8892b;
+      --gold-2: #e6c766;
+      --ring: rgba(212, 175, 55, 0.38);
+      --spot: rgba(212, 175, 55, 0.2);
+      --radius: 22px;
+      --shadow: 0 1px 2px rgba(24, 24, 27, 0.04),
+                0 10px 30px -12px rgba(24, 24, 27, 0.18),
+                0 30px 60px -30px rgba(24, 24, 27, 0.25);
     }
+
     [data-theme="dark"] {
-      --bg: #0a0a0a;
-      --text: #eee;
-      --card-bg: rgba(20, 20, 20, 0.6);
-      --border: rgba(212, 175, 55, 0.2);
-      --shadow: rgba(0, 0, 0, 0.5);
+      --bg: #090b0a;
+      --fg: #f4f4f5;
+      --muted: #a1a1aa;
+      --card: rgba(24, 28, 26, 0.58);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --gold: #d4af37;
+      --gold-2: #f0d98a;
+      --ring: rgba(212, 175, 55, 0.42);
+      --spot: rgba(212, 175, 55, 0.16);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.5),
+                0 18px 45px -18px rgba(0, 0, 0, 0.85);
     }
+
+    * { box-sizing: border-box; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Cairo', sans-serif;
       margin: 0;
-      transition: 0.5s ease;
-      background-image: radial-gradient(circle at 50% 50%, transparent 0%, var(--bg) 100%),
-                        url('https://www.transparenttextures.com/patterns/cubes.png');
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Cairo', system-ui, sans-serif;
+      transition: background 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
     }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(120, 120, 120, 0.16) 1px, transparent 1px);
+      background-size: 28px 28px;
+      -webkit-mask-image: linear-gradient(to bottom, #000, transparent 72%);
+      mask-image: linear-gradient(to bottom, #000, transparent 72%);
+    }
+
+    /* Magic UI — Aurora background */
+    .aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .aurora span {
+      position: absolute;
+      width: 46vw;
+      height: 46vw;
+      min-width: 340px;
+      min-height: 340px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.34;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .aurora span:nth-child(1) { background: #d4af37; top: -18vw; right: -10vw; }
+    .aurora span:nth-child(2) { background: #0f766e; bottom: -22vw; left: -12vw; animation-delay: -6s; }
+    .aurora span:nth-child(3) { background: #7c3aed; top: 34%; left: 42%; opacity: 0.16; animation-delay: -12s; }
+    [data-theme="dark"] .aurora span { opacity: 0.24; }
+    @keyframes drift { to { transform: translate3d(4vw, 3vw, 0) scale(1.12); } }
+
     .container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 46px 20px 64px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
+    /* shadcn/ui — focus-visible ring + rounded control */
     .theme-toggle {
       position: fixed;
       top: 20px;
       left: 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 50%;
+      z-index: 50;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      color: var(--fg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
       cursor: pointer;
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      box-shadow: 0 4px 15px var(--shadow);
+      font-size: 18px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .header { text-align: center; margin-bottom: 60px; }
-    .header h1 { font-family: 'Amiri', serif; font-size: clamp(2.5rem, 8vw, 4rem); color: var(--gold); margin: 0; }
-    .header p { opacity: 0.7; font-size: 0.9rem; letter-spacing: 3px; font-weight: 300; }
+    .theme-toggle:hover { transform: rotate(12deg) scale(1.06); border-color: var(--ring); }
+    .theme-toggle:focus-visible, .card:focus-visible, .repo-link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--ring), var(--shadow);
+    }
+
+    .header { text-align: center; margin-bottom: 48px; animation: rise 0.7s ease both; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border: 1px solid var(--ring);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(212, 175, 55, 0.06);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+    }
+    .header h1 {
+      font-family: 'Amiri', serif;
+      font-size: clamp(2.6rem, 7vw, 4.4rem);
+      line-height: 1.2;
+      margin: 16px 0 8px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-2), var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 6px 18px rgba(212, 175, 55, 0.22));
+    }
+    .header p { margin: 0; color: var(--muted); font-size: 0.82rem; letter-spacing: 3px; font-weight: 300; }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
       width: 100%;
     }
+
+    /* Magic UI — Spotlight card + Shine border على خلفية زجاجية */
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--border);
-      padding: 40px 30px;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border-radius: 24px;
-      box-shadow: 0 10px 30px var(--shadow);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 232px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 24px;
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px) saturate(165%);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+      color: inherit;
+      text-decoration: none;
+      animation: rise 0.6s ease both;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.35s ease, border-color 0.35s ease;
     }
-    .card:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-    .card h3 { color: var(--gold); margin: 0 0 15px 0; font-size: 1.8rem; font-family: 'Amiri', serif; }
-    .card p { font-size: 0.95rem; opacity: 0.8; line-height: 1.8; margin-bottom: 20px; }
+    .grid .card:nth-child(1) { animation-delay: 0.04s; }
+    .grid .card:nth-child(2) { animation-delay: 0.09s; }
+    .grid .card:nth-child(3) { animation-delay: 0.14s; }
+    .grid .card:nth-child(4) { animation-delay: 0.19s; }
+    .grid .card:nth-child(5) { animation-delay: 0.24s; }
+    .grid .card:nth-child(6) { animation-delay: 0.29s; }
+    .card > * { position: relative; z-index: 2; }
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), var(--spot), transparent 48%);
+    }
+    .card:hover::after { opacity: 1; }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      z-index: 1;
+      border-radius: inherit;
+      padding: 1px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: conic-gradient(from var(--angle), transparent 58%, var(--gold-2) 72%, transparent 86%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+    }
+    .card:hover::before { opacity: 0.9; animation: spin-border 4s linear infinite; }
+    @keyframes spin-border { to { --angle: 360deg; } }
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212, 175, 55, 0.5);
+      box-shadow: 0 24px 60px -22px rgba(180, 137, 43, 0.38), var(--shadow);
+    }
+
+    .card__icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--gold);
+      border: 1px solid var(--ring);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.03));
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-family: 'Amiri', serif;
+      font-size: 1.65rem;
+      color: var(--gold);
+    }
+    .card p { margin: 0; font-size: 0.9rem; line-height: 1.85; color: var(--muted); }
+
     .badge {
       align-self: flex-start;
-      padding: 8px 25px;
-      border: 1px solid var(--gold);
-      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 22px;
+      border: 1px solid var(--ring);
       border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      transition: 0.3s;
+      color: var(--gold);
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
-    .card:hover .badge { background: var(--gold); color: #fff; }
+    .badge span { transition: transform 0.25s ease; }
+    .card:hover .badge {
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      color: #17140b;
+      border-color: transparent;
+    }
+    .card:hover .badge span { transform: translateX(-5px); }
+
     .seo-content {
-      margin-top: 80px;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 40px;
-      border: 1px solid var(--border);
+      margin-top: 56px;
       max-width: 900px;
-      text-align: justify;
+      padding: 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      animation: rise 0.7s ease 0.35s both;
     }
-    .seo-content h2 { color: var(--gold); font-family: 'Amiri', serif; }
-    .seo-content p { opacity: 0.8; font-size: 1rem; line-height: 2; }
-    .repo-link { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--border); }
-    footer { margin-top: 60px; opacity: 0.6; font-size: 0.75rem; letter-spacing: 2px; text-align: center; }
+    .seo-content h2 { margin: 0 0 14px; color: var(--gold); font-family: 'Amiri', serif; font-size: 1.8rem; }
+    .seo-content p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 2.1; text-align: justify; }
+
+    footer {
+      margin-top: 48px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+    }
+    .repo-link { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--ring); padding-bottom: 2px; }
+    .repo-link:hover { color: var(--gold-2); }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
     @media (max-width: 600px) {
-      .container { padding: 20px; }
+      .container { padding: 28px 16px 48px; }
       .grid { grid-template-columns: 1fr; }
+      .card { min-height: 200px; padding: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body data-theme="light">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
   <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع" aria-label="تبديل الوضع">🌓</button>
 
-  <div class="container">
+  <main class="container">
     <header class="header">
+      <span class="eyebrow">QURAN COMPLEX · منصة مصاحف رقمية</span>
       <h1>مجمع القرآن الرقمي</h1>
       <p>INDIVIDUAL TECH INFRASTRUCTURE FOR QURANIC TEXTS</p>
     </header>
 
     <div class="grid">
       <a href="https://hafs.qurancomplex.ly" class="card">
-        <div><h3>رواية حفص عن عاصم</h3><p>تصفح مصحف المدينة النبوية برواية حفص بوضوح تام، مع الحفاظ على التنسيق الأصلي للمصحف الورقي في بيئة رقمية سريعة.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية حفص عن عاصم</h3><p>تصفح مصحف المدينة النبوية برواية حفص بوضوح تام، مع الحفاظ على التنسيق الأصلي للمصحف الورقي في بيئة رقمية سريعة.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
       <a href="https://qaloon.qurancomplex.ly" class="card">
-        <div><h3>رواية قالون عن نافع</h3><p>الإصدار الرقمي المعتمد لمصحف المدينة النبوية برواية قالون، مجهز ليعمل على كافة الشاشات والمتصفحات الحديثة.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية قالون عن نافع</h3><p>الإصدار الرقمي المعتمد لمصحف المدينة النبوية برواية قالون، مجهز ليعمل على كافة الشاشات والمتصفحات الحديثة.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
       <a href="https://warsh.qurancomplex.ly" class="card">
-        <div><h3>رواية ورش عن نافع</h3><p>تصفح رقمي متطور وفق طريق الأزرق، تم بناؤه ليوفر تجربة قراءة مريحة لطلاب العلم والقراء المهتمين برواية أهل المغرب.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية ورش عن نافع</h3><p>تصفح رقمي متطور وفق طريق الأزرق، تم بناؤه ليوفر تجربة قراءة مريحة لطلاب العلم والقراء المهتمين برواية أهل المغرب.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
       <a href="https://shubah.qurancomplex.ly" class="card">
-        <div><h3>رواية شعبة عن عاصم</h3><p>المستودع الرقمي المتكامل لرواية شعبة، تم ربط الكود وتجهيز الواجهة لتقديم أفضل عرض لمصحف شعبة عن عاصم.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية شعبة عن عاصم</h3><p>المستودع الرقمي المتكامل لرواية شعبة، تم ربط الكود وتجهيز الواجهة لتقديم أفضل عرض لمصحف شعبة عن عاصم.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
       <a href="https://susi.qurancomplex.ly" class="card">
-        <div><h3>رواية السوسي عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية السوسي عن أبي عمرو البصري، تصفح رقمي سلس وبنية تحتية سريعة لخدمة طلاب العلم والمطورين.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية السوسي عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية السوسي عن أبي عمرو البصري، تصفح رقمي سلس وبنية تحتية سريعة لخدمة طلاب العلم والمطورين.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
       <a href="https://duri.qurancomplex.ly" class="card">
-        <div><h3>رواية الدوري عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية الدوري عن أبي عمرو البصري، تصفح سلس عبر خوادم حافة سريعة ومستقرة تماماً.</p></div>
-        <span class="badge">تصفح المصحف</span>
+        <div><span class="card__icon">◈</span><h3>رواية الدوري عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية الدوري عن أبي عمرو البصري، تصفح سلس عبر خوادم حافة سريعة ومستقرة تماماً.</p></div>
+        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
     </div>
 
@@ -183,16 +367,25 @@ const landingHtml = `<!DOCTYPE html>
       QURANCOMPLEX.LY &copy; 2026 ·
       <a class="repo-link" href="https://github.com/Gamingmonster2/hafs" target="_blank" rel="noreferrer">مستودع المشروع على GitHub</a>
     </footer>
-  </div>
+  </main>
 
   <script>
     function toggleTheme() {
-      document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-      localStorage.setItem('theme', document.body.getAttribute('data-theme'));
+      var next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
     }
     if (localStorage.getItem('theme')) {
       document.body.setAttribute('data-theme', localStorage.getItem('theme'));
     }
+    // Magic UI — تتبّع Spotlight لموضع المؤشر داخل البطاقة
+    document.querySelectorAll('.card').forEach(function (card) {
+      card.addEventListener('pointermove', function (event) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (event.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (event.clientY - rect.top) + 'px');
+      });
+    });
   </script>
 </body>
 </html>`
@@ -224,7 +417,7 @@ export default {
       const relativePath = url.pathname.replace(/^\/+/, '')
       const target = new URL(relativePath + url.search, base)
 
-      // الملفات ذات الاسم المجزّأ تُخزَّن طويلاً؛ صفحة HTML تُحدَّث دائماً حتى تظهر البنية الجديدة فوراً.
+      // الملفات المجزّأة تُخزَّن طويلاً؛ HTML يُحدَّث دائماً حتى تظهر البنية الجديدة فوراً.
       const isHashedAsset = /\.[0-9a-zA-Z_-]{8,}\.(js|css)$/.test(url.pathname)
       const isStaticFile = /\.(js|css|png|svg|webmanifest|ico|jpg|woff2?)$/.test(url.pathname)
       const response = await fetch(target.toString(), {
