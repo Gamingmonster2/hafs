@@ -185,8 +185,8 @@ export default function App() {
 
   /* عنوان الصفحة ووصفها وبيانات المشاركة تتبع الرواية والصفحة الحالية */
   useEffect(() => {
-    applyReaderSeo(mushaf, pageNumber, label, currentSrc || undefined)
-  }, [mushaf, pageNumber, label, currentSrc])
+    applyReaderSeo(mushaf, pageNumber, label, currentSrc || undefined, data.index)
+  }, [mushaf, pageNumber, label, currentSrc, data.index])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme

@@ -5,24 +5,42 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '2.1-seo'
+const ROUTER_VERSION = '3.0-seo-all'
+
+const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
 
 /** ملفات SEO تُولَّد في public/ وتُنشر مع القارئ، ثم يمرّرها الـ Worker على النطاق الرئيسي */
 const SEO_FILES = new Set([
   '/robots.txt',
   '/sitemap.xml',
   '/sitemap-mushafs.xml',
+  '/sitemap-images.xml',
   '/sitemap-images-amma.xml',
   '/sitemap-images-tabarak.xml',
-  '/seo/juz-amma.html',
-  '/seo/juz-tabarak.html',
+  '/seo/juz.html',
+  '/seo/riwayat.html',
   '/manifest.webmanifest',
 ])
 
-/** عناوين قصيرة للصفحات المخصّصة */
+/** عناوين قصيرة لصفحات الأجزاء والروايات (30 + 6 + فهران) */
 const SEO_ALIASES = {
+  '/juz': '/seo/juz.html',
+  '/riwayat': '/seo/riwayat.html',
   '/juz-amma': '/seo/juz-amma.html',
   '/juz-tabarak': '/seo/juz-tabarak.html',
+}
+for (let number = 1; number <= 30; number++) {
+  SEO_ALIASES[`/juz-${number}`] = `/seo/juz-${number}.html`
+  SEO_ALIASES[`/juz/${number}`] = `/seo/juz-${number}.html`
+}
+for (const id of RIWAYAHS) {
+  SEO_ALIASES[`/riwayah/${id}`] = `/seo/riwayah-${id}.html`
+  SEO_ALIASES[`/riwayah-${id}`] = `/seo/riwayah-${id}.html`
+}
+
+/** أي ملف داخل seo/ يُسمح بتمريره (صفحات مولّدة) */
+function isGeneratedSeoFile(pathname) {
+  return /^\/seo\/[a-z0-9-]+\.html$/.test(pathname)
 }
 
 const SEO_CONTENT_TYPES = {
@@ -341,6 +359,47 @@ const landingHtml = `<!DOCTYPE html>
     .juz-strip a:hover { transform: translateY(-3px); border-color: var(--gold); }
     .juz-strip small { font-family: 'Cairo', sans-serif; color: var(--muted); font-size: 0.72rem; }
 
+    /* فهرس مختصر لكل الأجزاء والروايات */
+    .index-panel { margin-top: 34px; width: 100%; text-align: center; }
+    .index-panel details {
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      padding: 16px 22px;
+    }
+    .index-panel summary {
+      cursor: pointer;
+      color: var(--gold);
+      font-family: 'Amiri', serif;
+      font-size: 1.25rem;
+      list-style: none;
+    }
+    .index-panel summary::-webkit-details-marker { display: none; }
+    .index-panel summary::after { content: ' ▾'; font-family: 'Cairo', sans-serif; font-size: .8rem; }
+    .index-panel[open] summary::after { content: ' ▴'; }
+    .index-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+      text-align: right;
+    }
+    .index-grid--riwayat { margin-top: 12px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .index-grid a {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: inherit;
+      text-decoration: none;
+      font-size: .78rem;
+      background: rgba(212, 175, 55, .05);
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .index-grid a:hover { border-color: var(--gold); color: var(--gold); }
+
     /* قسم الروابط */
     .links-section {
       margin-top: 56px;
@@ -499,6 +558,54 @@ const landingHtml = `<!DOCTYPE html>
       <a href="/juz-tabarak">جزء تبارك <small>الجزء التاسع والعشرون · 20 صفحة</small></a>
     </nav>
 
+    <section class="index-panel" aria-labelledby="index-title">
+      <details>
+        <summary id="index-title">فهرس الأجزاء والروايات — 38 صفحة مخصّصة</summary>
+        <div class="index-grid">
+          <a href="/juz">كل الأجزاء</a>
+          <a href="/juz-1">1 · الم</a>
+          <a href="/juz-2">2 · سيقول السفهاء</a>
+          <a href="/juz-3">3 · تلك الرسل</a>
+          <a href="/juz-4">4 · لن تنالوا</a>
+          <a href="/juz-5">5 · والمحصنات</a>
+          <a href="/juz-6">6 · لا يحب الله</a>
+          <a href="/juz-7">7 · وإذا سمعوا</a>
+          <a href="/juz-8">8 · ولو أننا</a>
+          <a href="/juz-9">9 · قال الملأ</a>
+          <a href="/juz-10">10 · واعلموا</a>
+          <a href="/juz-11">11 · يعتذرون</a>
+          <a href="/juz-12">12 · وما من دابة</a>
+          <a href="/juz-13">13 · وما أبرئ</a>
+          <a href="/juz-14">14 · ربما</a>
+          <a href="/juz-15">15 · سبحان الذي</a>
+          <a href="/juz-16">16 · قال ألم</a>
+          <a href="/juz-17">17 · اقترب للناس</a>
+          <a href="/juz-18">18 · قد أفلح</a>
+          <a href="/juz-19">19 · وقال الذين</a>
+          <a href="/juz-20">20 · أمن خلق</a>
+          <a href="/juz-21">21 · اتل ما أوحي</a>
+          <a href="/juz-22">22 · ومن يقنت</a>
+          <a href="/juz-23">23 · وما لي</a>
+          <a href="/juz-24">24 · فمن أظلم</a>
+          <a href="/juz-25">25 · إليه يرد</a>
+          <a href="/juz-26">26 · حم</a>
+          <a href="/juz-27">27 · قال فما خطبكم</a>
+          <a href="/juz-28">28 · قد سمع الله</a>
+          <a href="/juz-29">29 · تبارك الذي</a>
+          <a href="/juz-30">30 · عم</a>
+        </div>
+        <div class="index-grid index-grid--riwayat">
+          <a href="/riwayat">كل الروايات</a>
+          <a href="/riwayah/hafs">حفص عن عاصم</a>
+          <a href="/riwayah/qaloon">قالون عن نافع</a>
+          <a href="/riwayah/warsh">ورش عن نافع</a>
+          <a href="/riwayah/shubah">شعبة عن عاصم</a>
+          <a href="/riwayah/susi">السوسي عن أبي عمرو</a>
+          <a href="/riwayah/douri">الدوري عن أبي عمرو</a>
+        </div>
+      </details>
+    </section>
+
     <section class="links-section" aria-labelledby="links-title">
       <h2 id="links-title">روابط ذات صلة</h2>
       <p class="links-note">جميعها مشاريعنا المرتبطة بالمستودع</p>
@@ -627,7 +734,7 @@ export default {
 
     // بيانات SEO على النطاق الرئيسي: تُقرأ من نسخة القارئ المنشورة فلا يتكرر تخزينها في الـ Worker.
     const seoPath = SEO_ALIASES[url.pathname] ?? url.pathname
-    if (!mushaf && SEO_FILES.has(seoPath)) {
+    if (!mushaf && (SEO_FILES.has(seoPath) || isGeneratedSeoFile(seoPath))) {
       return serveReaderFile(env, seoPath)
     }
 
