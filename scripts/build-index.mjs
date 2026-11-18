@@ -50,7 +50,7 @@ const output = {
   source: 'Quran.com API v4 — ترقيم مصحف المدينة النبوية (604 صفحة)',
   sourceUrl: 'https://api.quran.com/api/v4/chapters',
   generatedAt: new Date().toISOString().slice(0, 10),
-  note: 'يجوب على المستخدم مطابقة أرقام الصفحات مع الصور بصرياً قبل الاعتماد النهائي.',
+  note: 'يجب على المستخدم مطابقة أرقام الصفحات مع الصور بصرياً قبل الاعتماد النهائي.',
   surahs,
   juz,
 }

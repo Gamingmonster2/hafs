@@ -1,0 +1,29 @@
+name: Deploy Cloudflare Worker (front door)
+
+on:
+  push:
+    branches: [reader-preview, main]
+    paths:
+      - 'worker/**'
+      - 'wrangler.toml'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            deploy --config wrangler.toml
+            ${{ vars.READER_BASE && format('--var READER_BASE:{0}', vars.READER_BASE) || '' }}

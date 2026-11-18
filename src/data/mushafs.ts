@@ -12,8 +12,8 @@ export const mushafs: Mushaf[] = [
     riwayah: 'حفص عن عاصم',
     loadPages: () => import('./hafs-pages.json'),
     loadIndex: () => import('./hafs-index.json'),
-    // الصور 1-3 أغلفة، والفاتحة في الصورة 4 = صفحة المصحف 1، ثم 604 صفحة قرآن،
-    // والباقي صفحات الفهرس في نهاية المصحف.
+    // النمط مؤكّد للمصاحف الستة: الصور 1-3 أغلفة، والصورة 4 = الفاتحة (صفحة 1)،
+    // ثم 604 صفحة قرآن، والباقي فهارس في نهاية الملف.
     coverPages: 3,
     quranPages: 604,
     sourcePdf: 'https://dn711503.ca.archive.org/0/items/Hafs-HD/mumtaz-1.pdf',

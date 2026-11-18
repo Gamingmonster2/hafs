@@ -1,0 +1,18 @@
+name = "qurancomplex-router"
+main = "worker/index.js"
+compatibility_date = "2026-11-18"
+
+# البوابة تعمل على النطاق الرئيسي وكل النطاقات الفرعية.
+# DNS يجب أن يكون proxied (السحابة البرتقالية) على Cloudflare.
+routes = [
+  { pattern = "qurancomplex.ly/*", zone_name = "qurancomplex.ly" },
+  { pattern = "*.qurancomplex.ly/*", zone_name = "qurancomplex.ly" },
+]
+
+[vars]
+# المصدر الافتراضي هو معاينة GitHub Pages. بعد إنشاء مشروع Cloudflare Pages
+# بدّله إلى https://<CF_PAGES_PROJECT>.pages.dev/ (أو عيّنه كمتغير READER_BASE في GitHub).
+READER_BASE = "https://gamingmonster2.github.io/hafs/"
+
+[observability]
+enabled = true
