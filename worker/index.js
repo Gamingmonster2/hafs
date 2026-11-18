@@ -5,6 +5,7 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
+const ROUTER_VERSION = '2.0-unified'
 
 /** اسم النطاق الفرعي → معرّف الرواية في التطبيق */
 const ROUTES = {
@@ -528,6 +529,7 @@ export default {
       return json({
         ok: true,
         host: hostname,
+        router: ROUTER_VERSION,
         readerBase: env.READER_BASE || DEFAULT_READER_BASE,
         routes: Object.keys(ROUTES),
       })
@@ -552,6 +554,7 @@ export default {
       const headers = new Headers(response.headers)
       headers.set('X-Content-Type-Options', 'nosniff')
       headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+      headers.set('X-QC-Router', ROUTER_VERSION)
       if (!isStaticFile && url.pathname === '/') headers.set('Cache-Control', 'no-store')
       return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
     }
@@ -561,6 +564,7 @@ export default {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'public, max-age=3600',
         'X-Content-Type-Options': 'nosniff',
+        'X-QC-Router': ROUTER_VERSION,
       },
     })
   },

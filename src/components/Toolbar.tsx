@@ -14,6 +14,8 @@ interface ToolbarProps {
 }
 
 const REPO_URL = 'https://github.com/Gamingmonster2/hafs'
+/** الواجهة الأمامية على النطاق الرئيسي: يسمح للقارئ باختيار رواية أخرى */
+const HOME_URL = 'https://qurancomplex.ly/'
 
 const themes: { id: Theme; label: string }[] = [
   { id: 'light', label: '☀️ فاتح' },
@@ -74,6 +76,9 @@ export function Toolbar({
       </div>
 
       <nav className="toolbar__actions" aria-label="أدوات القارئ">
+        <a className="tool-btn home-btn" href={HOME_URL} title="العودة للواجهة الرئيسية" aria-label="العودة للواجهة الرئيسية">
+          <b aria-hidden="true">⌂</b><span>الرئيسية</span>
+        </a>
         <button type="button" className="icon-btn" onClick={onOpenIndex} title="فهرس الصفحات" aria-label="فهرس الصفحات">
           ☰
         </button>
