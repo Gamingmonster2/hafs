@@ -135,6 +135,16 @@ scripts/check-mushaf.mjs    فحص صحة الروابط
 
 **لماذا لا مستودعات منفصلة؟** الواجهة والفهرس والمنطق مشتركة بالكامل؛ تكرارها 6 مرات يعني 6 نسخ تحتاج صيانة متزامنة. كما أن توجيه Worker إلى المستودعات القديمة يُفقدنا التحسينات الجديدة (تحميل صفحة واحدة، الفهرس، الفلاتر، وضع التركيز، PWA).
 
+## تحسين نتائج البحث (SEO)
+
+- `npm run build:seo` (مُدمج في `npm run build`) يولّد من بيانات الفهارس وروابط الصور:
+  - `public/robots.txt`
+  - `public/sitemap.xml` → `sitemap-mushafs.xml` (873 رابطاً: الرئيسية + صفحات الروايات + الأجزاء + السور)، و`sitemap-images-amma.xml` (138 صورة)، و`sitemap-images-tabarak.xml` (120 صورة).
+  - `public/seo/juz-amma.html` و`public/seo/juz-tabarak.html`: صفحتان مخصصتان ببيانات وصفية وJSON-LD ومعرض مصغّر لصفحات الجزء في الروايات الستة (الصور محمّلة كسولة ومرتبطة بالقارئ).
+- الـ Worker يمرّر هذه الملفات على النطاق الرئيسي، ويجعل `/juz-amma` و`/juz-tabarak` عنوانين مختصرين، ويُظهر `X-QC-Router: 2.1-seo` في `/health`.
+- `src/seo.ts` يحدّث عنوان الصفحة والوصف و`canonical` و`og:image` وJSON-LD تبعاً للرواية والصفحة المفتوحة.
+- بعد النشر: أرسل `https://qurancomplex.ly/sitemap.xml` في Google Search Console وBing Webmaster Tools.
+
 ## النسخة التجريبية المنشورة الآن
 
 النسخة الحالية منشورة على فرع `gh-pages` في المستودع `Gamingmonster2/hafs`:

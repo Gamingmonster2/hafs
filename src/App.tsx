@@ -5,6 +5,7 @@ import { PageViewer } from './components/PageViewer'
 import { Toolbar } from './components/Toolbar'
 import { clampPage, coverCount, getMushaf, imagePageFromNumber, mushafs, pageLabel, quranCount } from './data/mushafs'
 import { usePersistentState } from './hooks/usePersistentState'
+import { applyReaderSeo } from './seo'
 import type { ImageStatus, MushafData, Theme } from './types'
 
 const ZOOM_STEPS = [50, 75, 100, 125, 150, 200, 250]
@@ -181,6 +182,11 @@ export default function App() {
       cancelled = true
     }
   }, [currentSrc, page, data.pages, retryCount])
+
+  /* عنوان الصفحة ووصفها وبيانات المشاركة تتبع الرواية والصفحة الحالية */
+  useEffect(() => {
+    applyReaderSeo(mushaf, pageNumber, label, currentSrc || undefined)
+  }, [mushaf, pageNumber, label, currentSrc])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme

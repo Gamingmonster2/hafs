@@ -5,7 +5,32 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '2.0-unified'
+const ROUTER_VERSION = '2.1-seo'
+
+/** ملفات SEO تُولَّد في public/ وتُنشر مع القارئ، ثم يمرّرها الـ Worker على النطاق الرئيسي */
+const SEO_FILES = new Set([
+  '/robots.txt',
+  '/sitemap.xml',
+  '/sitemap-mushafs.xml',
+  '/sitemap-images-amma.xml',
+  '/sitemap-images-tabarak.xml',
+  '/seo/juz-amma.html',
+  '/seo/juz-tabarak.html',
+  '/manifest.webmanifest',
+])
+
+/** عناوين قصيرة للصفحات المخصّصة */
+const SEO_ALIASES = {
+  '/juz-amma': '/seo/juz-amma.html',
+  '/juz-tabarak': '/seo/juz-tabarak.html',
+}
+
+const SEO_CONTENT_TYPES = {
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.html': 'text/html; charset=utf-8',
+  '.webmanifest': 'application/manifest+json; charset=utf-8',
+}
 
 /** اسم النطاق الفرعي → معرّف الرواية في التطبيق */
 const ROUTES = {
@@ -28,10 +53,15 @@ const landingHtml = `<!DOCTYPE html>
   <meta name="keywords" content="قرآن كريم, رواية حفص, رواية قالون, رواية ورش, رواية شعبة, رواية السوسي, رواية الدوري, مصحف المدينة, مجمع القرآن الرقمي, قراءات قرآنية">
   <meta property="og:title" content="مجمع القرآن الرقمي | QURAN COMPLEX">
   <meta property="og:description" content="ست روايات من مصحف المدينة النبوية في قارئ رقمي سريع يعمل على كل الأجهزة.">
+  <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar">
+  <meta property="og:url" content="https://qurancomplex.ly/">
+  <meta name="twitter:card" content="summary_large_image">
   <title>مجمع القرآن الرقمي | QURAN COMPLEX</title>
   <link rel="canonical" href="https://qurancomplex.ly/">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://qurancomplex.ly/#website","name":"مجمع القرآن الرقمي","url":"https://qurancomplex.ly/","inLanguage":"ar","description":"ست روايات من مصحف المدينة النبوية في قارئ رقمي سريع يعمل على كل الأجهزة."},{"@type":"ItemList","@id":"https://qurancomplex.ly/#mushafs","name":"مصاحف المدينة النبوية","itemListElement":[{"@type":"ListItem","position":1,"name":"رواية حفص عن عاصم","url":"https://hafs.qurancomplex.ly/"},{"@type":"ListItem","position":2,"name":"رواية قالون عن نافع","url":"https://qaloon.qurancomplex.ly/"},{"@type":"ListItem","position":3,"name":"رواية ورش عن نافع","url":"https://warsh.qurancomplex.ly/"},{"@type":"ListItem","position":4,"name":"رواية شعبة عن عاصم","url":"https://shubah.qurancomplex.ly/"},{"@type":"ListItem","position":5,"name":"رواية السوسي عن أبي عمرو","url":"https://susi.qurancomplex.ly/"},{"@type":"ListItem","position":6,"name":"رواية الدوري عن أبي عمرو","url":"https://duri.qurancomplex.ly/"}]}]}</script>
   <style>
     @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
@@ -139,7 +169,7 @@ const landingHtml = `<!DOCTYPE html>
     }
     .theme-toggle:hover { transform: rotate(12deg) scale(1.06); border-color: var(--ring); }
     .theme-toggle:focus-visible, .card:focus-visible, .repo-link:focus-visible,
-    .link-tile:focus-visible, .youtube-card:focus-visible {
+    .link-tile:focus-visible, .youtube-card:focus-visible, .juz-strip a:focus-visible {
       outline: none;
       box-shadow: 0 0 0 3px var(--ring), var(--shadow);
     }
@@ -282,6 +312,34 @@ const landingHtml = `<!DOCTYPE html>
       border-color: transparent;
     }
     .card:hover .badge span { transform: translateX(-5px); }
+
+    /* أدلة الأجزاء — روابط داخلية لصفحات SEO المخصّصة */
+    .juz-strip {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .juz-strip a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--ring);
+      background: var(--card);
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Amiri', serif;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .juz-strip a:hover { transform: translateY(-3px); border-color: var(--gold); }
+    .juz-strip small { font-family: 'Cairo', sans-serif; color: var(--muted); font-size: 0.72rem; }
 
     /* قسم الروابط */
     .links-section {
@@ -436,6 +494,11 @@ const landingHtml = `<!DOCTYPE html>
       </a>
     </div>
 
+    <nav class="juz-strip" aria-label="أدلة سريعة">
+      <a href="/juz-amma">جزء عم <small>الجزء الثلاثون · 23 صفحة</small></a>
+      <a href="/juz-tabarak">جزء تبارك <small>الجزء التاسع والعشرون · 20 صفحة</small></a>
+    </nav>
+
     <section class="links-section" aria-labelledby="links-title">
       <h2 id="links-title">روابط ذات صلة</h2>
       <p class="links-note">جميعها مشاريعنا المرتبطة بالمستودع</p>
@@ -520,6 +583,31 @@ function json(data, status = 200) {
   })
 }
 
+/** تمرير ملف ثابت من مبنى القارئ (حيث وُلد) إلى النطاق الرئيسي */
+async function serveReaderFile(env, readerPath) {
+  const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
+  const target = new URL(readerPath.replace(/^\/+/, ''), base)
+  const response = await fetch(target.toString(), {
+    headers: { 'X-Forwarded-Host': 'qurancomplex.ly' },
+    cf: { cacheEverything: true, cacheTtl: 3600 },
+  })
+
+  const headers = new Headers(response.headers)
+  const dot = readerPath.lastIndexOf('.')
+  const contentType = SEO_CONTENT_TYPES[dot === -1 ? '' : readerPath.slice(dot)]
+  if (contentType) headers.set('Content-Type', contentType)
+  headers.set('X-Content-Type-Options', 'nosniff')
+  headers.set('X-QC-Router', ROUTER_VERSION)
+  if (readerPath.endsWith('.xml') || readerPath.endsWith('robots.txt')) {
+    headers.set('Cache-Control', 'public, max-age=3600')
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
@@ -536,6 +624,13 @@ export default {
     }
 
     const mushaf = ROUTES[hostname]
+
+    // بيانات SEO على النطاق الرئيسي: تُقرأ من نسخة القارئ المنشورة فلا يتكرر تخزينها في الـ Worker.
+    const seoPath = SEO_ALIASES[url.pathname] ?? url.pathname
+    if (!mushaf && SEO_FILES.has(seoPath)) {
+      return serveReaderFile(env, seoPath)
+    }
+
     if (mushaf) {
       const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
       const relativePath = url.pathname.replace(/^\/+/, '')
