@@ -1,14 +1,19 @@
 {
-  "name": "Quran Complex — مصاحف رقمية",
-  "short_name": "مصاحف",
-  "description": "قارئ مصاحف رقمية سريع ومريح",
+  "name": "Quran Complex — المصاحف الرقمية",
+  "short_name": "المصاحف",
+  "description": "قارئ مصاحف رقمية سريع: ست روايات، فهرس السور والأجزاء، حفظ الجلسة والقراءة دون اتصال.",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f7f3ea",
+  "orientation": "any",
+  "background_color": "#f4f1ea",
   "theme_color": "#0f4c3a",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }
