@@ -1,12 +1,8 @@
-import hafsPages from './hafs-pages.json'
-import hafsIndex from './hafs-index.json'
 import type { Mushaf } from '../types'
 
 /**
- * سجل المصاحف. لإضافة مصحف جديد لاحقاً:
- * 1) أنشئ ملف روابط في `src/data/` بنفس الشكل (مصفوفة من روابط الصور).
- * 2) أضف كائنًا هنا في مصفوفة `mushafs`.
- * لا يحتاج أي مكوّن في الواجهة إلى تعديل.
+ * سجل المصاحف. كل مصحف له ملف روابط وملف فهرس يُحمّلان عند اختياره فقط،
+ * حتى لا تُحمّل روابط كل المصاحف دفعة واحدة عند فتح الموقع.
  */
 export const mushafs: Mushaf[] = [
   {
@@ -14,15 +10,75 @@ export const mushafs: Mushaf[] = [
     name: 'مصحف المدينة الشريفة — رواية حفص عن عاصم',
     shortName: 'حفص عن عاصم',
     riwayah: 'حفص عن عاصم',
-    pages: hafsPages,
+    loadPages: () => import('./hafs-pages.json'),
+    loadIndex: () => import('./hafs-index.json'),
     // الصور 1-3 أغلفة، والفاتحة في الصورة 4 = صفحة المصحف 1، ثم 604 صفحة قرآن،
-    // والصور 608-640 صفحات الفهرس في نهاية المصحف.
+    // والباقي صفحات الفهرس في نهاية المصحف.
     coverPages: 3,
     quranPages: 604,
-    index: hafsIndex,
     sourcePdf: 'https://dn711503.ca.archive.org/0/items/Hafs-HD/mumtaz-1.pdf',
     accent: '#0f4c3a',
-    note: '640 صفحة مصوّرة — المخزن الحالي على Blogger',
+    note: '640 صورة — المخزن الحالي على Blogger',
+  },
+  {
+    id: 'qaloon',
+    name: 'مصحف المدينة الشريفة — رواية قالون عن نافع',
+    shortName: 'قالون عن نافع',
+    riwayah: 'قالون عن نافع',
+    loadPages: () => import('./qaloon-pages.json'),
+    loadIndex: () => import('./qaloon-index.json'),
+    coverPages: 3,
+    quranPages: 604,
+    accent: '#7a4b8a',
+    note: '640 صورة — المخزن الحالي على Blogger',
+  },
+  {
+    id: 'warsh',
+    name: 'مصحف المدينة الشريفة — رواية ورش عن نافع',
+    shortName: 'ورش عن نافع',
+    riwayah: 'ورش عن نافع',
+    loadPages: () => import('./warsh-pages.json'),
+    loadIndex: () => import('./warsh-index.json'),
+    coverPages: 3,
+    quranPages: 604,
+    accent: '#9c4a2f',
+    note: '640 صورة — المخزن الحالي على Blogger',
+  },
+  {
+    id: 'shubah',
+    name: 'مصحف المدينة الشريفة — رواية شعبة عن عاصم',
+    shortName: 'شعبة عن عاصم',
+    riwayah: 'شعبة عن عاصم',
+    loadPages: () => import('./shubah-pages.json'),
+    loadIndex: () => import('./shubah-index.json'),
+    coverPages: 3,
+    quranPages: 604,
+    accent: '#1f5f7a',
+    note: '640 صورة — المخزن الحالي على Blogger',
+  },
+  {
+    id: 'susi',
+    name: 'مصحف المدينة الشريفة — رواية السوسي عن أبي عمرو',
+    shortName: 'السوسي عن أبي عمرو',
+    riwayah: 'السوسي عن أبي عمرو',
+    loadPages: () => import('./susi-pages.json'),
+    loadIndex: () => import('./susi-index.json'),
+    coverPages: 3,
+    quranPages: 604,
+    accent: '#8a6b1f',
+    note: '624 صورة — المخزن الحالي على Blogger',
+  },
+  {
+    id: 'douri',
+    name: 'مصحف المدينة الشريفة — رواية الدوري عن أبي عمرو',
+    shortName: 'الدوري عن أبي عمرو',
+    riwayah: 'الدوري عن أبي عمرو',
+    loadPages: () => import('./douri-pages.json'),
+    loadIndex: () => import('./douri-index.json'),
+    coverPages: 3,
+    quranPages: 604,
+    accent: '#4a5d8a',
+    note: '640 صورة — المخزن الحالي على Blogger',
   },
 ]
 
@@ -42,13 +98,10 @@ export function coverCount(mushaf: Mushaf): number {
 
 /** عدد صفحات القرآن الفعلية (بدون الأغلفة والفهرس) */
 export function quranCount(mushaf: Mushaf): number {
-  return Math.max(mushaf.quranPages ?? mushaf.pages.length - coverCount(mushaf), 1)
+  return Math.max(mushaf.quranPages ?? 1, 1)
 }
 
-/**
- * التسمية التي تُعرض للمستخدم لصورة معينة.
- * page هنا هو رقم الصورة (1-based) داخل مصفوفة الروابط.
- */
+/** التسمية التي تُعرض للمستخدم لصورة معينة (page = رقم الصورة داخل الملف) */
 export function pageLabel(mushaf: Mushaf, page: number): string {
   const covers = coverCount(mushaf)
   const quran = quranCount(mushaf)
@@ -59,5 +112,5 @@ export function pageLabel(mushaf: Mushaf, page: number): string {
 
 /** تحويل رقم صفحة مصحف يدخله المستخدم إلى رقم الصورة المقابل */
 export function imagePageFromNumber(mushaf: Mushaf, number: number): number {
-  return clampPage(number + coverCount(mushaf), mushaf.pages.length)
+  return number + coverCount(mushaf)
 }

@@ -13,6 +13,8 @@ interface ToolbarProps {
   onToggleFullscreen: () => void
 }
 
+const REPO_URL = 'https://github.com/Gamingmonster2/hafs'
+
 const themes: { id: Theme; label: string }[] = [
   { id: 'light', label: '☀️ فاتح' },
   { id: 'sepia', label: '📖 ورقي' },
@@ -68,7 +70,7 @@ export function Toolbar({
             ))}
           </select>
         </label>
-        <span className="page-chip" title={`الصورة ${page} من ${mushaf.pages.length}`}>{pageLabel}</span>
+        <span className="page-chip" title={`الصورة رقم ${page} في الملف`}>{pageLabel}</span>
       </div>
 
       <nav className="toolbar__actions" aria-label="أدوات القارئ">
@@ -109,6 +111,10 @@ export function Toolbar({
                   تحميل نسخة PDF ↗
                 </a>
               )}
+              <a className="repo-link" href={REPO_URL} target="_blank" rel="noreferrer">
+                <span>＜/＞</span>
+                مستودع المشروع على GitHub
+              </a>
               <p className="settings-popover__hint">تُحفظ إعداداتك تلقائياً على هذا الجهاز.</p>
             </div>
           )}

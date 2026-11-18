@@ -7,16 +7,16 @@ export interface Mushaf {
   shortName: string
   /** الرواية */
   riwayah: string
-  /** روابط صفحات المصحف بالترتيب، الفهرس 0 = الصورة 1 */
-  pages: string[]
+  /** تحميل كسول لروابط الصور حتى لا تُحمّل كل المصاحف دفعة واحدة */
+  loadPages: () => Promise<{ default: string[] }>
+  /** تحميل كسول لفهرس السور والأجزاء */
+  loadIndex?: () => Promise<{ default: MushafIndex }>
   /** عدد الصور التمهيدية (الأغلفة) قبل أول صفحة قرآن. الافتراضي 0 */
   coverPages?: number
   /** عدد صفحات القرآن الحقيقية بعد الأغلفة. الباقي في نهاية الملف فهرس */
   quranPages?: number
   /** رابط ملف PDF الأصلي إن وُجد */
   sourcePdf?: string
-  /** فهرس السور/Aجزاء إن وُجد */
-  index?: MushafIndex
   /** لون مميز للمصحف */
   accent: string
   /** ملاحظة اختيارية تظهر في فهرس المصاحف */
@@ -31,6 +31,12 @@ export interface MushafIndex {
   note?: string
   surahs: { number: number; name: string; page: number; endPage: number }[]
   juz: { number: number; page: number; verse: string | null }[]
+}
+
+/** بيانات المصحف التي تُحمّل وقت التشغيل */
+export interface MushafData {
+  pages: string[]
+  index?: MushafIndex
 }
 
 export type Theme = 'light' | 'sepia' | 'dark'

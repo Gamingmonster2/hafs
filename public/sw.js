@@ -1,8 +1,16 @@
 /* Quran Complex service worker: shell cache + on-demand page cache */
-const SHELL_CACHE = 'qc-shell-v2'
+const SHELL_CACHE = 'qc-shell-v3'
 const PAGE_CACHE = 'qc-pages-v1'
 const SCOPE = self.registration.scope
-const SHELL_ASSETS = [SCOPE, `${SCOPE}index.html`, `${SCOPE}manifest.webmanifest`, `${SCOPE}icon.svg`]
+const SHELL_ASSETS = [
+  SCOPE,
+  `${SCOPE}index.html`,
+  `${SCOPE}manifest.webmanifest`,
+  `${SCOPE}icon.svg`,
+  `${SCOPE}icon-192.png`,
+  `${SCOPE}icon-512.png`,
+  `${SCOPE}apple-touch-icon.png`,
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
