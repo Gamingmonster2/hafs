@@ -290,11 +290,12 @@ const landingHtml = `<!DOCTYPE html>
       animation: rise 0.7s ease 0.3s both;
     }
     .links-section h2 {
-      margin: 0 0 22px;
+      margin: 0 0 8px;
       font-family: 'Amiri', serif;
       font-size: 1.9rem;
       color: var(--gold);
     }
+    .links-note { margin: 0 0 24px; color: var(--muted); font-size: 0.82rem; }
     .links-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -436,24 +437,28 @@ const landingHtml = `<!DOCTYPE html>
 
     <section class="links-section" aria-labelledby="links-title">
       <h2 id="links-title">روابط ذات صلة</h2>
+      <p class="links-note">جميعها مشاريعنا المرتبطة بالمستودع</p>
       <div class="links-grid">
-        <a class="link-tile" href="https://quranvoice.org" target="_blank" rel="noreferrer">
-          <span class="link-tile__mark">﷽</span><span><strong>القران الكريم - Quran Voice</strong><small>quranvoice.org</small></span>
+        <a class="link-tile" href="https://quranvoice.org" target="_blank" rel="noreferrer" title="quranvoice.org">
+          <span class="link-tile__mark">﷽</span><span><strong>القران الكريم - Quran Voice</strong><small>PDF للتحميل + تلاوات شيوخ</small></span>
         </a>
-        <a class="link-tile" href="https://quran.com.ly" target="_blank" rel="noreferrer">
-          <span class="link-tile__mark">◈</span><span><strong>Quran.com.ly</strong><small>quran.com.ly</small></span>
+        <a class="link-tile" href="https://quran.com.ly" target="_blank" rel="noreferrer" title="quran.com.ly">
+          <span class="link-tile__mark">◈</span><span><strong>Quran.com.ly</strong><small>امتداد ليبي — مصحف إلكتروني متكامل: قراءة ومجتمع</small></span>
         </a>
-        <a class="link-tile" href="https://quran.net.ly" target="_blank" rel="noreferrer">
-          <span class="link-tile__mark">◈</span><span><strong>Quran.net.ly</strong><small>quran.net.ly</small></span>
+        <a class="link-tile" href="https://quran.net.ly" target="_blank" rel="noreferrer" title="quran.net.ly">
+          <span class="link-tile__mark">♫</span><span><strong>Quran.net.ly</strong><small>تلاوات +50 شيخاً مرتبة أبجدياً</small></span>
         </a>
-        <a class="link-tile" href="https://www.muslim.com.ly/" target="_blank" rel="noreferrer">
-          <span class="link-tile__mark">◈</span><span><strong>muslim.com.ly</strong><small>www.muslim.com.ly</small></span>
+        <a class="link-tile" href="https://www.muslim.com.ly/" target="_blank" rel="noreferrer" title="www.muslim.com.ly">
+          <span class="link-tile__mark">◈</span><span><strong>muslim.com.ly</strong><small>الرقية الشرعية والاستماع إليها</small></span>
         </a>
-        <a class="link-tile" href="https://q.com.ly" target="_blank" rel="noreferrer">
+        <a class="link-tile" href="https://q.com.ly" target="_blank" rel="noreferrer" title="q.com.ly">
           <span class="link-tile__mark">⬇</span><span><strong>تحميل القرآن الكريم</strong><small>q.com.ly</small></span>
         </a>
-        <a class="link-tile" href="https://quranbook.org" target="_blank" rel="noreferrer">
-          <span class="link-tile__mark">▤</span><span><strong>Quran Book</strong><small>quranbook.org</small></span>
+        <a class="link-tile" href="https://quranbook.org" target="_blank" rel="noreferrer" title="quranbook.org">
+          <span class="link-tile__mark">▤</span><span><strong>Quran Book</strong><small>مقالات قرآنية وتحميل PDF</small></span>
+        </a>
+        <a class="link-tile" href="https://vector.ai.id.ly/" target="_blank" rel="noreferrer" title="vector.ai.id.ly">
+          <span class="link-tile__mark">◇</span><span><strong>أرشيف مصحف المدينة - المتجهات AI</strong><small>نسخ SVG غير متاحة سابقاً</small></span>
         </a>
       </div>
 
@@ -467,7 +472,7 @@ const landingHtml = `<!DOCTYPE html>
         </svg>
         <span>
           <strong>اشترك وشاهد · Quran Voice</strong>
-          <small>قناة اليوتيوب الرسمية — تلاوات ومصحف المدينة بصوت الشيخ</small>
+          <small>فيديوهات قصيرة وتلاوات بأصوات شيوخ من العالم الإسلامي</small>
         </span>
       </a>
     </section>
