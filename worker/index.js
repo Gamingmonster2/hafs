@@ -137,7 +137,8 @@ const landingHtml = `<!DOCTYPE html>
       transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .theme-toggle:hover { transform: rotate(12deg) scale(1.06); border-color: var(--ring); }
-    .theme-toggle:focus-visible, .card:focus-visible, .repo-link:focus-visible {
+    .theme-toggle:focus-visible, .card:focus-visible, .repo-link:focus-visible,
+    .link-tile:focus-visible, .youtube-card:focus-visible {
       outline: none;
       box-shadow: 0 0 0 3px var(--ring), var(--shadow);
     }
@@ -281,6 +282,84 @@ const landingHtml = `<!DOCTYPE html>
     }
     .card:hover .badge span { transform: translateX(-5px); }
 
+    /* قسم الروابط */
+    .links-section {
+      margin-top: 56px;
+      width: 100%;
+      text-align: center;
+      animation: rise 0.7s ease 0.3s both;
+    }
+    .links-section h2 {
+      margin: 0 0 22px;
+      font-family: 'Amiri', serif;
+      font-size: 1.9rem;
+      color: var(--gold);
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+    .link-tile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .link-tile:hover { transform: translateY(-4px); border-color: var(--ring); }
+    .link-tile__mark {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      border: 1px solid var(--ring);
+      color: var(--gold);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.03));
+      font-family: 'Amiri', serif;
+      font-size: 15px;
+    }
+    .link-tile strong { display: block; font-size: 0.88rem; }
+    .link-tile small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .youtube-card {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(212, 175, 55, 0.08));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .youtube-card:hover { transform: translateY(-4px); border-color: rgba(239, 68, 68, 0.7); }
+    .youtube-icon { width: 54px; height: 54px; flex: 0 0 auto; }
+    .youtube-card strong { display: block; font-family: 'Amiri', serif; font-size: 1.35rem; color: var(--gold); }
+    .youtube-card small { display: block; color: var(--muted); font-size: 0.8rem; }
+
     .seo-content {
       margin-top: 56px;
       max-width: 900px;
@@ -354,6 +433,44 @@ const landingHtml = `<!DOCTYPE html>
         <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
       </a>
     </div>
+
+    <section class="links-section" aria-labelledby="links-title">
+      <h2 id="links-title">روابط ذات صلة</h2>
+      <div class="links-grid">
+        <a class="link-tile" href="https://quranvoice.org" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">﷽</span><span><strong>القران الكريم - Quran Voice</strong><small>quranvoice.org</small></span>
+        </a>
+        <a class="link-tile" href="https://quran.com.ly" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">◈</span><span><strong>Quran.com.ly</strong><small>quran.com.ly</small></span>
+        </a>
+        <a class="link-tile" href="https://quran.net.ly" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">◈</span><span><strong>Quran.net.ly</strong><small>quran.net.ly</small></span>
+        </a>
+        <a class="link-tile" href="https://www.muslim.com.ly/" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">◈</span><span><strong>muslim.com.ly</strong><small>www.muslim.com.ly</small></span>
+        </a>
+        <a class="link-tile" href="https://q.com.ly" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">⬇</span><span><strong>تحميل القرآن الكريم</strong><small>q.com.ly</small></span>
+        </a>
+        <a class="link-tile" href="https://quranbook.org" target="_blank" rel="noreferrer">
+          <span class="link-tile__mark">▤</span><span><strong>Quran Book</strong><small>quranbook.org</small></span>
+        </a>
+      </div>
+
+      <a class="youtube-card" href="https://www.youtube.com/@quranvoiceorg" target="_blank" rel="noreferrer" aria-label="اشترك وشاهد قناة Quran Voice على يوتيوب">
+        <svg class="youtube-icon" viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="2" y="16" width="60" height="40" rx="13" fill="#ef4444"/>
+          <path d="M27 26 L44 36 L27 46 Z" fill="#ffffff"/>
+          <path d="M50 3 a7 7 0 0 1 7 7 v5 l3 4 h-20 l3-4 v-5 a7 7 0 0 1 7-7 z" fill="#ffffff"/>
+          <circle cx="50" cy="25" r="2.6" fill="#ffffff"/>
+          <path d="M50 0 v4 M47.5 2 h5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span>
+          <strong>اشترك وشاهد · Quran Voice</strong>
+          <small>قناة اليوتيوب الرسمية — تلاوات ومصحف المدينة بصوت الشيخ</small>
+        </span>
+      </a>
+    </section>
 
     <section class="seo-content">
       <h2>عن مجمع القرآن الرقمي المستقل</h2>
