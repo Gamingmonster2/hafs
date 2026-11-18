@@ -10,6 +10,11 @@ import type { ImageStatus, MushafData, Theme } from './types'
 
 const ZOOM_STEPS = [50, 75, 100, 125, 150, 200, 250]
 
+interface InstallPromptEvent extends Event {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
 function readParam(name: string): string | null {
   return new URLSearchParams(window.location.search).get(name)
 }
@@ -48,8 +53,13 @@ export default function App() {
     return coverCount(initialMushaf) + 1
   })
   const [zoom, setZoom] = useState(100)
+  /** الوضع الافتراضي: الصفحة كلها ملاءمة للشاشة، بلا حاجة لتكبير أو تصغير */
+  const [fitMode, setFitMode] = usePersistentState<boolean>('qurancomplex:fit', true)
   const [theme, setTheme] = usePersistentState<Theme>('qurancomplex:theme', 'light')
   const [clarity, setClarity] = usePersistentState<boolean>('qurancomplex:clarity', false)
+  const [uiHidden, setUiHidden] = useState(false)
+  const [canInstall, setCanInstall] = useState(false)
+  const installPrompt = useRef<InstallPromptEvent | null>(null)
   const [bookmark, setBookmark] = useState<number | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [status, setStatus] = useState<ImageStatus>('loading')
@@ -83,6 +93,28 @@ export default function App() {
     if (!Number.isFinite(value)) return
     setZoom(Math.min(Math.max(Math.trunc(value), 50), 300))
   }, [])
+
+  /** أي تكبير صريح يلغي وضع الملاءمة مؤقتاً؛ وزر الملاءمة يرجعه */
+  const handleZoomIn = useCallback(() => {
+    setFitMode(false)
+    setZoom((current) => zoomStep(current, 1))
+  }, [setFitMode])
+
+  const handleZoomOut = useCallback(() => {
+    setFitMode(false)
+    setZoom((current) => zoomStep(current, -1))
+  }, [setFitMode])
+
+  const handleZoomSet = useCallback(
+    (value: number) => {
+      setFitMode(false)
+      setZoomClamped(value)
+    },
+    [setFitMode, setZoomClamped],
+  )
+
+  const enableFit = useCallback(() => setFitMode(true), [setFitMode])
+  const toggleUi = useCallback(() => setUiHidden((hidden) => !hidden), [])
 
   /* تحميل بيانات المصحف المختار فقط (روابط + فهرس) */
   useEffect(() => {
@@ -203,6 +235,30 @@ export default function App() {
     document.documentElement.dataset.clarity = clarity ? 'true' : 'false'
   }, [clarity])
 
+  useEffect(() => {
+    document.documentElement.dataset.ui = uiHidden ? 'hidden' : 'visible'
+  }, [uiHidden])
+
+  /* تثبيت القارئ كتطبيق على أندرويد (النطاق الرئيسي وكل نطاق فرعي على حدة) */
+  useEffect(() => {
+    function onBeforeInstall(event: Event) {
+      event.preventDefault()
+      installPrompt.current = event as InstallPromptEvent
+      setCanInstall(true)
+    }
+    function onInstalled() {
+      installPrompt.current = null
+      setCanInstall(false)
+      showToast('تم تثبيت التطبيق على الجهاز')
+    }
+    window.addEventListener('beforeinstallprompt', onBeforeInstall)
+    window.addEventListener('appinstalled', onInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall)
+      window.removeEventListener('appinstalled', onInstalled)
+    }
+  }, [showToast])
+
   /* ارتفاع الشاشة الفعلي يتغيّر عند قلب الهاتف؛ نحدّثه لملء الشاشة بشكل صحيح */
   useEffect(() => {
     function updateAppHeight() {
@@ -220,7 +276,9 @@ export default function App() {
   /* في ملء الشاشة لا يبقى سوى المصحف، ويُغلق بالضغط على Escape */
   useEffect(() => {
     function onChange() {
-      setIsFullscreen(Boolean(document.fullscreenElement))
+      const active = Boolean(document.fullscreenElement)
+      setIsFullscreen(active)
+      if (active) setUiHidden(false)
     }
     document.addEventListener('fullscreenchange', onChange)
     return () => document.removeEventListener('fullscreenchange', onChange)
@@ -289,10 +347,10 @@ export default function App() {
           break
         case '+':
         case '=':
-          setZoom((current) => zoomStep(current, 1))
+          handleZoomIn()
           break
         case '-':
-          setZoom((current) => zoomStep(current, -1))
+          handleZoomOut()
           break
         case 'f':
         case 'F':
@@ -303,7 +361,23 @@ export default function App() {
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [nextPage, previousPage, goTo, totalPages, toggleFullscreen])
+  }, [nextPage, previousPage, goTo, totalPages, toggleFullscreen, handleZoomIn, handleZoomOut])
+
+  async function installApp() {
+    const prompt = installPrompt.current
+    if (!prompt) {
+      showToast('من قائمة المتصفح اختر: «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»')
+      return
+    }
+    try {
+      await prompt.prompt()
+      await prompt.userChoice.catch(() => undefined)
+    } catch {
+      /* رفض المستخدم لا يُعد خطأً */
+    }
+    installPrompt.current = null
+    setCanInstall(false)
+  }
 
   function handleMushafChange(id: string) {
     setMushafId(id)
@@ -349,10 +423,14 @@ export default function App() {
         pageLabel={label}
         theme={theme}
         clarity={clarity}
+        uiHidden={uiHidden}
+        canInstall={canInstall}
         onMushafChange={handleMushafChange}
         onOpenIndex={() => setDrawerOpen(true)}
         onThemeChange={setTheme}
         onClarityChange={setClarity}
+        onToggleUi={toggleUi}
+        onInstall={() => void installApp()}
         onToggleFullscreen={() => void toggleFullscreen()}
       />
 
@@ -362,11 +440,13 @@ export default function App() {
         page={page}
         pageLabel={label}
         status={dataReady ? status : 'loading'}
-        zoom={zoom}
+        zoom={fitMode ? 100 : zoom}
+        fitMode={fitMode}
         onRetry={() => setRetryCount((count) => count + 1)}
         onNext={nextPage}
         onPrevious={previousPage}
-        onZoomSet={setZoomClamped}
+        onZoomSet={handleZoomSet}
+        onToggleUi={toggleUi}
       />
 
       <BottomBar
@@ -375,12 +455,14 @@ export default function App() {
         pageLabel={label}
         totalPages={quranPages}
         zoom={zoom}
+        fitMode={fitMode}
         bookmark={bookmark}
         onPrevious={previousPage}
         onNext={nextPage}
         onPageChange={goToNumber}
-        onZoomIn={() => setZoom((current) => zoomStep(current, 1))}
-        onZoomOut={() => setZoom((current) => zoomStep(current, -1))}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onFitToggle={enableFit}
         onToggleBookmark={toggleBookmark}
         onGoToBookmark={() => {
           if (bookmark !== null) goTo(bookmark)
@@ -400,6 +482,12 @@ export default function App() {
       <div className={toast ? 'toast is-visible' : 'toast'} role="status" aria-live="polite">
         {toast}
       </div>
+
+      {uiHidden && !isFullscreen && (
+        <button type="button" className="ui-reveal" onClick={toggleUi} title="إظهار أدوات القراءة">
+          <b aria-hidden="true">☰</b><span>إظهار الأدوات</span>
+        </button>
+      )}
 
       {isFullscreen && (
         <button type="button" className="focus-exit" onClick={() => void toggleFullscreen()}>

@@ -5,11 +5,11 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '3.0-seo-all'
+const ROUTER_VERSION = '3.1-reading-install'
 
 const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
 
-/** ملفات SEO تُولَّد في public/ وتُنشر مع القارئ، ثم يمرّرها الـ Worker على النطاق الرئيسي */
+/** ملفات SEO وملفات تثبيت التطبيق تُولَّد في public/ وتُنشر مع القارئ، ثم يمرّرها الـ Worker على النطاق الرئيسي */
 const SEO_FILES = new Set([
   '/robots.txt',
   '/sitemap.xml',
@@ -20,6 +20,11 @@ const SEO_FILES = new Set([
   '/seo/juz.html',
   '/seo/riwayat.html',
   '/manifest.webmanifest',
+  '/landing-sw.js',
+  '/icon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/apple-touch-icon.png',
 ])
 
 /** عناوين قصيرة لصفحات الأجزاء والروايات (30 + 6 + فهران) */
@@ -48,6 +53,10 @@ const SEO_CONTENT_TYPES = {
   '.xml': 'application/xml; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.webmanifest': 'application/manifest+json; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
 }
 
 /** اسم النطاق الفرعي → معرّف الرواية في التطبيق */
@@ -66,7 +75,12 @@ const landingHtml = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f4c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="المصاحف">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="description" content="مجمع القرآن الرقمي - منصة تقنية مستقلة تهدف لأرشفة وعرض مصاحف القراءات والروايات القرآنية بجودة عالية عبر بنية تحتية سحابية متطورة.">
   <meta name="keywords" content="قرآن كريم, رواية حفص, رواية قالون, رواية ورش, رواية شعبة, رواية السوسي, رواية الدوري, مصحف المدينة, مجمع القرآن الرقمي, قراءات قرآنية">
   <meta property="og:title" content="مجمع القرآن الرقمي | QURAN COMPLEX">
@@ -78,6 +92,9 @@ const landingHtml = `<!DOCTYPE html>
   <meta name="twitter:card" content="summary_large_image">
   <title>مجمع القرآن الرقمي | QURAN COMPLEX</title>
   <link rel="canonical" href="https://qurancomplex.ly/">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://qurancomplex.ly/#website","name":"مجمع القرآن الرقمي","url":"https://qurancomplex.ly/","inLanguage":"ar","description":"ست روايات من مصحف المدينة النبوية في قارئ رقمي سريع يعمل على كل الأجهزة."},{"@type":"ItemList","@id":"https://qurancomplex.ly/#mushafs","name":"مصاحف المدينة النبوية","itemListElement":[{"@type":"ListItem","position":1,"name":"رواية حفص عن عاصم","url":"https://hafs.qurancomplex.ly/"},{"@type":"ListItem","position":2,"name":"رواية قالون عن نافع","url":"https://qaloon.qurancomplex.ly/"},{"@type":"ListItem","position":3,"name":"رواية ورش عن نافع","url":"https://warsh.qurancomplex.ly/"},{"@type":"ListItem","position":4,"name":"رواية شعبة عن عاصم","url":"https://shubah.qurancomplex.ly/"},{"@type":"ListItem","position":5,"name":"رواية السوسي عن أبي عمرو","url":"https://susi.qurancomplex.ly/"},{"@type":"ListItem","position":6,"name":"رواية الدوري عن أبي عمرو","url":"https://duri.qurancomplex.ly/"}]}]}</script>
   <style>
@@ -217,6 +234,29 @@ const landingHtml = `<!DOCTYPE html>
       filter: drop-shadow(0 6px 18px rgba(212, 175, 55, 0.22));
     }
     .header p { margin: 0; color: var(--muted); font-size: 0.82rem; letter-spacing: 3px; font-weight: 300; }
+
+    /* تثبيت الواجهة الرئيسية كتطبيق أندرويد */
+    .install-bar { display: flex; justify-content: center; margin: -20px 0 34px; }
+    .install-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 11px 22px;
+      border: 1px solid var(--ring);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--gold);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .install-btn:hover { transform: translateY(-3px); border-color: var(--gold); }
 
     .grid {
       display: grid;
@@ -526,6 +566,12 @@ const landingHtml = `<!DOCTYPE html>
       <p>INDIVIDUAL TECH INFRASTRUCTURE FOR QURANIC TEXTS</p>
     </header>
 
+    <div class="install-bar">
+      <button type="button" id="install-app" class="install-btn" onclick="installApp()" title="تثبيت الموقع كتطبيق على أندرويد">
+        <span aria-hidden="true">⬇</span><span id="install-label">تثبيت الموقع كتطبيق</span>
+      </button>
+    </div>
+
     <div class="grid">
       <a href="https://hafs.qurancomplex.ly" class="card">
         <div><span class="card__icon">◈</span><h3>رواية حفص عن عاصم</h3><p>تصفح مصحف المدينة النبوية برواية حفص بوضوح تام، مع الحفاظ على التنسيق الأصلي للمصحف الورقي في بيئة رقمية سريعة.</p></div>
@@ -663,6 +709,36 @@ const landingHtml = `<!DOCTYPE html>
   </main>
 
   <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/landing-sw.js', { scope: '/' }).catch(function () {});
+      });
+    }
+    var deferredInstall = null;
+    window.addEventListener('beforeinstallprompt', function (event) {
+      event.preventDefault();
+      deferredInstall = event;
+      var label = document.getElementById('install-label');
+      if (label) label.textContent = 'تثبيت التطبيق على الجهاز';
+    });
+    window.addEventListener('appinstalled', function () {
+      deferredInstall = null;
+      var label = document.getElementById('install-label');
+      if (label) label.textContent = 'تم تثبيت التطبيق ✓';
+    });
+    async function installApp() {
+      var label = document.getElementById('install-label');
+      if (!deferredInstall) {
+        if (label) label.textContent = 'القائمة ⋮ ← تثبيت التطبيق / إضافة إلى الشاشة الرئيسية';
+        return;
+      }
+      try {
+        await deferredInstall.prompt();
+        await deferredInstall.userChoice;
+      } catch (error) { /* المستخدم ألغى التثبيت */ }
+      deferredInstall = null;
+      if (label) label.textContent = 'تثبيت الموقع كتطبيق';
+    }
     function toggleTheme() {
       var next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       document.body.setAttribute('data-theme', next);

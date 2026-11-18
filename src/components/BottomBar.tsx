@@ -8,12 +8,14 @@ interface BottomBarProps {
   pageLabel: string
   totalPages: number
   zoom: number
+  fitMode: boolean
   bookmark: number | null
   onPrevious: () => void
   onNext: () => void
   onPageChange: (page: number) => void
   onZoomIn: () => void
   onZoomOut: () => void
+  onFitToggle: () => void
   onToggleBookmark: () => void
   onGoToBookmark: () => void
   onCachePage: () => void
@@ -25,12 +27,14 @@ export function BottomBar({
   pageLabel,
   totalPages,
   zoom,
+  fitMode,
   bookmark,
   onPrevious,
   onNext,
   onPageChange,
   onZoomIn,
   onZoomOut,
+  onFitToggle,
   onToggleBookmark,
   onGoToBookmark,
   onCachePage,
@@ -103,8 +107,17 @@ export function BottomBar({
 
       <div className="bottom-bar__group zoom-group">
         <button type="button" className="nav-btn" onClick={onZoomOut} aria-label="تصغير" title="تصغير (−)">−</button>
-        <span className="zoom-value">{zoom}%</span>
+        <span className="zoom-value">{fitMode ? 'ملاءمة' : `${zoom}%`}</span>
         <button type="button" className="nav-btn" onClick={onZoomIn} aria-label="تكبير" title="تكبير (+)">+</button>
+        <button
+          type="button"
+          className={fitMode ? 'mini-btn fit-btn is-active' : 'mini-btn fit-btn'}
+          onClick={onFitToggle}
+          aria-label="ملاءمة الصفحة للشاشة"
+          title="ملاءمة الصفحة للشاشة — القراءة المريحة الافتراضية"
+        >
+          ⤢
+        </button>
       </div>
     </footer>
   )

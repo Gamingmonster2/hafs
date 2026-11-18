@@ -180,6 +180,24 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .clarity-toggle.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 .clarity-toggle b { font-size: 16px; font-weight: 400; }
 .clarity-toggle__state { margin-inline-start: auto; font-size: 11px; opacity: .8; }
+.install-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+}
+.install-option:hover { filter: brightness(.97); }
 .pdf-link { display: block; margin-top: 12px; font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 700; }
 .settings-popover__hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); }
 
@@ -228,6 +246,31 @@ button:disabled { cursor: not-allowed; opacity: .45; }
   z-index: 1;
 }
 .page-image.is-visible { opacity: 1; }
+
+/* الوضع الافتراضي: الصفحة كاملة ملاءمة للشاشة في الوضعين الرأسي والأفقي.
+   قواعد ملء الشاشة أدناه أعلى خصوصية لتتجاوز هذه القواعد عند التركيز. */
+.viewer[data-fit="true"] {
+  overflow: hidden;
+  align-items: stretch;
+  padding: 8px;
+}
+.viewer[data-fit="true"] .page-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  overflow: hidden;
+}
+.viewer[data-fit="true"] .page-canvas { width: 100%; height: 100%; }
+.viewer[data-fit="true"] .page-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
 .page-skeleton {
   position: absolute;
@@ -284,7 +327,9 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .bottom-bar__group { display: flex; align-items: center; gap: 6px; }
 .nav-btn { width: 38px; height: 38px; font-size: 22px; line-height: 1; display: grid; place-items: center; }
 .zoom-group .nav-btn { font-size: 18px; }
-.zoom-value { min-width: 48px; text-align: center; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.zoom-value { min-width: 58px; text-align: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.fit-btn { font-size: 15px; line-height: 1; }
+.fit-btn.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 
 .page-jump { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 3px 8px; }
 .page-jump input {
@@ -405,6 +450,35 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .repo-link:hover { background: var(--accent-soft); }
 .repo-link span { color: var(--muted); font-weight: 400; font-size: 10px; }
 
+/* ---------- إخفاء كل الأدوات أثناء القراءة (بنقرة على الصفحة) ---------- */
+html[data-ui="hidden"] .toolbar,
+html[data-ui="hidden"] .bottom-bar,
+html[data-ui="hidden"] .toast,
+html[data-ui="hidden"] .drawer-root { display: none !important; }
+
+.ui-reveal {
+  position: fixed;
+  z-index: 45;
+  inset-block-start: calc(10px + env(safe-area-inset-top));
+  inset-inline-start: calc(10px + env(safe-area-inset-left));
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: .78;
+}
+.ui-reveal:hover { opacity: 1; }
+.ui-reveal b { font-size: 15px; font-weight: 400; }
+
 /* ---------- وضع التركيز (ملء الشاشة) ---------- */
 html[data-focus="true"] .toolbar,
 html[data-focus="true"] .bottom-bar,
@@ -422,7 +496,7 @@ html[data-focus="true"] .viewer {
   overflow: hidden;
   background: #000;
 }
-html[data-focus="true"] .page-frame {
+html[data-focus="true"] .viewer .page-frame {
   width: 100vw !important;
   max-width: none !important;
   height: var(--app-height);
@@ -436,8 +510,8 @@ html[data-focus="true"] .page-frame {
   overflow: auto;
   scrollbar-width: none;
 }
-html[data-focus="true"] .page-frame::-webkit-scrollbar { display: none; }
-html[data-focus="true"] .page-canvas {
+html[data-focus="true"] .viewer .page-frame::-webkit-scrollbar { display: none; }
+html[data-focus="true"] .viewer .page-canvas {
   width: max-content;
   height: max-content;
   min-width: 100vw;
@@ -446,7 +520,7 @@ html[data-focus="true"] .page-canvas {
   align-items: center;
   justify-content: center;
 }
-html[data-focus="true"] .page-image {
+html[data-focus="true"] .viewer .page-image {
   width: calc(100vw * var(--zoom-scale, 1));
   height: calc(var(--app-height) * var(--zoom-scale, 1));
   max-width: none;

@@ -8,10 +8,14 @@ interface ToolbarProps {
   pageLabel: string
   theme: Theme
   clarity: boolean
+  uiHidden: boolean
+  canInstall: boolean
   onMushafChange: (id: string) => void
   onOpenIndex: () => void
   onThemeChange: (theme: Theme) => void
   onClarityChange: (value: boolean) => void
+  onToggleUi: () => void
+  onInstall: () => void
   onToggleFullscreen: () => void
 }
 
@@ -32,14 +36,22 @@ export function Toolbar({
   pageLabel,
   theme,
   clarity,
+  uiHidden,
+  canInstall,
   onMushafChange,
   onOpenIndex,
   onThemeChange,
   onClarityChange,
+  onToggleUi,
+  onInstall,
   onToggleFullscreen,
 }: ToolbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const settingsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (uiHidden) setSettingsOpen(false)
+  }, [uiHidden])
 
   useEffect(() => {
     function closeOnOutsideClick(event: MouseEvent) {
@@ -86,6 +98,9 @@ export function Toolbar({
         <button type="button" className="icon-btn" onClick={onOpenIndex} title="فهرس الصفحات" aria-label="فهرس الصفحات">
           ☰
         </button>
+        <button type="button" className="icon-btn" onClick={onToggleUi} title="إخفاء الأدوات أثناء القراءة" aria-label="إخفاء الأدوات أثناء القراءة">
+          👁
+        </button>
         <div className="settings-wrap" ref={settingsRef}>
           <button
             type="button"
@@ -131,6 +146,13 @@ export function Toolbar({
                   تحميل نسخة PDF ↗
                 </a>
               )}
+              <button type="button" className="install-option" onClick={onInstall}>
+                <span aria-hidden="true">⬇</span>
+                {canInstall ? 'تثبيت التطبيق على الجهاز' : 'تثبيت الموقع كتطبيق'}
+              </button>
+              <p className="settings-popover__hint">
+                على أندرويد: اختر «تثبيت التطبيق» أو من قائمة المتصفح «إضافة إلى الشاشة الرئيسية». كل رواية تُثبَّت كتطبيق مستقل.
+              </p>
               <a className="repo-link" href={REPO_URL} target="_blank" rel="noreferrer">
                 <span>＜/＞</span>
                 مستودع المشروع على GitHub

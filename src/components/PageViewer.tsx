@@ -9,11 +9,14 @@ interface PageViewerProps {
   pageLabel: string
   status: ImageStatus
   zoom: number
+  fitMode: boolean
   onRetry: () => void
   onNext: () => void
   onPrevious: () => void
   /** يسمح للقرّب بإصبعين بتغيير مستوى التكبير داخل التطبيق */
   onZoomSet: (zoom: number) => void
+  /** الضغط على الصفحة يخفي أو يُظهر كل أدوات الواجهة */
+  onToggleUi: () => void
 }
 
 export function PageViewer({
@@ -23,14 +26,18 @@ export function PageViewer({
   pageLabel,
   status,
   zoom,
+  fitMode,
   onRetry,
   onNext,
   onPrevious,
   onZoomSet,
+  onToggleUi,
 }: PageViewerProps) {
   const viewerRef = useRef<HTMLElement>(null)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
   const pinch = useRef<{ distance: number; zoom: number } | null>(null)
+  const didSwipe = useRef(false)
+  const didPinch = useRef(false)
 
   function distanceBetween(a: TouchEvent['touches'][number], b: TouchEvent['touches'][number]) {
     return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)
@@ -44,6 +51,7 @@ export function PageViewer({
         zoom,
       }
       touchStart.current = null // منع قلب الصفحة أثناء القرّب
+      didPinch.current = true
       viewerRef.current?.classList.add('is-pinching')
       return
     }
@@ -79,12 +87,27 @@ export function PageViewer({
 
     if (dx < 0) onNext()
     else onPrevious()
+    didSwipe.current = true
+  }
+
+  /** نقرة واحدة على الصفحة تخفي أو تُظهر الأدوات (بعد استبعاد السحب والقرّب) */
+  function handlePageClick() {
+    if (didSwipe.current) {
+      didSwipe.current = false
+      return
+    }
+    if (didPinch.current) {
+      didPinch.current = false
+      return
+    }
+    onToggleUi()
   }
 
   return (
     <main
       ref={viewerRef}
       className="viewer"
+      data-fit={fitMode ? 'true' : 'false'}
       style={{ '--zoom-scale': zoom / 100 } as CSSProperties}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -113,7 +136,7 @@ export function PageViewer({
           </div>
         )}
 
-        <div className="page-canvas">
+        <div className="page-canvas" onClick={handlePageClick}>
           <img
             key={src}
             data-image-index={page}
