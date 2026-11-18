@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { TouchEvent } from 'react'
+import type { CSSProperties, TouchEvent } from 'react'
 import type { ImageStatus } from '../types'
 
 interface PageViewerProps {
@@ -12,17 +12,62 @@ interface PageViewerProps {
   onRetry: () => void
   onNext: () => void
   onPrevious: () => void
+  /** يسمح للقرّب بإصبعين بتغيير مستوى التكبير داخل التطبيق */
+  onZoomSet: (zoom: number) => void
 }
 
-export function PageViewer({ src, alt, page, pageLabel, status, zoom, onRetry, onNext, onPrevious }: PageViewerProps) {
+export function PageViewer({
+  src,
+  alt,
+  page,
+  pageLabel,
+  status,
+  zoom,
+  onRetry,
+  onNext,
+  onPrevious,
+  onZoomSet,
+}: PageViewerProps) {
+  const viewerRef = useRef<HTMLElement>(null)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const pinch = useRef<{ distance: number; zoom: number } | null>(null)
+
+  function distanceBetween(a: TouchEvent['touches'][number], b: TouchEvent['touches'][number]) {
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)
+  }
 
   function handleTouchStart(event: TouchEvent) {
+    if (event.touches.length >= 2) {
+      // بدء القرّب بإصبعين: نثبّت المسافة ومستوى التكبير الابتدائي
+      pinch.current = {
+        distance: distanceBetween(event.touches[0], event.touches[1]),
+        zoom,
+      }
+      touchStart.current = null // منع قلب الصفحة أثناء القرّب
+      viewerRef.current?.classList.add('is-pinching')
+      return
+    }
     const touch = event.touches[0]
     if (touch) touchStart.current = { x: touch.clientX, y: touch.clientY }
   }
 
+  function handleTouchMove(event: TouchEvent) {
+    if (event.touches.length < 2 || !pinch.current || pinch.current.distance <= 0) return
+    const distance = distanceBetween(event.touches[0], event.touches[1])
+    const ratio = distance / pinch.current.distance
+    const next = Math.round(pinch.current.zoom * ratio)
+    onZoomSet(Math.min(Math.max(next, 50), 300))
+  }
+
   function handleTouchEnd(event: TouchEvent) {
+    if (pinch.current) {
+      // إن بقي إصبع واحد بعد رفع الآخر فلا نعتبرها تمرير صفحة
+      pinch.current = null
+      touchStart.current = null
+      if (event.touches.length === 0) viewerRef.current?.classList.remove('is-pinching')
+      return
+    }
+
     const start = touchStart.current
     const touch = event.changedTouches[0]
     touchStart.current = null
@@ -36,16 +81,18 @@ export function PageViewer({ src, alt, page, pageLabel, status, zoom, onRetry, o
     else onPrevious()
   }
 
-  const width = `${zoom}%`
-
   return (
     <main
+      ref={viewerRef}
       className="viewer"
+      style={{ '--zoom-scale': zoom / 100 } as CSSProperties}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       aria-label={`صفحة المصحف رقم ${pageLabel}`}
     >
-      <div className="page-frame" style={{ width, maxWidth: zoom <= 100 ? `${850 * (zoom / 100)}px` : 'none' }}>
+      <div className="page-frame">
         {status === 'loading' && (
           <div className="page-skeleton" role="status" aria-live="polite">
             <div className="page-skeleton__line" />
@@ -66,17 +113,19 @@ export function PageViewer({ src, alt, page, pageLabel, status, zoom, onRetry, o
           </div>
         )}
 
-        <img
-          key={src}
-          data-image-index={page}
-          className={`page-image ${status === 'loaded' ? 'is-visible' : ''}`}
-          src={src}
-          alt={alt}
-          decoding="async"
-          fetchPriority="high"
-          referrerPolicy="no-referrer"
-          draggable={false}
-        />
+        <div className="page-canvas">
+          <img
+            key={src}
+            data-image-index={page}
+            className={`page-image ${status === 'loaded' ? 'is-visible' : ''}`}
+            src={src}
+            alt={alt}
+            decoding="async"
+            fetchPriority="high"
+            referrerPolicy="no-referrer"
+            draggable={false}
+          />
+        </div>
       </div>
     </main>
   )

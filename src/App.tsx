@@ -49,6 +49,7 @@ export default function App() {
   })
   const [zoom, setZoom] = useState(100)
   const [theme, setTheme] = usePersistentState<Theme>('qurancomplex:theme', 'light')
+  const [clarity, setClarity] = usePersistentState<boolean>('qurancomplex:clarity', false)
   const [bookmark, setBookmark] = useState<number | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [status, setStatus] = useState<ImageStatus>('loading')
@@ -75,6 +76,12 @@ export default function App() {
     setToast(message)
     if (toastTimer.current) window.clearTimeout(toastTimer.current)
     toastTimer.current = window.setTimeout(() => setToast(null), 2600)
+  }, [])
+
+  /** حدود التكبير موحّدة لأزرار +/− والقرّب بإصبعين */
+  const setZoomClamped = useCallback((value: number) => {
+    if (!Number.isFinite(value)) return
+    setZoom(Math.min(Math.max(Math.trunc(value), 50), 300))
   }, [])
 
   /* تحميل بيانات المصحف المختار فقط (روابط + فهرس) */
@@ -191,6 +198,24 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+
+  useEffect(() => {
+    document.documentElement.dataset.clarity = clarity ? 'true' : 'false'
+  }, [clarity])
+
+  /* ارتفاع الشاشة الفعلي يتغيّر عند قلب الهاتف؛ نحدّثه لملء الشاشة بشكل صحيح */
+  useEffect(() => {
+    function updateAppHeight() {
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`)
+    }
+    updateAppHeight()
+    window.addEventListener('resize', updateAppHeight)
+    window.addEventListener('orientationchange', updateAppHeight)
+    return () => {
+      window.removeEventListener('resize', updateAppHeight)
+      window.removeEventListener('orientationchange', updateAppHeight)
+    }
+  }, [])
 
   /* في ملء الشاشة لا يبقى سوى المصحف، ويُغلق بالضغط على Escape */
   useEffect(() => {
@@ -323,9 +348,11 @@ export default function App() {
         page={page}
         pageLabel={label}
         theme={theme}
+        clarity={clarity}
         onMushafChange={handleMushafChange}
         onOpenIndex={() => setDrawerOpen(true)}
         onThemeChange={setTheme}
+        onClarityChange={setClarity}
         onToggleFullscreen={() => void toggleFullscreen()}
       />
 
@@ -339,6 +366,7 @@ export default function App() {
         onRetry={() => setRetryCount((count) => count + 1)}
         onNext={nextPage}
         onPrevious={previousPage}
+        onZoomSet={setZoomClamped}
       />
 
       <BottomBar
@@ -372,6 +400,12 @@ export default function App() {
       <div className={toast ? 'toast is-visible' : 'toast'} role="status" aria-live="polite">
         {toast}
       </div>
+
+      {isFullscreen && (
+        <button type="button" className="focus-exit" onClick={() => void toggleFullscreen()}>
+          <b aria-hidden="true">✕</b><span>خروج من ملء الشاشة</span>
+        </button>
+      )}
     </div>
   )
 }

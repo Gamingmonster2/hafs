@@ -7,9 +7,11 @@ interface ToolbarProps {
   page: number
   pageLabel: string
   theme: Theme
+  clarity: boolean
   onMushafChange: (id: string) => void
   onOpenIndex: () => void
   onThemeChange: (theme: Theme) => void
+  onClarityChange: (value: boolean) => void
   onToggleFullscreen: () => void
 }
 
@@ -29,9 +31,11 @@ export function Toolbar({
   page,
   pageLabel,
   theme,
+  clarity,
   onMushafChange,
   onOpenIndex,
   onThemeChange,
+  onClarityChange,
   onToggleFullscreen,
 }: ToolbarProps) {
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -111,6 +115,17 @@ export function Toolbar({
                   </button>
                 ))}
               </div>
+              <p className="settings-popover__title settings-popover__title--spaced">قراءة أوضح</p>
+              <button
+                type="button"
+                className={clarity ? 'clarity-toggle is-active' : 'clarity-toggle'}
+                onClick={() => onClarityChange(!clarity)}
+                aria-pressed={clarity}
+              >
+                <span>وضوح الصورة</span>
+                <b aria-hidden="true">{clarity ? '◉' : '○'}</b>
+                <span className="clarity-toggle__state">{clarity ? 'مفعّل' : 'متوقف'}</span>
+              </button>
               {mushaf.sourcePdf && (
                 <a className="pdf-link" href={mushaf.sourcePdf} target="_blank" rel="noreferrer">
                   تحميل نسخة PDF ↗
