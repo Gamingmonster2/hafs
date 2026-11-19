@@ -602,5 +602,7 @@ html[data-focus="true"] .page-error { color: #fff; }
 .nav-btn__arrow { font-size: 27px; font-weight: 700; line-height: 1; }
 .nav-btn__label { font-size: 10px; font-weight: 700; line-height: 1.1; color: var(--accent); }
 
-/* زر صوت تقليب الصفحة داخل الإعدادات */
+/* زر صوت تقليب الصفحة: في الشريط العلوي وداخل الإعدادات */
+.sound-btn { font-size: 16px; }
+.sound-btn.is-muted { opacity: .55; }
 .sound-toggle { margin-top: 8px; }

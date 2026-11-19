@@ -105,6 +105,16 @@ export function Toolbar({
         <button type="button" className="icon-btn" onClick={onToggleUi} title="إخفاء الأدوات أثناء القراءة" aria-label="إخفاء الأدوات أثناء القراءة">
           👁
         </button>
+        <button
+          type="button"
+          className={turnSound ? 'icon-btn sound-btn' : 'icon-btn sound-btn is-muted'}
+          onClick={() => onTurnSoundChange(!turnSound)}
+          title={turnSound ? 'كتم صوت تقليب الصفحة' : 'تشغيل صوت تقليب الصفحة'}
+          aria-label={turnSound ? 'كتم صوت تقليب الصفحة' : 'تشغيل صوت تقليب الصفحة'}
+          aria-pressed={turnSound}
+        >
+          {turnSound ? '🔊' : '🔇'}
+        </button>
         <div className="settings-wrap" ref={settingsRef}>
           <button
             type="button"

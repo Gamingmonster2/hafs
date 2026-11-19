@@ -5,7 +5,7 @@ import { PageViewer } from './components/PageViewer'
 import { Toolbar } from './components/Toolbar'
 import { clampPage, coverCount, getMushaf, imagePageFromNumber, mushafs, pageLabel, quranCount } from './data/mushafs'
 import { usePersistentState } from './hooks/usePersistentState'
-import { playPageTurnSound } from './pageTurnSound'
+import { playPageTurnSound, preloadPageTurnSound } from './pageTurnSound'
 import { applyReaderSeo } from './seo'
 import type { ImageStatus, MushafData, Theme } from './types'
 import { clampZoom, zoomStep } from './zoom'
@@ -67,9 +67,10 @@ export default function App() {
   const toastTimer = useRef<number | null>(null)
   const firstLoad = useRef(true)
 
-  const totalPages = data.pages.length
   const covers = coverCount(mushaf)
   const quranPages = quranCount(mushaf)
+  /** حدود ثابتة منذ اللحظة الأولى: لا يتجاهل القارئ أول ضغطة قبل اكتمال تحميل الفهرس */
+  const totalPages = data.pages.length || covers + quranPages
   const label = pageLabel(mushaf, page)
   const pageNumber = page > covers && page <= covers + quranPages ? page - covers : page
   const currentSrc = useMemo(() => data.pages[page - 1] ?? '', [data.pages, page])
@@ -285,6 +286,10 @@ export default function App() {
   }, [isFullscreen])
 
   useEffect(() => {
+    preloadPageTurnSound()
+  }, [])
+
+  useEffect(() => {
     if (!('serviceWorker' in navigator) || !import.meta.env.PROD) return
     window.addEventListener('load', () => {
       navigator.serviceWorker.register(new URL('sw.js', document.baseURI).href).catch(() => {
@@ -314,7 +319,7 @@ export default function App() {
     (delta: 1 | -1) => {
       const target = page + delta
       if (target < 1 || target > totalPages) return
-      if (turnSound) playPageTurnSound()
+      if (turnSound) void playPageTurnSound()
       goTo(target)
     },
     [goTo, page, totalPages, turnSound],
