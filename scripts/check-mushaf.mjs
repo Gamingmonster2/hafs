@@ -5,7 +5,7 @@
  *   npm run check:mushaf -- --id=hafs
  *   npm run check:mushaf -- --limit=20 --concurrency=6 --no-fail
  */
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '..')
@@ -38,6 +38,24 @@ function loadMushafFiles() {
 
 async function inspect(url) {
   const started = performance.now()
+  // الصور المحلية في public/images/ تُفحص من القرص مباشرة، بلا طلب HTTP
+  if (url.startsWith('/images/')) {
+    try {
+      const file = join(root, 'public', url)
+      const bytes = statSync(file).size
+      return {
+        url, ok: bytes > 1000, status: 200, ms: Math.round(performance.now() - started),
+        slow: false, contentType: 'image/webp', bytes,
+        error: bytes > 1000 ? null : 'file too small',
+      }
+    } catch (error) {
+      return {
+        url, ok: false, status: 0, ms: Math.round(performance.now() - started),
+        slow: false, contentType: '', bytes: 0,
+        error: error instanceof Error ? error.message : String(error),
+      }
+    }
+  }
   try {
     let response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(timeoutMs) })
     if (response.status === 405 || response.status === 403) {

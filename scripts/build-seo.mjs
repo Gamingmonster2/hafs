@@ -30,6 +30,9 @@ const MUSHAFS = [
   { id: 'shubah', host: 'shubah.qurancomplex.ly', short: 'شعبة عن عاصم', riwayah: 'شعبة عن عاصم' },
   { id: 'susi', host: 'susi.qurancomplex.ly', short: 'السوسي عن أبي عمرو', riwayah: 'السوسي عن أبي عمرو' },
   { id: 'douri', host: 'duri.qurancomplex.ly', short: 'الدوري عن أبي عمرو', riwayah: 'الدوري عن أبي عمرو' },
+  { id: 'standard1', host: 'standard1.qurancomplex.ly', short: 'المصحف العادي 1', riwayah: 'حفص عن عاصم', covers: 0 },
+  { id: 'standard2', host: 'standard2.qurancomplex.ly', short: 'المصحف العادي 2', riwayah: 'حفص عن عاصم', covers: 0 },
+  { id: 'big', host: 'big.qurancomplex.ly', short: 'المصحف الكبير', riwayah: 'حفص عن عاصم', covers: 0 },
 ]
 
 const data = MUSHAFS.map((m) => ({
@@ -46,7 +49,11 @@ const xml = (value) => String(value)
   .replace(/'/g, '&apos;')
 
 const readerUrl = (mushaf, page) => `https://${mushaf.host}/?mushaf=${mushaf.id}&page=${page}`
-const imageForPage = (mushaf, page) => mushaf.pages[page + COVERS - 1]
+const imageForPage = (mushaf, page) => {
+  const src = mushaf.pages[page + (mushaf.covers ?? COVERS) - 1]
+  // الصور المحلية مسارات نسبية، لكن خرائط المواقع وبيانات OG تحتاج روابط مطلقة
+  return src?.startsWith('/') ? `${SITE}${src}` : src
+}
 
 function juzRange(mushaf, number) {
   const start = mushaf.index.juz[number - 1].page

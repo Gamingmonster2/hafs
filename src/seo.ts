@@ -15,6 +15,9 @@ const HOSTS: Record<string, string> = {
   shubah: 'shubah.qurancomplex.ly',
   susi: 'susi.qurancomplex.ly',
   douri: 'duri.qurancomplex.ly',
+  standard1: 'standard1.qurancomplex.ly',
+  standard2: 'standard2.qurancomplex.ly',
+  big: 'big.qurancomplex.ly',
 }
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {

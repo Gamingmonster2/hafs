@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "check:mushaf": "node scripts/check-mushaf.mjs",
     "import:mushaf": "node scripts/import-from-repo.mjs",
+    "import:pdfquran": "python scripts/import-pdfquran.py",
     "build:index": "node scripts/build-index.mjs"
   },
   "dependencies": {

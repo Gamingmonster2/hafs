@@ -5,7 +5,7 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '3.2-subdomain-seo'
+const ROUTER_VERSION = '4.0-pdfquran-editions'
 
 const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
 
@@ -55,6 +55,7 @@ const SEO_CONTENT_TYPES = {
   '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
   '.png': 'image/png',
+  '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
 }
@@ -68,9 +69,12 @@ const ROUTES = {
   'susi.qurancomplex.ly': 'susi',
   'duri.qurancomplex.ly': 'douri',
   'douri.qurancomplex.ly': 'douri',
+  'standard1.qurancomplex.ly': 'standard1',
+  'standard2.qurancomplex.ly': 'standard2',
+  'big.qurancomplex.ly': 'big',
 }
 
-/** بيانات SEO ثابتة لكل رواية: تُحقن في HTML المُمرَّر قبل تشغيل JavaScript */
+/** بيانات SEO ثابتة لكل مصحف: تُحقن في HTML المُمرَّر قبل تشغيل JavaScript */
 const MUSHAF_SEO = {
   hafs: { riwayah: 'حفص عن عاصم' },
   qaloon: { riwayah: 'قالون عن نافع' },
@@ -78,13 +82,17 @@ const MUSHAF_SEO = {
   shubah: { riwayah: 'شعبة عن عاصم' },
   susi: { riwayah: 'السوسي عن أبي عمرو' },
   douri: { riwayah: 'الدوري عن أبي عمرو' },
+  standard1: { edition: 'المصحف العادي 1' },
+  standard2: { edition: 'المصحف العادي 2' },
+  big: { edition: 'المصحف الكبير' },
 }
 
 function localizeReaderHtml(html, mushafId, hostname) {
   const seo = MUSHAF_SEO[mushafId]
   if (!seo) return html
-  const title = `مصحف المدينة - رواية ${seo.riwayah} | Quran Complex - Mushaf`
-  const description = `تصفح وقراءة مصحف المدينة برواية ${seo.riwayah} أونلاين بجودة عالية: انتقال مباشر إلى أي صفحة، فهرس السور والأجزاء، تكبير ووضع ليلي، وتجربة قراءة سريعة على كل الأجهزة.`
+  const label = seo.riwayah ? `رواية ${seo.riwayah}` : seo.edition
+  const title = `مصحف المدينة - ${label} | Quran Complex - Mushaf`
+  const description = `تصفح وقراءة مصحف المدينة (${label}) أونلاين بجودة عالية: انتقال مباشر إلى أي صفحة، فهرس السور والأجزاء، تكبير ووضع ليلي، وتجربة قراءة سريعة على كل الأجهزة.`
 
   let output = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`)
   output = output.replace(
@@ -841,8 +849,8 @@ export default {
 
     // بيانات SEO على النطاق الرئيسي: تُقرأ من نسخة القارئ المنشورة فلا يتكرر تخزينها في الـ Worker.
     const seoPath = SEO_ALIASES[url.pathname] ?? url.pathname
-    if (!mushaf && (SEO_FILES.has(seoPath) || isGeneratedSeoFile(seoPath))) {
-      return serveReaderFile(env, seoPath)
+    if (!mushaf && (SEO_FILES.has(seoPath) || isGeneratedSeoFile(seoPath) || url.pathname.startsWith('/images/'))) {
+      return serveReaderFile(env, url.pathname.startsWith('/images/') ? url.pathname : seoPath)
     }
 
     if (mushaf) {
@@ -852,7 +860,7 @@ export default {
 
       // الملفات المجزّأة تُخزَّن طويلاً؛ HTML يُحدَّث دائماً حتى تظهر البنية الجديدة فوراً.
       const isHashedAsset = /\.[0-9a-zA-Z_-]{8,}\.(js|css)$/.test(url.pathname)
-      const isStaticFile = /\.(js|css|png|svg|webmanifest|ico|jpg|woff2?)$/.test(url.pathname)
+      const isStaticFile = /\.(js|css|png|webp|svg|webmanifest|ico|jpg|woff2?)$/.test(url.pathname)
       const response = await fetch(target.toString(), {
         headers: { 'X-Forwarded-Host': hostname },
         cf: isHashedAsset || isStaticFile
