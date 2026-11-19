@@ -5,7 +5,7 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '3.1-reading-install'
+const ROUTER_VERSION = '3.2-subdomain-seo'
 
 const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
 
@@ -68,6 +68,37 @@ const ROUTES = {
   'susi.qurancomplex.ly': 'susi',
   'duri.qurancomplex.ly': 'douri',
   'douri.qurancomplex.ly': 'douri',
+}
+
+/** بيانات SEO ثابتة لكل رواية: تُحقن في HTML المُمرَّر قبل تشغيل JavaScript */
+const MUSHAF_SEO = {
+  hafs: { riwayah: 'حفص عن عاصم' },
+  qaloon: { riwayah: 'قالون عن نافع' },
+  warsh: { riwayah: 'ورش عن نافع' },
+  shubah: { riwayah: 'شعبة عن عاصم' },
+  susi: { riwayah: 'السوسي عن أبي عمرو' },
+  douri: { riwayah: 'الدوري عن أبي عمرو' },
+}
+
+function localizeReaderHtml(html, mushafId, hostname) {
+  const seo = MUSHAF_SEO[mushafId]
+  if (!seo) return html
+  const title = `مصحف المدينة - رواية ${seo.riwayah} | Quran Complex - Mushaf`
+  const description = `تصفح وقراءة مصحف المدينة برواية ${seo.riwayah} أونلاين بجودة عالية: انتقال مباشر إلى أي صفحة، فهرس السور والأجزاء، تكبير ووضع ليلي، وتجربة قراءة سريعة على كل الأجهزة.`
+
+  let output = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`)
+  output = output.replace(
+    /<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta name="description" content="${description}" />`,
+  )
+  if (!/rel=["']canonical["']/i.test(output)) {
+    const tags = `  <link rel="canonical" href="https://${hostname}/" />\n`
+      + `  <meta property="og:title" content="${title}" />\n`
+      + `  <meta property="og:description" content="${description}" />\n`
+      + `  <meta property="og:url" content="https://${hostname}/" />\n`
+    output = output.replace('</head>', `${tags}  </head>`)
+  }
+  return output
 }
 
 /** صفحة الهبوط للنطاق الرئيسي */
@@ -833,7 +864,15 @@ export default {
       headers.set('X-Content-Type-Options', 'nosniff')
       headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
       headers.set('X-QC-Router', ROUTER_VERSION)
-      if (!isStaticFile && url.pathname === '/') headers.set('Cache-Control', 'no-store')
+
+      // كل نطاق فرعي يحمل عنوان ووصف روايته في HTML الخام، لا عنواناً عاماً مشتركاً
+      if (!isStaticFile && url.pathname === '/') {
+        headers.set('Cache-Control', 'no-store')
+        headers.delete('content-length')
+        const html = localizeReaderHtml(await response.text(), mushaf, hostname)
+        return new Response(html, { status: response.status, statusText: response.statusText, headers })
+      }
+
       return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
     }
 
