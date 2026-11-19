@@ -5,10 +5,10 @@ import { PageViewer } from './components/PageViewer'
 import { Toolbar } from './components/Toolbar'
 import { clampPage, coverCount, getMushaf, imagePageFromNumber, mushafs, pageLabel, quranCount } from './data/mushafs'
 import { usePersistentState } from './hooks/usePersistentState'
+import { playPageTurnSound } from './pageTurnSound'
 import { applyReaderSeo } from './seo'
 import type { ImageStatus, MushafData, Theme } from './types'
-
-const ZOOM_STEPS = [50, 75, 100, 125, 150, 200, 250]
+import { clampZoom, zoomStep } from './zoom'
 
 interface InstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -33,11 +33,6 @@ function mushafFromHost(): string | null {
   return map[subdomain] ?? null
 }
 
-function zoomStep(current: number, direction: 1 | -1): number {
-  if (direction === 1) return ZOOM_STEPS.find((step) => step > current) ?? Math.min(current + 25, 300)
-  return [...ZOOM_STEPS].reverse().find((step) => step < current) ?? Math.max(current - 25, 50)
-}
-
 export default function App() {
   const initialMushaf = getMushaf(readParam('mushaf') ?? mushafFromHost())
   const [mushafId, setMushafId] = useState(initialMushaf.id)
@@ -57,6 +52,7 @@ export default function App() {
   const [fitMode, setFitMode] = usePersistentState<boolean>('qurancomplex:fit', true)
   const [theme, setTheme] = usePersistentState<Theme>('qurancomplex:theme', 'light')
   const [clarity, setClarity] = usePersistentState<boolean>('qurancomplex:clarity', false)
+  const [turnSound, setTurnSound] = usePersistentState<boolean>('qurancomplex:turn-sound', true)
   const [uiHidden, setUiHidden] = useState(false)
   const [canInstall, setCanInstall] = useState(false)
   const installPrompt = useRef<InstallPromptEvent | null>(null)
@@ -91,7 +87,7 @@ export default function App() {
   /** حدود التكبير موحّدة لأزرار +/− والقرّب بإصبعين */
   const setZoomClamped = useCallback((value: number) => {
     if (!Number.isFinite(value)) return
-    setZoom(Math.min(Math.max(Math.trunc(value), 50), 300))
+    setZoom(clampZoom(value))
   }, [])
 
   /** أي تكبير صريح يلغي وضع الملاءمة مؤقتاً؛ وزر الملاءمة يرجعه */
@@ -153,7 +149,7 @@ export default function App() {
     }
 
     if (saved && typeof saved.zoom === 'number' && Number.isFinite(saved.zoom)) {
-      setZoom(Math.min(Math.max(Math.trunc(saved.zoom), 50), 300))
+      setZoom(clampZoom(saved.zoom))
     }
 
     const shouldUseUrlPage = firstLoad.current && (readParam('page') !== null || readParam('image') !== null)
@@ -313,8 +309,19 @@ export default function App() {
     [goTo, mushaf],
   )
 
-  const nextPage = useCallback(() => goTo(page + 1), [goTo, page])
-  const previousPage = useCallback(() => goTo(page - 1), [goTo, page])
+  /** قلب صفحة واحدة: صوت خفيف عند الانتقال الفعلي فقط (لا صوت عند الحدود) */
+  const turnPage = useCallback(
+    (delta: 1 | -1) => {
+      const target = page + delta
+      if (target < 1 || target > totalPages) return
+      if (turnSound) playPageTurnSound()
+      goTo(target)
+    },
+    [goTo, page, totalPages, turnSound],
+  )
+
+  const nextPage = useCallback(() => turnPage(1), [turnPage])
+  const previousPage = useCallback(() => turnPage(-1), [turnPage])
 
   const toggleFullscreen = useCallback(async () => {
     try {
@@ -423,12 +430,14 @@ export default function App() {
         pageLabel={label}
         theme={theme}
         clarity={clarity}
+        turnSound={turnSound}
         uiHidden={uiHidden}
         canInstall={canInstall}
         onMushafChange={handleMushafChange}
         onOpenIndex={() => setDrawerOpen(true)}
         onThemeChange={setTheme}
         onClarityChange={setClarity}
+        onTurnSoundChange={setTurnSound}
         onToggleUi={toggleUi}
         onInstall={() => void installApp()}
         onToggleFullscreen={() => void toggleFullscreen()}

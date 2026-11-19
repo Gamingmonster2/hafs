@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import type { CSSProperties, TouchEvent } from 'react'
 import type { ImageStatus } from '../types'
+import { clampZoom } from '../zoom'
 
 interface PageViewerProps {
   src: string
@@ -64,7 +65,7 @@ export function PageViewer({
     const distance = distanceBetween(event.touches[0], event.touches[1])
     const ratio = distance / pinch.current.distance
     const next = Math.round(pinch.current.zoom * ratio)
-    onZoomSet(Math.min(Math.max(next, 50), 300))
+    onZoomSet(clampZoom(next))
   }
 
   function handleTouchEnd(event: TouchEvent) {

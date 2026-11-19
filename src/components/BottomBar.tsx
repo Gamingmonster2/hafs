@@ -58,8 +58,9 @@ export function BottomBar({
   return (
     <footer className="bottom-bar">
       <div className="bottom-bar__group">
-        <button type="button" className="nav-btn" onClick={onPrevious} aria-label="الصفحة السابقة" title="الصفحة السابقة (→)">
-          ›
+        <button type="button" className="nav-btn nav-btn--page" onClick={onPrevious} aria-label="الصفحة السابقة" title="الصفحة السابقة (→)">
+          <span className="nav-btn__arrow" aria-hidden="true">→</span>
+          <span className="nav-btn__label">السابقة</span>
         </button>
         <form className="page-jump" onSubmit={submitPage}>
           <label className="sr-only" htmlFor="page-jump-input">رقم الصفحة</label>
@@ -76,8 +77,9 @@ export function BottomBar({
           <button type="submit" className="mini-btn">اذهب</button>
           <span className="page-jump__label" title="الصورة الحالية في الملف">{pageLabel}</span>
         </form>
-        <button type="button" className="nav-btn" onClick={onNext} aria-label="الصفحة التالية" title="الصفحة التالية (←)">
-          ‹
+        <button type="button" className="nav-btn nav-btn--page" onClick={onNext} aria-label="الصفحة التالية" title="الصفحة التالية (←)">
+          <span className="nav-btn__arrow" aria-hidden="true">←</span>
+          <span className="nav-btn__label">التالية</span>
         </button>
       </div>
 

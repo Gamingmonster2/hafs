@@ -583,3 +583,24 @@ html[data-focus="true"] .page-error { color: #fff; }
   .toolbar__brand .brand-mark { width: 32px; height: 32px; }
   .settings-popover { left: auto; right: 0; }
 }
+
+/* أزرار قلب الصفحة: أكبر وأوضح، مع كلمة توضيحية تحت السهم */
+.bottom-bar .nav-btn--page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 68px;
+  height: 54px;
+  padding: 4px 8px;
+  gap: 1px;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.nav-btn__arrow { font-size: 27px; font-weight: 700; line-height: 1; }
+.nav-btn__label { font-size: 10px; font-weight: 700; line-height: 1.1; color: var(--accent); }
+
+/* زر صوت تقليب الصفحة داخل الإعدادات */
+.sound-toggle { margin-top: 8px; }

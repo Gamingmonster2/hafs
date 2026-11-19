@@ -8,12 +8,14 @@ interface ToolbarProps {
   pageLabel: string
   theme: Theme
   clarity: boolean
+  turnSound: boolean
   uiHidden: boolean
   canInstall: boolean
   onMushafChange: (id: string) => void
   onOpenIndex: () => void
   onThemeChange: (theme: Theme) => void
   onClarityChange: (value: boolean) => void
+  onTurnSoundChange: (value: boolean) => void
   onToggleUi: () => void
   onInstall: () => void
   onToggleFullscreen: () => void
@@ -36,12 +38,14 @@ export function Toolbar({
   pageLabel,
   theme,
   clarity,
+  turnSound,
   uiHidden,
   canInstall,
   onMushafChange,
   onOpenIndex,
   onThemeChange,
   onClarityChange,
+  onTurnSoundChange,
   onToggleUi,
   onInstall,
   onToggleFullscreen,
@@ -140,6 +144,16 @@ export function Toolbar({
                 <span>وضوح الصورة</span>
                 <b aria-hidden="true">{clarity ? '◉' : '○'}</b>
                 <span className="clarity-toggle__state">{clarity ? 'مفعّل' : 'متوقف'}</span>
+              </button>
+              <button
+                type="button"
+                className={`clarity-toggle sound-toggle${turnSound ? ' is-active' : ''}`}
+                onClick={() => onTurnSoundChange(!turnSound)}
+                aria-pressed={turnSound}
+              >
+                <span>صوت تقليب الصفحة</span>
+                <b aria-hidden="true">{turnSound ? '◉' : '○'}</b>
+                <span className="clarity-toggle__state">{turnSound ? 'مفعّل' : 'متوقف'}</span>
               </button>
               {mushaf.sourcePdf && (
                 <a className="pdf-link" href={mushaf.sourcePdf} target="_blank" rel="noreferrer">
