@@ -5,7 +5,7 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '6.0-per-page-seo'
+const ROUTER_VERSION = '6.1-glass-previews'
 
 const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
 
@@ -53,14 +53,15 @@ const EDITIONS = [
 ]
 
 const EDITION_CARDS = EDITIONS.map((item) => `
-      <a href="https://${item.id}.qurancomplex.ly" class="card">
-        <img class="card__cover" src="/images/covers/${item.id}.webp" alt="غلاف ${item.title}" loading="lazy" decoding="async" width="72" height="104">
-        <div class="card__body">
-          <div>
-            <span class="card__eyebrow">${item.group}</span>
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-          </div>
+      <a href="https://${item.id}.qurancomplex.ly" class="card card--preview">
+        <span class="card__glass">
+          <img class="card__preview" src="/images/previews/${item.id}.webp" alt="الصفحة الأولى من ${item.title}" loading="lazy" decoding="async" width="240" height="348">
+          <span class="card__shine" aria-hidden="true"></span>
+        </span>
+        <div class="card__body card__body--under">
+          <span class="card__eyebrow">${item.group}</span>
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
           <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
         </div>
       </a>`).join('')
@@ -376,10 +377,58 @@ const landingHtml = `<!DOCTYPE html>
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
       width: 100%;
     }
+
+    /* صندوق زجاجي: صورة الصفحة الأولى داخل إطار شفاف والكتابة تحتها */
+    .card--preview {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      min-height: 0;
+      padding: 14px;
+    }
+    .card__glass {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.22), rgba(212, 175, 55, 0.08));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 12px 30px -14px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+    }
+    .card__preview {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 240 / 348;
+      object-fit: contain;
+      object-position: top center;
+      background: #fff;
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .card:hover .card__preview { transform: scale(1.04); }
+    .card__shine {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 48%, transparent 62%);
+      transform: translateX(-120%);
+      transition: transform 0.8s ease;
+    }
+    .card:hover .card__shine { transform: translateX(120%); }
+    .card__body--under {
+      align-items: stretch;
+      gap: 8px;
+      text-align: center;
+    }
+    .card__body--under h3 { font-size: 1rem; margin: 2px 0; }
+    .card__body--under p { font-size: 0.76rem; line-height: 1.55; margin: 0; }
+    .card__body--under .badge { align-self: center; }
 
     /* Magic UI — Spotlight card + Shine border على خلفية زجاجية */
     .card {
@@ -679,9 +728,11 @@ const landingHtml = `<!DOCTYPE html>
     @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
     @media (max-width: 600px) {
       .container { padding: 28px 16px 48px; }
-      .grid { grid-template-columns: 1fr; }
-      .card { min-height: 150px; padding: 18px; }
-      .card__cover { width: 62px; height: 90px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+      .card { min-height: 0; padding: 10px; }
+      .card--preview { gap: 8px; }
+      .card__body--under p { display: none; }
+      .card__body--under h3 { font-size: 0.85rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
