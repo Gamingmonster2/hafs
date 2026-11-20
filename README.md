@@ -2,6 +2,8 @@
 
 [![Preview build](https://github.com/Gamingmonster2/hafs/actions/workflows/pages-preview.yml/badge.svg?branch=reader-preview)](https://github.com/Gamingmonster2/hafs/actions/workflows/pages-preview.yml)
 
+> **النسخة الحالية (الإصدار 2)** هي هذا التطبيق الكامل، وهي ما تظهر في الصفحة الرئيسية للمستودع. **النسخة الأولى** (ملف `index.html` القديم الخاص برواية حفص وحدها) لم تُحذف؛ بل أُرشفت في [`legacy/`](legacy/README.md) وفي الفرع `legacy-v1` لمن أراد الرجوع إليها أو تطويرها. الأرشيف غير مستعمل في البناء أو النشر، ولا يؤثر على روابط الصور لأنها على Blogger وpdfquran.com.
+
 **قارئ مصاحف رقمي** يجمع **مصحف المدينة النبوية** بروايات **حفص، قالون، ورش، شعبة، السوسي والدوري**، وثلاثة إصدارات عربية من **pdfquran.com** (**المصحف العادي 1**، **المصحف العادي 2**، **المصحف الكبير**)، و**اثنتي عشرة ترجمة** إلى لغات العالم، في تطبيق واحد مبني بـ **React + Vite + TypeScript**. صفحات مصوّرة كاملة، فهرس السور والأجزاء، انتقال مباشر إلى أي صفحة، قراءة دون اتصال، وتوافق مع الجوال.
 
 🔗 [الواجهة الرئيسية](https://qurancomplex.ly/) · [المعاينة المباشرة](https://gamingmonster2.github.io/hafs/) · [المستودع](https://github.com/Gamingmonster2/hafs)
