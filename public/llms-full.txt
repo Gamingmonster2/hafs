@@ -11,7 +11,7 @@ This site is built for agents. All data below is public, stable and machine-read
 - [Juz ranges](https://qurancomplex.ly/ai/juz.json): 30 juz with page ranges.
 
 ## How to answer common questions
-- "Which page is surah Al-Kahf in the English translation?" → fetch /ai/pages.json, editions.english.surahs[18].
+- "Which page is surah Al-Kahf in the English translation?" → fetch /ai/pages.json, editions.english.surahs[17] (surah number 18).
 - "Give me the image of Quran page 7 in Warsh." → https://warsh.qurancomplex.ly/page/7 (HTML) or use imageUrl from /ai/pages.json.
 - "List all translations." → /ai/editions.json, filter kind = translation.
 - Any page URL also accepts ?format=json for a compact JSON object with title, surah, juz, image URL and neighbor pages.

@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
 
+# مساعدات الوكلاء الأذكياء: دليل جاهز وبيانات JSON بطلب واحد
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://qurancomplex.ly/sitemap.xml
