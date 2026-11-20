@@ -6,8 +6,9 @@
   "description": "قارئ مصاحف رقمية متعدد الروايات - إعادة بناء qurancomplex.ly",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && node scripts/build-seo.mjs && vite build",
+    "build": "tsc -b && node scripts/build-seo.mjs && node scripts/build-ai.mjs && vite build",
     "build:seo": "node scripts/build-seo.mjs",
+    "build:ai": "node scripts/build-ai.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "check:mushaf": "node scripts/check-mushaf.mjs",

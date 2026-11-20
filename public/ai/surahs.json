@@ -1,0 +1,918 @@
+{
+  "generated": "2026-11-20",
+  "note": "Page numbers are from the Hafs riwayah with 604 numbered Quran pages; other editions have their own page numbers in ai/pages.json.",
+  "surahs": [
+    {
+      "number": 1,
+      "nameAr": "الفاتحة",
+      "nameEn": "Al-Fatihah — The Opening",
+      "hafsStartPage": 1,
+      "hafsEndPage": 1,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/1"
+    },
+    {
+      "number": 2,
+      "nameAr": "البقرة",
+      "nameEn": "Al-Baqarah — The Cow",
+      "hafsStartPage": 2,
+      "hafsEndPage": 49,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/2"
+    },
+    {
+      "number": 3,
+      "nameAr": "آل عمران",
+      "nameEn": "Ali-Imran — The Family of Imran",
+      "hafsStartPage": 50,
+      "hafsEndPage": 76,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/50"
+    },
+    {
+      "number": 4,
+      "nameAr": "النساء",
+      "nameEn": "An-Nisa — The Women",
+      "hafsStartPage": 77,
+      "hafsEndPage": 106,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/77"
+    },
+    {
+      "number": 5,
+      "nameAr": "المائدة",
+      "nameEn": "Al-Ma'idah — The Table Spread",
+      "hafsStartPage": 106,
+      "hafsEndPage": 127,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/106"
+    },
+    {
+      "number": 6,
+      "nameAr": "الأنعام",
+      "nameEn": "Al-An'am — The Cattle",
+      "hafsStartPage": 128,
+      "hafsEndPage": 150,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/128"
+    },
+    {
+      "number": 7,
+      "nameAr": "الأعراف",
+      "nameEn": "Al-A'raf — The Heights",
+      "hafsStartPage": 151,
+      "hafsEndPage": 176,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/151"
+    },
+    {
+      "number": 8,
+      "nameAr": "الأنفال",
+      "nameEn": "Al-Anfal — The Spoils of War",
+      "hafsStartPage": 177,
+      "hafsEndPage": 186,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/177"
+    },
+    {
+      "number": 9,
+      "nameAr": "التوبة",
+      "nameEn": "At-Tawbah — The Repentance",
+      "hafsStartPage": 187,
+      "hafsEndPage": 207,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/187"
+    },
+    {
+      "number": 10,
+      "nameAr": "يونس",
+      "nameEn": "Yunus — Jonah",
+      "hafsStartPage": 208,
+      "hafsEndPage": 221,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/208"
+    },
+    {
+      "number": 11,
+      "nameAr": "هود",
+      "nameEn": "Hud — Hud",
+      "hafsStartPage": 221,
+      "hafsEndPage": 235,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/221"
+    },
+    {
+      "number": 12,
+      "nameAr": "يوسف",
+      "nameEn": "Yusuf — Joseph",
+      "hafsStartPage": 235,
+      "hafsEndPage": 248,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/235"
+    },
+    {
+      "number": 13,
+      "nameAr": "الرعد",
+      "nameEn": "Ar-Ra'd — The Thunder",
+      "hafsStartPage": 249,
+      "hafsEndPage": 255,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/249"
+    },
+    {
+      "number": 14,
+      "nameAr": "ابراهيم",
+      "nameEn": "Ibrahim — Abraham",
+      "hafsStartPage": 255,
+      "hafsEndPage": 261,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/255"
+    },
+    {
+      "number": 15,
+      "nameAr": "الحجر",
+      "nameEn": "Al-Hijr — The Rocky Tract",
+      "hafsStartPage": 262,
+      "hafsEndPage": 267,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/262"
+    },
+    {
+      "number": 16,
+      "nameAr": "النحل",
+      "nameEn": "An-Nahl — The Bee",
+      "hafsStartPage": 267,
+      "hafsEndPage": 281,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/267"
+    },
+    {
+      "number": 17,
+      "nameAr": "الإسراء",
+      "nameEn": "Al-Isra — The Night Journey",
+      "hafsStartPage": 282,
+      "hafsEndPage": 293,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/282"
+    },
+    {
+      "number": 18,
+      "nameAr": "الكهف",
+      "nameEn": "Al-Kahf — The Cave",
+      "hafsStartPage": 293,
+      "hafsEndPage": 304,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/293"
+    },
+    {
+      "number": 19,
+      "nameAr": "مريم",
+      "nameEn": "Maryam — Mary",
+      "hafsStartPage": 305,
+      "hafsEndPage": 312,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/305"
+    },
+    {
+      "number": 20,
+      "nameAr": "طه",
+      "nameEn": "Ta-Ha — Ta-Ha",
+      "hafsStartPage": 312,
+      "hafsEndPage": 321,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/312"
+    },
+    {
+      "number": 21,
+      "nameAr": "الأنبياء",
+      "nameEn": "Al-Anbiya — The Prophets",
+      "hafsStartPage": 322,
+      "hafsEndPage": 331,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/322"
+    },
+    {
+      "number": 22,
+      "nameAr": "الحج",
+      "nameEn": "Al-Hajj — The Pilgrimage",
+      "hafsStartPage": 332,
+      "hafsEndPage": 341,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/332"
+    },
+    {
+      "number": 23,
+      "nameAr": "المؤمنون",
+      "nameEn": "Al-Mu'minun — The Believers",
+      "hafsStartPage": 342,
+      "hafsEndPage": 349,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/342"
+    },
+    {
+      "number": 24,
+      "nameAr": "النور",
+      "nameEn": "An-Nur — The Light",
+      "hafsStartPage": 350,
+      "hafsEndPage": 359,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/350"
+    },
+    {
+      "number": 25,
+      "nameAr": "الفرقان",
+      "nameEn": "Al-Furqan — The Criterion",
+      "hafsStartPage": 359,
+      "hafsEndPage": 366,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/359"
+    },
+    {
+      "number": 26,
+      "nameAr": "الشعراء",
+      "nameEn": "Ash-Shu'ara — The Poets",
+      "hafsStartPage": 367,
+      "hafsEndPage": 376,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/367"
+    },
+    {
+      "number": 27,
+      "nameAr": "النمل",
+      "nameEn": "An-Naml — The Ant",
+      "hafsStartPage": 377,
+      "hafsEndPage": 385,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/377"
+    },
+    {
+      "number": 28,
+      "nameAr": "القصص",
+      "nameEn": "Al-Qasas — The Stories",
+      "hafsStartPage": 385,
+      "hafsEndPage": 396,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/385"
+    },
+    {
+      "number": 29,
+      "nameAr": "العنكبوت",
+      "nameEn": "Al-'Ankabut — The Spider",
+      "hafsStartPage": 396,
+      "hafsEndPage": 404,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/396"
+    },
+    {
+      "number": 30,
+      "nameAr": "الروم",
+      "nameEn": "Ar-Rum — The Romans",
+      "hafsStartPage": 404,
+      "hafsEndPage": 410,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/404"
+    },
+    {
+      "number": 31,
+      "nameAr": "لقمان",
+      "nameEn": "Luqman — Luqman",
+      "hafsStartPage": 411,
+      "hafsEndPage": 414,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/411"
+    },
+    {
+      "number": 32,
+      "nameAr": "السجدة",
+      "nameEn": "As-Sajdah — The Prostration",
+      "hafsStartPage": 415,
+      "hafsEndPage": 417,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/415"
+    },
+    {
+      "number": 33,
+      "nameAr": "الأحزاب",
+      "nameEn": "Al-Ahzab — The Combined Forces",
+      "hafsStartPage": 418,
+      "hafsEndPage": 427,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/418"
+    },
+    {
+      "number": 34,
+      "nameAr": "سبإ",
+      "nameEn": "Saba — Sheba",
+      "hafsStartPage": 428,
+      "hafsEndPage": 434,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/428"
+    },
+    {
+      "number": 35,
+      "nameAr": "فاطر",
+      "nameEn": "Fatir — The Originator",
+      "hafsStartPage": 434,
+      "hafsEndPage": 440,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/434"
+    },
+    {
+      "number": 36,
+      "nameAr": "يس",
+      "nameEn": "Ya-Sin — Ya-Sin",
+      "hafsStartPage": 440,
+      "hafsEndPage": 445,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/440"
+    },
+    {
+      "number": 37,
+      "nameAr": "الصافات",
+      "nameEn": "As-Saffat — Those Who Set The Ranks",
+      "hafsStartPage": 446,
+      "hafsEndPage": 452,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/446"
+    },
+    {
+      "number": 38,
+      "nameAr": "ص",
+      "nameEn": "Sad — The Letter Saad",
+      "hafsStartPage": 453,
+      "hafsEndPage": 458,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/453"
+    },
+    {
+      "number": 39,
+      "nameAr": "الزمر",
+      "nameEn": "Az-Zumar — The Troops",
+      "hafsStartPage": 458,
+      "hafsEndPage": 467,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/458"
+    },
+    {
+      "number": 40,
+      "nameAr": "غافر",
+      "nameEn": "Ghafir — The Forgiving",
+      "hafsStartPage": 467,
+      "hafsEndPage": 476,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/467"
+    },
+    {
+      "number": 41,
+      "nameAr": "فصلت",
+      "nameEn": "Fussilat — Explained in Detail",
+      "hafsStartPage": 477,
+      "hafsEndPage": 482,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/477"
+    },
+    {
+      "number": 42,
+      "nameAr": "الشورى",
+      "nameEn": "Ash-Shura — The Consultation",
+      "hafsStartPage": 483,
+      "hafsEndPage": 489,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/483"
+    },
+    {
+      "number": 43,
+      "nameAr": "الزخرف",
+      "nameEn": "Az-Zukhruf — The Ornaments of Gold",
+      "hafsStartPage": 489,
+      "hafsEndPage": 495,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/489"
+    },
+    {
+      "number": 44,
+      "nameAr": "الدخان",
+      "nameEn": "Ad-Dukhan — The Smoke",
+      "hafsStartPage": 496,
+      "hafsEndPage": 498,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/496"
+    },
+    {
+      "number": 45,
+      "nameAr": "الجاثية",
+      "nameEn": "Al-Jathiyah — The Crouching",
+      "hafsStartPage": 499,
+      "hafsEndPage": 502,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/499"
+    },
+    {
+      "number": 46,
+      "nameAr": "الأحقاف",
+      "nameEn": "Al-Ahqaf — The Wind-Curved Sandhills",
+      "hafsStartPage": 502,
+      "hafsEndPage": 506,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/502"
+    },
+    {
+      "number": 47,
+      "nameAr": "محمد",
+      "nameEn": "Muhammad — Muhammad",
+      "hafsStartPage": 507,
+      "hafsEndPage": 510,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/507"
+    },
+    {
+      "number": 48,
+      "nameAr": "الفتح",
+      "nameEn": "Al-Fath — The Victory",
+      "hafsStartPage": 511,
+      "hafsEndPage": 515,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/511"
+    },
+    {
+      "number": 49,
+      "nameAr": "الحجرات",
+      "nameEn": "Al-Hujurat — The Rooms",
+      "hafsStartPage": 515,
+      "hafsEndPage": 517,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/515"
+    },
+    {
+      "number": 50,
+      "nameAr": "ق",
+      "nameEn": "Qaf — The Letter Qaf",
+      "hafsStartPage": 518,
+      "hafsEndPage": 520,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/518"
+    },
+    {
+      "number": 51,
+      "nameAr": "الذاريات",
+      "nameEn": "Adh-Dhariyat — The Winnowing Winds",
+      "hafsStartPage": 520,
+      "hafsEndPage": 523,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/520"
+    },
+    {
+      "number": 52,
+      "nameAr": "الطور",
+      "nameEn": "At-Tur — The Mount",
+      "hafsStartPage": 523,
+      "hafsEndPage": 525,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/523"
+    },
+    {
+      "number": 53,
+      "nameAr": "النجم",
+      "nameEn": "An-Najm — The Star",
+      "hafsStartPage": 526,
+      "hafsEndPage": 528,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/526"
+    },
+    {
+      "number": 54,
+      "nameAr": "القمر",
+      "nameEn": "Al-Qamar — The Moon",
+      "hafsStartPage": 528,
+      "hafsEndPage": 531,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/528"
+    },
+    {
+      "number": 55,
+      "nameAr": "الرحمن",
+      "nameEn": "Ar-Rahman — The Beneficent",
+      "hafsStartPage": 531,
+      "hafsEndPage": 534,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/531"
+    },
+    {
+      "number": 56,
+      "nameAr": "الواقعة",
+      "nameEn": "Al-Waqi'ah — The Event",
+      "hafsStartPage": 534,
+      "hafsEndPage": 537,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/534"
+    },
+    {
+      "number": 57,
+      "nameAr": "الحديد",
+      "nameEn": "Al-Hadid — The Iron",
+      "hafsStartPage": 537,
+      "hafsEndPage": 541,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/537"
+    },
+    {
+      "number": 58,
+      "nameAr": "المجادلة",
+      "nameEn": "Al-Mujadila — The Pleading Woman",
+      "hafsStartPage": 542,
+      "hafsEndPage": 545,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/542"
+    },
+    {
+      "number": 59,
+      "nameAr": "الحشر",
+      "nameEn": "Al-Hashr — The Exile",
+      "hafsStartPage": 545,
+      "hafsEndPage": 548,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/545"
+    },
+    {
+      "number": 60,
+      "nameAr": "الممتحنة",
+      "nameEn": "Al-Mumtahanah — She That Is To Be Examined",
+      "hafsStartPage": 549,
+      "hafsEndPage": 551,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/549"
+    },
+    {
+      "number": 61,
+      "nameAr": "الصف",
+      "nameEn": "As-Saff — The Ranks",
+      "hafsStartPage": 551,
+      "hafsEndPage": 552,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/551"
+    },
+    {
+      "number": 62,
+      "nameAr": "الجمعة",
+      "nameEn": "Al-Jumu'ah — The Congregation",
+      "hafsStartPage": 553,
+      "hafsEndPage": 554,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/553"
+    },
+    {
+      "number": 63,
+      "nameAr": "المنافقون",
+      "nameEn": "Al-Munafiqun — The Hypocrites",
+      "hafsStartPage": 554,
+      "hafsEndPage": 555,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/554"
+    },
+    {
+      "number": 64,
+      "nameAr": "التغابن",
+      "nameEn": "At-Taghabun — The Day of Mutual Loss and Gain",
+      "hafsStartPage": 556,
+      "hafsEndPage": 557,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/556"
+    },
+    {
+      "number": 65,
+      "nameAr": "الطلاق",
+      "nameEn": "At-Talaq — The Divorce",
+      "hafsStartPage": 558,
+      "hafsEndPage": 559,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/558"
+    },
+    {
+      "number": 66,
+      "nameAr": "التحريم",
+      "nameEn": "At-Tahrim — The Prohibition",
+      "hafsStartPage": 560,
+      "hafsEndPage": 561,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/560"
+    },
+    {
+      "number": 67,
+      "nameAr": "الملك",
+      "nameEn": "Al-Mulk — The Dominion",
+      "hafsStartPage": 562,
+      "hafsEndPage": 564,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/562"
+    },
+    {
+      "number": 68,
+      "nameAr": "القلم",
+      "nameEn": "Al-Qalam — The Pen",
+      "hafsStartPage": 564,
+      "hafsEndPage": 566,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/564"
+    },
+    {
+      "number": 69,
+      "nameAr": "الحاقة",
+      "nameEn": "Al-Haqqah — The Inevitable",
+      "hafsStartPage": 566,
+      "hafsEndPage": 568,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/566"
+    },
+    {
+      "number": 70,
+      "nameAr": "المعارج",
+      "nameEn": "Al-Ma'arij — The Ways of Ascent",
+      "hafsStartPage": 568,
+      "hafsEndPage": 570,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/568"
+    },
+    {
+      "number": 71,
+      "nameAr": "نوح",
+      "nameEn": "Nuh — Noah",
+      "hafsStartPage": 570,
+      "hafsEndPage": 571,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/570"
+    },
+    {
+      "number": 72,
+      "nameAr": "الجن",
+      "nameEn": "Al-Jinn — The Spirits",
+      "hafsStartPage": 572,
+      "hafsEndPage": 573,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/572"
+    },
+    {
+      "number": 73,
+      "nameAr": "المزمل",
+      "nameEn": "Al-Muzzammil — The One Wrapped In Garments",
+      "hafsStartPage": 574,
+      "hafsEndPage": 575,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/574"
+    },
+    {
+      "number": 74,
+      "nameAr": "المدثر",
+      "nameEn": "Al-Muddaththir — The One Wrapped In a Cloak",
+      "hafsStartPage": 575,
+      "hafsEndPage": 577,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/575"
+    },
+    {
+      "number": 75,
+      "nameAr": "القيامة",
+      "nameEn": "Al-Qiyamah — The Resurrection",
+      "hafsStartPage": 577,
+      "hafsEndPage": 578,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/577"
+    },
+    {
+      "number": 76,
+      "nameAr": "الانسان",
+      "nameEn": "Al-Insan — The Human",
+      "hafsStartPage": 578,
+      "hafsEndPage": 580,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/578"
+    },
+    {
+      "number": 77,
+      "nameAr": "المرسلات",
+      "nameEn": "Al-Mursalat — The Messengers",
+      "hafsStartPage": 580,
+      "hafsEndPage": 581,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/580"
+    },
+    {
+      "number": 78,
+      "nameAr": "النبإ",
+      "nameEn": "An-Naba — The Tidings",
+      "hafsStartPage": 582,
+      "hafsEndPage": 583,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/582"
+    },
+    {
+      "number": 79,
+      "nameAr": "النازعات",
+      "nameEn": "An-Nazi'at — Those Who Drag Forth",
+      "hafsStartPage": 583,
+      "hafsEndPage": 584,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/583"
+    },
+    {
+      "number": 80,
+      "nameAr": "عبس",
+      "nameEn": "Abasa — He Frowned",
+      "hafsStartPage": 585,
+      "hafsEndPage": 585,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/585"
+    },
+    {
+      "number": 81,
+      "nameAr": "التكوير",
+      "nameEn": "At-Takwir — The Overthrowing",
+      "hafsStartPage": 586,
+      "hafsEndPage": 586,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/586"
+    },
+    {
+      "number": 82,
+      "nameAr": "الإنفطار",
+      "nameEn": "Al-Infitar — The Cleaving",
+      "hafsStartPage": 587,
+      "hafsEndPage": 587,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/587"
+    },
+    {
+      "number": 83,
+      "nameAr": "المطففين",
+      "nameEn": "Al-Mutaffifin — The Defrauding",
+      "hafsStartPage": 587,
+      "hafsEndPage": 589,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/587"
+    },
+    {
+      "number": 84,
+      "nameAr": "الإنشقاق",
+      "nameEn": "Al-Inshiqaq — The Splitting Asunder",
+      "hafsStartPage": 589,
+      "hafsEndPage": 589,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/589"
+    },
+    {
+      "number": 85,
+      "nameAr": "البروج",
+      "nameEn": "Al-Buruj — The Constellations",
+      "hafsStartPage": 590,
+      "hafsEndPage": 590,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/590"
+    },
+    {
+      "number": 86,
+      "nameAr": "الطارق",
+      "nameEn": "At-Tariq — The Nightcomer",
+      "hafsStartPage": 591,
+      "hafsEndPage": 591,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/591"
+    },
+    {
+      "number": 87,
+      "nameAr": "الأعلى",
+      "nameEn": "Al-A'la — The Most High",
+      "hafsStartPage": 591,
+      "hafsEndPage": 592,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/591"
+    },
+    {
+      "number": 88,
+      "nameAr": "الغاشية",
+      "nameEn": "Al-Ghashiyah — The Overwhelming",
+      "hafsStartPage": 592,
+      "hafsEndPage": 592,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/592"
+    },
+    {
+      "number": 89,
+      "nameAr": "الفجر",
+      "nameEn": "Al-Fajr — The Dawn",
+      "hafsStartPage": 593,
+      "hafsEndPage": 594,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/593"
+    },
+    {
+      "number": 90,
+      "nameAr": "البلد",
+      "nameEn": "Al-Balad — The City",
+      "hafsStartPage": 594,
+      "hafsEndPage": 594,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/594"
+    },
+    {
+      "number": 91,
+      "nameAr": "الشمس",
+      "nameEn": "Ash-Shams — The Sun",
+      "hafsStartPage": 595,
+      "hafsEndPage": 595,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/595"
+    },
+    {
+      "number": 92,
+      "nameAr": "الليل",
+      "nameEn": "Al-Layl — The Night",
+      "hafsStartPage": 595,
+      "hafsEndPage": 596,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/595"
+    },
+    {
+      "number": 93,
+      "nameAr": "الضحى",
+      "nameEn": "Ad-Duhaa — The Morning Hours",
+      "hafsStartPage": 596,
+      "hafsEndPage": 596,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/596"
+    },
+    {
+      "number": 94,
+      "nameAr": "الشرح",
+      "nameEn": "Ash-Sharh — The Relief",
+      "hafsStartPage": 596,
+      "hafsEndPage": 596,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/596"
+    },
+    {
+      "number": 95,
+      "nameAr": "التين",
+      "nameEn": "At-Tin — The Fig",
+      "hafsStartPage": 597,
+      "hafsEndPage": 597,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/597"
+    },
+    {
+      "number": 96,
+      "nameAr": "العلق",
+      "nameEn": "Al-'Alaq — The Clot",
+      "hafsStartPage": 597,
+      "hafsEndPage": 597,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/597"
+    },
+    {
+      "number": 97,
+      "nameAr": "القدر",
+      "nameEn": "Al-Qadr — The Power",
+      "hafsStartPage": 598,
+      "hafsEndPage": 598,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/598"
+    },
+    {
+      "number": 98,
+      "nameAr": "البينة",
+      "nameEn": "Al-Bayyinah — The Clear Evidence",
+      "hafsStartPage": 598,
+      "hafsEndPage": 599,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/598"
+    },
+    {
+      "number": 99,
+      "nameAr": "الزلزلة",
+      "nameEn": "Az-Zalzalah — The Earthquake",
+      "hafsStartPage": 599,
+      "hafsEndPage": 599,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/599"
+    },
+    {
+      "number": 100,
+      "nameAr": "العاديات",
+      "nameEn": "Al-'Adiyat — The Chargers",
+      "hafsStartPage": 599,
+      "hafsEndPage": 600,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/599"
+    },
+    {
+      "number": 101,
+      "nameAr": "القارعة",
+      "nameEn": "Al-Qari'ah — The Striking Hour",
+      "hafsStartPage": 600,
+      "hafsEndPage": 600,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/600"
+    },
+    {
+      "number": 102,
+      "nameAr": "التكاثر",
+      "nameEn": "At-Takathur — The Competition",
+      "hafsStartPage": 600,
+      "hafsEndPage": 600,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/600"
+    },
+    {
+      "number": 103,
+      "nameAr": "العصر",
+      "nameEn": "Al-'Asr — The Time",
+      "hafsStartPage": 601,
+      "hafsEndPage": 601,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/601"
+    },
+    {
+      "number": 104,
+      "nameAr": "الهمزة",
+      "nameEn": "Al-Humazah — The Slanderer",
+      "hafsStartPage": 601,
+      "hafsEndPage": 601,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/601"
+    },
+    {
+      "number": 105,
+      "nameAr": "الفيل",
+      "nameEn": "Al-Fil — The Elephant",
+      "hafsStartPage": 601,
+      "hafsEndPage": 601,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/601"
+    },
+    {
+      "number": 106,
+      "nameAr": "قريش",
+      "nameEn": "Quraysh — Quraysh",
+      "hafsStartPage": 602,
+      "hafsEndPage": 602,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/602"
+    },
+    {
+      "number": 107,
+      "nameAr": "الماعون",
+      "nameEn": "Al-Ma'un — The Small Kindnesses",
+      "hafsStartPage": 602,
+      "hafsEndPage": 602,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/602"
+    },
+    {
+      "number": 108,
+      "nameAr": "الكوثر",
+      "nameEn": "Al-Kawthar — The Abundance",
+      "hafsStartPage": 602,
+      "hafsEndPage": 602,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/602"
+    },
+    {
+      "number": 109,
+      "nameAr": "الكافرون",
+      "nameEn": "Al-Kafirun — The Disbelievers",
+      "hafsStartPage": 603,
+      "hafsEndPage": 603,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/603"
+    },
+    {
+      "number": 110,
+      "nameAr": "النصر",
+      "nameEn": "An-Nasr — The Help",
+      "hafsStartPage": 603,
+      "hafsEndPage": 603,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/603"
+    },
+    {
+      "number": 111,
+      "nameAr": "المسد",
+      "nameEn": "Al-Masad — The Palm Fiber",
+      "hafsStartPage": 603,
+      "hafsEndPage": 603,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/603"
+    },
+    {
+      "number": 112,
+      "nameAr": "الإخلاص",
+      "nameEn": "Al-Ikhlas — The Sincerity",
+      "hafsStartPage": 604,
+      "hafsEndPage": 604,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/604"
+    },
+    {
+      "number": 113,
+      "nameAr": "الفلق",
+      "nameEn": "Al-Falaq — The Daybreak",
+      "hafsStartPage": 604,
+      "hafsEndPage": 604,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/604"
+    },
+    {
+      "number": 114,
+      "nameAr": "الناس",
+      "nameEn": "An-Nas — The Mankind",
+      "hafsStartPage": 604,
+      "hafsEndPage": 604,
+      "firstPageUrl": "https://qurancomplex.ly/page/hafs/604"
+    }
+  ]
+}

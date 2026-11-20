@@ -110,6 +110,16 @@ const SEO_FILES = new Set([
   '/apple-touch-icon.png',
 ])
 
+/** ملفات جاهزة للوكلاء الأذكياء: تُقرأ بطلب واحد دون زحف على 18,847 صفحة */
+const AI_FILES = new Set([
+  '/llms.txt',
+  '/llms-full.txt',
+  '/ai/editions.json',
+  '/ai/surahs.json',
+  '/ai/pages.json',
+  '/ai/juz.json',
+])
+
 /** عناوين قصيرة لصفحات الأجزاء والروايات (30 + 6 + فهران) */
 const SEO_ALIASES = {
   '/juz': '/seo/juz.html',
@@ -146,6 +156,7 @@ function pageSeoAlias(pathname, mushaf) {
 
 const SEO_CONTENT_TYPES = {
   '.txt': 'text/plain; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.webmanifest': 'application/manifest+json; charset=utf-8',
@@ -922,6 +933,55 @@ function json(data, status = 200) {
   })
 }
 
+/** استخراج معرّف الإصدار ورقم الصفحة من /page/12 أو /page/english/12 */
+function parsePagePath(pathname, mushaf) {
+  if (mushaf) {
+    const match = pathname.match(/^\/page\/([0-9]+)\/?$/)
+    return match ? { edition: mushaf, page: Number(match[1]) } : null
+  }
+  const match = pathname.match(/^\/page\/([a-z0-9-]+)\/([0-9]+)\/?$/)
+  return match && EDITION_IDS.has(match[1])
+    ? { edition: match[1], page: Number(match[2]) }
+    : null
+}
+
+/** ردّ JSON مضغوط لوكيل ذكي يطلب ?format=json على أي صفحة مصوّرة */
+async function pageJsonResponse(env, edition, page, pathname) {
+  const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
+  const target = new URL('ai/pages.json', base)
+  const source = await fetch(target.toString(), { cf: { cacheEverything: true, cacheTtl: 86400 } })
+  if (!source.ok) return json({ error: 'AI index unavailable', edition, page }, 503)
+
+  const data = await source.json()
+  const ed = data.editions?.[edition]
+  if (!ed) return json({ error: 'unknown edition', edition }, 404)
+
+  const surahs = ed.surahs || []
+  const found = surahs.find((s) => page >= s.page && page <= s.endPage)
+  const maxPage = ed.pageCount || (surahs.length ? surahs[surahs.length - 1].endPage : page)
+
+  return json({
+    edition,
+    page,
+    host: ed.host,
+    title: found
+      ? `${found.nameAr} — ${found.nameEn} · صفحة ${page}`
+      : `صفحة ${page} · ${edition}`,
+    surah: found
+      ? { number: found.number, nameAr: found.nameAr, nameEn: found.nameEn }
+      : null,
+    juz: found ? found.juz : null,
+    juzApproximate: Boolean(ed.juzApproximate),
+    pageUrl: `https://${edition}.qurancomplex.ly/page/${page}`,
+    canonicalUrl: `https://qurancomplex.ly${pathname}`,
+    imageUrl: found ? found.imageUrl : null,
+    neighbors: {
+      prev: page > 1 ? page - 1 : null,
+      next: page < maxPage ? page + 1 : null,
+    },
+  })
+}
+
 /** تمرير ملف ثابت من مبنى القارئ (حيث وُلد) إلى النطاق الرئيسي */
 async function serveReaderFile(env, readerPath) {
   const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
@@ -964,10 +1024,16 @@ export default {
 
     const mushaf = ROUTES[hostname]
 
+    // وكيل ذكي يطلب تمثيلاً JSON مضغوطاً لأي صفحة بدل زحف صفحات HTML.
+    if (url.searchParams.get('format') === 'json') {
+      const parsed = parsePagePath(url.pathname, mushaf)
+      if (parsed) return pageJsonResponse(env, parsed.edition, parsed.page, url.pathname)
+    }
+
     // بيانات SEO على النطاق الرئيسي: تُقرأ من نسخة القارئ المنشورة فلا يتكرر تخزينها في الـ Worker.
     const pageAlias = pageSeoAlias(url.pathname, mushaf)
     const seoPath = SEO_ALIASES[url.pathname] ?? pageAlias ?? url.pathname
-    if (!mushaf && (SEO_FILES.has(seoPath) || isGeneratedSeoFile(seoPath) || url.pathname.startsWith('/images/'))) {
+    if (!mushaf && (SEO_FILES.has(seoPath) || AI_FILES.has(url.pathname) || isGeneratedSeoFile(seoPath) || url.pathname.startsWith('/images/'))) {
       return serveReaderFile(env, url.pathname.startsWith('/images/') ? url.pathname : seoPath)
     }
 
