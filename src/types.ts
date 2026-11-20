@@ -17,6 +17,12 @@ export interface Mushaf {
   quranPages?: number
   /** رابط ملف PDF الأصلي إن وُجد */
   sourcePdf?: string
+  /** صورة غلاف مصغّرة تُعرض في قوائم الاختيار */
+  cover: string
+  /** نوع الإصدار: رواية، إصدار عربي، أو ترجمة */
+  kind: 'riwayah' | 'edition' | 'translation'
+  /** لغة الإصدار (للترجمات) */
+  language?: string
   /** لون مميز للمصحف */
   accent: string
   /** ملاحظة اختيارية تظهر في فهرس المصاحف */
@@ -29,7 +35,9 @@ export interface MushafIndex {
   sourceUrl?: string
   generatedAt?: string
   note?: string
-  surahs: { number: number; name: string; page: number; endPage: number }[]
+  /** الترجمات لا تحمل ترقيم المصحف العربي؛ صفحات أجزائها تقديرية ويجب ألا تُعرض كرقم مؤكد */
+  juzApproximate?: boolean
+  surahs: { number: number; name: string; localName?: string; page: number; endPage: number }[]
   juz: { number: number; page: number; verse: string | null }[]
 }
 

@@ -13,6 +13,8 @@
     "check:mushaf": "node scripts/check-mushaf.mjs",
     "import:mushaf": "node scripts/import-from-repo.mjs",
     "import:pdfquran": "python scripts/import-pdfquran.py",
+    "import:translations": "python scripts/import-translations.py",
+    "import:covers": "python scripts/import-covers.py",
     "build:index": "node scripts/build-index.mjs"
   },
   "dependencies": {

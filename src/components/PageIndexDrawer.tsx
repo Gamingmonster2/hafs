@@ -108,6 +108,13 @@ export function PageIndexDrawer({
               </button>
             </div>
 
+            {tab === 'juz' && index.juzApproximate && (
+              <p className="drawer__notice">
+                صفحات الأجزاء في هذه الترجمة تقديرية (≈) لأنها لا تحمل ترقيم المصحف العربي.
+                أرقام السور من ملف المصدر وهي المعتمدة.
+              </p>
+            )}
+
             <div className="drawer__list">
               {tab === 'surah' &&
                 index.surahs.map((surah) => (
@@ -139,7 +146,7 @@ export function PageIndexDrawer({
                   >
                     <span className="index-row__num">{juz.number}</span>
                     <span className="index-row__name">الجزء {juz.number}</span>
-                    <span className="index-row__page">ص {juz.page}</span>
+                    <span className="index-row__page">{index.juzApproximate ? '≈ ص' : 'ص'} {juz.page}</span>
                   </button>
                 ))}
             </div>

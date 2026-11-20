@@ -22,17 +22,46 @@ function readJson(name) {
 }
 
 const JUZ_NAMES = readJson('juz-names.json')
+const SURAH_NAMES_EN = readJson('surah-names-en.json')
+
+/** أسماء الإصدارات بالإنجليزية حتى تظهر الصفحات في بحث الصور العالمي */
+const EDITION_EN = {
+  hafs: 'Hafs Quran', qaloon: 'Qaloon Quran', warsh: 'Warsh Quran',
+  shubah: 'Shubah Quran', susi: 'Susi Quran', douri: 'Douri Quran',
+  standard1: 'Standard Mushaf 1', standard2: 'Standard Mushaf 2', big: 'Large Mushaf',
+  anko: 'Anko translation', chinese: 'Chinese translation', english: 'English translation',
+  french: 'French translation', hausa: 'Hausa translation', indonesian: 'Indonesian translation',
+  portuguese: 'Portuguese translation', tamil: 'Tamil translation', telugu: 'Telugu translation',
+  turkish: 'Turkish translation', urdu: 'Urdu translation', vietnami: 'Vietnamese translation',
+}
+const LANG_CODES = {
+  anko: 'ha', chinese: 'zh', english: 'en', french: 'fr', hausa: 'ha', indonesian: 'id',
+  portuguese: 'pt', tamil: 'ta', telugu: 'te', turkish: 'tr', urdu: 'ur', vietnami: 'vi',
+}
+const englishSurah = (surah) => SURAH_NAMES_EN[surah.number] ?? ''
 
 const MUSHAFS = [
-  { id: 'hafs', host: 'hafs.qurancomplex.ly', short: 'حفص عن عاصم', riwayah: 'حفص عن عاصم' },
-  { id: 'qaloon', host: 'qaloon.qurancomplex.ly', short: 'قالون عن نافع', riwayah: 'قالون عن نافع' },
-  { id: 'warsh', host: 'warsh.qurancomplex.ly', short: 'ورش عن نافع', riwayah: 'ورش عن نافع' },
-  { id: 'shubah', host: 'shubah.qurancomplex.ly', short: 'شعبة عن عاصم', riwayah: 'شعبة عن عاصم' },
-  { id: 'susi', host: 'susi.qurancomplex.ly', short: 'السوسي عن أبي عمرو', riwayah: 'السوسي عن أبي عمرو' },
-  { id: 'douri', host: 'duri.qurancomplex.ly', short: 'الدوري عن أبي عمرو', riwayah: 'الدوري عن أبي عمرو' },
-  { id: 'standard1', host: 'standard1.qurancomplex.ly', short: 'المصحف العادي 1', riwayah: 'حفص عن عاصم', covers: 0 },
-  { id: 'standard2', host: 'standard2.qurancomplex.ly', short: 'المصحف العادي 2', riwayah: 'حفص عن عاصم', covers: 0 },
-  { id: 'big', host: 'big.qurancomplex.ly', short: 'المصحف الكبير', riwayah: 'حفص عن عاصم', covers: 0 },
+  { id: 'hafs', host: 'hafs.qurancomplex.ly', short: 'حفص عن عاصم', riwayah: 'حفص عن عاصم', kind: 'riwayah', cover: '/images/covers/hafs.webp' },
+  { id: 'qaloon', host: 'qaloon.qurancomplex.ly', short: 'قالون عن نافع', riwayah: 'قالون عن نافع', kind: 'riwayah', cover: '/images/covers/qaloon.webp' },
+  { id: 'warsh', host: 'warsh.qurancomplex.ly', short: 'ورش عن نافع', riwayah: 'ورش عن نافع', kind: 'riwayah', cover: '/images/covers/warsh.webp' },
+  { id: 'shubah', host: 'shubah.qurancomplex.ly', short: 'شعبة عن عاصم', riwayah: 'شعبة عن عاصم', kind: 'riwayah', cover: '/images/covers/shubah.webp' },
+  { id: 'susi', host: 'susi.qurancomplex.ly', short: 'السوسي عن أبي عمرو', riwayah: 'السوسي عن أبي عمرو', kind: 'riwayah', cover: '/images/covers/susi.webp' },
+  { id: 'douri', host: 'duri.qurancomplex.ly', short: 'الدوري عن أبي عمرو', riwayah: 'الدوري عن أبي عمرو', kind: 'riwayah', cover: '/images/covers/douri.webp' },
+  { id: 'standard1', host: 'standard1.qurancomplex.ly', short: 'المصحف العادي 1', riwayah: 'حفص عن عاصم', covers: 0, kind: 'edition', cover: '/images/covers/standard1.webp' },
+  { id: 'standard2', host: 'standard2.qurancomplex.ly', short: 'المصحف العادي 2', riwayah: 'حفص عن عاصم', covers: 0, kind: 'edition', cover: '/images/covers/standard2.webp' },
+  { id: 'big', host: 'big.qurancomplex.ly', short: 'المصحف الكبير', riwayah: 'حفص عن عاصم', covers: 0, kind: 'edition', cover: '/images/covers/big.webp' },
+  { id: 'anko', host: 'anko.qurancomplex.ly', short: 'الترجمة بالأنكو', riwayah: 'لغة الأنكو', covers: 0, kind: 'translation', language: 'الأنكو', cover: '/images/covers/anko.webp' },
+  { id: 'chinese', host: 'chinese.qurancomplex.ly', short: 'الترجمة بالصينية', riwayah: 'اللغة الصينية', covers: 0, kind: 'translation', language: 'الصينية', cover: '/images/covers/chinese.webp' },
+  { id: 'english', host: 'english.qurancomplex.ly', short: 'الترجمة بالإنجليزية', riwayah: 'اللغة الإنجليزية', covers: 0, kind: 'translation', language: 'الإنجليزية', cover: '/images/covers/english.webp' },
+  { id: 'french', host: 'french.qurancomplex.ly', short: 'الترجمة بالفرنسية', riwayah: 'اللغة الفرنسية', covers: 0, kind: 'translation', language: 'الفرنسية', cover: '/images/covers/french.webp' },
+  { id: 'hausa', host: 'hausa.qurancomplex.ly', short: 'الترجمة بالهوساوية', riwayah: 'اللغة الهوساوية', covers: 0, kind: 'translation', language: 'الهوساوية', cover: '/images/covers/hausa.webp' },
+  { id: 'indonesian', host: 'indonesian.qurancomplex.ly', short: 'الترجمة بالإندونيسية', riwayah: 'اللغة الإندونيسية', covers: 0, kind: 'translation', language: 'الإندونيسية', cover: '/images/covers/indonesian.webp' },
+  { id: 'portuguese', host: 'portuguese.qurancomplex.ly', short: 'الترجمة بالبرتغالية', riwayah: 'اللغة البرتغالية', covers: 0, kind: 'translation', language: 'البرتغالية', cover: '/images/covers/portuguese.webp' },
+  { id: 'tamil', host: 'tamil.qurancomplex.ly', short: 'الترجمة بالتاميل', riwayah: 'اللغة التاميل', covers: 0, kind: 'translation', language: 'التاميل', cover: '/images/covers/tamil.webp' },
+  { id: 'telugu', host: 'telugu.qurancomplex.ly', short: 'الترجمة بالتيلجو', riwayah: 'اللغة التيلجو', covers: 0, kind: 'translation', language: 'التيلجو', cover: '/images/covers/telugu.webp' },
+  { id: 'turkish', host: 'turkish.qurancomplex.ly', short: 'الترجمة بالتركية', riwayah: 'اللغة التركية', covers: 0, kind: 'translation', language: 'التركية', cover: '/images/covers/turkish.webp' },
+  { id: 'urdu', host: 'urdu.qurancomplex.ly', short: 'الترجمة بالأوردو', riwayah: 'اللغة الأوردو', covers: 0, kind: 'translation', language: 'الأوردو', cover: '/images/covers/urdu.webp' },
+  { id: 'vietnami', host: 'vietnami.qurancomplex.ly', short: 'الترجمة بالفيتنامية', riwayah: 'اللغة الفيتنامية', covers: 0, kind: 'translation', language: 'الفيتنامية', cover: '/images/covers/vietnami.webp' },
 ]
 
 const data = MUSHAFS.map((m) => ({
@@ -40,6 +69,14 @@ const data = MUSHAFS.map((m) => ({
   index: readJson(`${m.id}-index.json`),
   pages: readJson(`${m.id}-pages.json`),
 }))
+
+const editionLabel = (mushaf) => {
+  if (mushaf.kind === 'translation') return mushaf.riwayah
+  if (mushaf.kind === 'edition') return mushaf.short
+  return `رواية ${mushaf.riwayah}`
+}
+const coverUrl = (mushaf) => `${SITE}${mushaf.cover}`
+const pageCount = (mushaf) => (mushaf.kind === 'translation' ? mushaf.pages.length : 604)
 
 const xml = (value) => String(value)
   .replace(/&/g, '&amp;')
@@ -57,7 +94,7 @@ const imageForPage = (mushaf, page) => {
 
 function juzRange(mushaf, number) {
   const start = mushaf.index.juz[number - 1].page
-  const end = number === 30 ? 604 : mushaf.index.juz[number].page - 1
+  const end = number === 30 ? pageCount(mushaf) : mushaf.index.juz[number].page - 1
   return { start, end }
 }
 
@@ -136,7 +173,7 @@ function imagesForJuz(number) {
       images.push({
         loc,
         title: `صفحة ${page} من جزء ${number} — ${mushaf.short}`,
-        caption: `صفحة ${page} من مصحف المدينة النبوية برواية ${mushaf.riwayah}، جزء ${number}، صورة عالية الجودة للقراءة والتصفح.`,
+        caption: `صفحة ${page} في ${editionLabel(mushaf)}، جزء ${number}، صورة عالية الجودة للقراءة والتصفح.`,
       })
     }
   }
@@ -162,9 +199,68 @@ for (const number of [30, 29]) {
   ], true), 'utf8')
 }
 
+/* ---------- صفحة مستقلة لكل صفحة مصوّرة في كل إصدار ---------- */
+// تنسيق مضغوط عمداً: 18,847 صفحة × كل كيلوبايت يضيف 18 ميجابايت إلى الموقع المنشور
+const pageStyles = 'body{margin:0;background:#f6f6f4;color:#18181b;font:16px/1.8 system-ui;direction:rtl}.wrap{max-width:760px;margin:auto;padding:20px 14px 40px}h1{color:#b8892b;font-size:1.8rem;margin:8px 0}p{margin:6px 0;color:#555}.ltr{direction:ltr;text-align:center}.panel{background:#fff;border:1px solid #e5d9b8;border-radius:14px;padding:12px;margin:14px 0;text-align:center}img{display:block;width:100%;max-width:640px;height:auto;margin:auto;border-radius:8px}.cap{font-size:12px}a{color:#b8892b}nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}footer{text-align:center;font-size:11px;color:#888}'
+
+function pageSeo(mushaf, page) {
+  const surah = mushaf.index.surahs.find((item) => page >= item.page && page <= item.endPage)
+    ?? mushaf.index.surahs[0]
+  const juz = [...mushaf.index.juz].reverse().find((item) => page >= item.page) ?? mushaf.index.juz[0]
+  const enName = englishSurah(surah)
+  const nameLabel = `${surah.name}${enName ? ` (${enName})` : ''}`
+  const edition = editionLabel(mushaf)
+  const editionEn = EDITION_EN[mushaf.id] ?? 'Quran Complex'
+  const image = imageForPage(mushaf, page)
+  const pageUrl = `https://${mushaf.host}/page/${page}`
+  const total = pageCount(mushaf)
+  const title = `صفحة ${page} من سورة ${nameLabel} — ${edition} | Quran Complex`
+  const description = `${nameLabel} — ${edition} — صفحة ${page}، الجزء ${juz.number}. ${enName ? `Surah ${enName}, ${editionEn}, page ${page}, juz ${juz.number}.` : ''} صورة كاملة عالية الجودة للقراءة والمشاركة.`
+  const caption = `${surah.name}${enName ? ` (${enName})` : ''} — ${editionEn} — page ${page} — juz ${juz.number}`
+  const schema = {
+    '@context': 'https://schema.org', '@type': 'WebPage', url: pageUrl, name: title,
+    inLanguage: LANG_CODES[mushaf.id] ?? 'ar',
+    primaryImageOfPage: { '@type': 'ImageObject', contentUrl: image, caption },
+  }
+
+  const prev = page > 1 ? `<a href="https://${mushaf.host}/page/${page - 1}">السابقة</a>` : ''
+  const next = page < total ? `<a href="https://${mushaf.host}/page/${page + 1}">التالية ←</a>` : ''
+  const enLine = enName ? `<p class="ltr">Surah ${xml(enName)} — page ${page} — ${xml(editionEn)}</p>` : ''
+  const notice = mushaf.index.juzApproximate ? '<p>صفحات الأجزاء تقديرية (≈)؛ أرقام السور من ملف المصدر.</p>' : ''
+  const body = `<h1>${xml(surah.name)}${enName ? ` (${xml(enName)})` : ''}</h1><p>صفحة ${page} من ${total} — الجزء ${juz.number} — ${xml(edition)}</p>${enLine}<section class="panel"><img src="${xml(image)}" alt="${xml(caption)}" width="640" decoding="async" fetchpriority="high"><p class="cap">${xml(caption)} — pdfquran.com / مجمع الملك فهد</p></section><nav>${prev}${next}</nav><p><a href="${readerUrl(mushaf, page)}">اقرأ الصفحة في القارئ الكامل</a></p>${notice}`
+
+  return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xml(title)}</title><meta name="description" content="${xml(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${pageUrl}"><meta property="og:title" content="${xml(title)}"><meta property="og:description" content="${xml(description)}"><meta property="og:type" content="article"><meta property="og:url" content="${pageUrl}"><meta property="og:image" content="${xml(image)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${xml(image)}"><style>${pageStyles}</style><script type="application/ld+json">${JSON.stringify(schema)}</script></head><body><main class="wrap">${body}<footer><a href="${SITE}/">الرئيسية</a> · <a href="${SITE}/riwayat">كل المصاحف</a></footer></main></body></html>`
+}
+
+const pageEntriesForSitemap = []
+for (const mushaf of data) {
+  const pageDir = join(seoDir, 'pages', mushaf.id)
+  mkdirSync(pageDir, { recursive: true })
+  for (let page = 1; page <= pageCount(mushaf); page++) {
+    writeFileSync(join(pageDir, `${page}.html`), pageSeo(mushaf, page), 'utf8')
+    const surah = mushaf.index.surahs.find((item) => page >= item.page && page <= item.endPage)
+      ?? mushaf.index.surahs[0]
+    const juz = [...mushaf.index.juz].reverse().find((item) => page >= item.page) ?? mushaf.index.juz[0]
+    const enName = englishSurah(surah)
+    const label = `${surah.name}${enName ? ` (${enName})` : ''}`
+    const editionEn = EDITION_EN[mushaf.id] ?? 'Quran Complex'
+    pageEntriesForSitemap.push(urlEntry(`https://${mushaf.host}/page/${page}`, {
+      priority: '0.6',
+      changefreq: 'monthly',
+      images: [{
+        loc: imageForPage(mushaf, page),
+        title: `${label} — ${editionEn} — page ${page}`,
+        caption: `Surah ${enName}, ${editionEn}, page ${page}, juz ${juz.number}. ${label} — صورة مصوّرة للقراءة والمشاركة.`,
+      }],
+    }))
+  }
+}
+writeFileSync(join(publicDir, 'sitemap-pages.xml'), urlset(pageEntriesForSitemap, true), 'utf8')
+
 /* ---------- فهرس الخرائط ---------- */
 const sitemapFiles = [
   'sitemap-mushafs.xml',
+  'sitemap-pages.xml',
   'sitemap-images.xml',
   'sitemap-images-amma.xml',
   'sitemap-images-tabarak.xml',
@@ -189,7 +285,8 @@ const styles = `
   .surahs li{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px}
   .surahs small{color:var(--muted)}
   .mushaf-grid,.juz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-  .mushaf-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px;border:1px solid var(--border);border-radius:14px;text-decoration:none;color:inherit;background:rgba(255,255,255,.35);transition:.25s ease}
+  .mushaf-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--border);border-radius:14px;text-decoration:none;color:inherit;background:rgba(255,255,255,.35);transition:.25s ease}
+  .mushaf-card__cover{width:36px;height:52px;object-fit:cover;border-radius:5px;border:1px solid var(--border);background:#fff;flex:0 0 auto}
   .mushaf-card:hover{transform:translateY(-4px);border-color:var(--gold)}
   .mushaf-card strong{color:var(--gold);font-size:1rem}
   .mushaf-card small{display:block;color:var(--muted)}
@@ -275,18 +372,19 @@ function juzPage(number) {
   const { start, end } = juzRange(sample, number)
   const surahs = surahsBetween(sample, start, end)
   const name = JUZ_NAMES[String(number)] || ''
-  const shownSurahs = surahs.slice(0, 6).map((surah) => surah.name).join('، ') + (surahs.length > 6 ? ' وغيرها' : '')
+  const shownSurahs = surahs.slice(0, 6).map((surah) => `${surah.name}${englishSurah(surah) ? ` (${englishSurah(surah)})` : ''}`).join('، ') + (surahs.length > 6 ? ' وغيرها' : '')
   const canonical = `${SITE}${juzPath(number)}`
   const title = `جزء ${number}${name ? ` — ${name}` : ''} | صفحات ${start}-${end} من مصحف المدينة النبوية | Quran Complex`
-  const description = `الجزء ${number}${name ? ` المعروف بـ${name}` : ''} من مصحف المدينة النبوية، الصفحات ${start} إلى ${end}، يضم ${shownSurahs}. تصفحه مصوّراً بروايات حفص وقالون وورش وشعبة والسوسي والدوري مع فهرس السور.`
+  const description = `الجزء ${number}${name ? ` المعروف بـ${name}` : ''} من مصحف المدينة النبوية، الصفحات ${start} إلى ${end}، يضم ${shownSurahs}. تصفحه مصوّراً في 21 إصداراً من الروايات والمصاحف والترجمات مع فهرس السور.`
 
   const surahRows = surahs.map((surah) => (
-    `<li><span>${surah.number}. ${xml(surah.name)}</span><small>ص ${surah.page}</small></li>`
+    `<li><span>${surah.number}. ${xml(surah.name)}${englishSurah(surah) ? ` — ${xml(englishSurah(surah))}` : ''}</span><small>ص ${surah.page}</small></li>`
   )).join('\n        ')
 
   const cards = data.map((mushaf) => {
     const page = juzRange(mushaf, number).start
     return `<a class="mushaf-card" href="${readerUrl(mushaf, page)}">
+          <img class="mushaf-card__cover" src="${xml(coverUrl(mushaf))}" alt="" loading="lazy" decoding="async" width="36" height="52">
           <span><strong>${xml(mushaf.short)}</strong><small>من الصفحة ${page} إلى ${juzRange(mushaf, number).end}</small></span>
           <span aria-hidden="true">←</span>
         </a>`
@@ -298,8 +396,11 @@ function juzPage(number) {
     for (let page = range.start; page <= range.end; page++) {
       const image = imageForPage(mushaf, page)
       if (!image) continue
-      thumbs.push(`<a class="thumb" href="${readerUrl(mushaf, page)}" aria-label="صفحة ${page} — ${xml(mushaf.short)}">
-            <img src="${xml(image)}" alt="صفحة ${page} من مصحف المدينة برواية ${xml(mushaf.riwayah)} — جزء ${number}" loading="lazy" decoding="async">
+      const pageSurah = mushaf.index.surahs.find((item) => page >= item.page && page <= item.endPage)
+        ?? mushaf.index.surahs[0]
+      const en = englishSurah(pageSurah)
+      thumbs.push(`<a class="thumb" href="https://${mushaf.host}/page/${page}" aria-label="صفحة ${page} — ${xml(mushaf.short)}">
+            <img src="${xml(image)}" alt="صفحة ${page} في ${xml(editionLabel(mushaf))} — سورة ${xml(pageSurah.name)}${en ? ` (${xml(en)})` : ''} — جزء ${number}" loading="lazy" decoding="async">
             <span>${page}</span>
           </a>`)
     }
@@ -348,7 +449,7 @@ function juzPage(number) {
   const body = `    <header>
       <span class="eyebrow">مصحف المدينة النبوية · الجزء ${number} من 30</span>
       <h1>جزء ${number}${name ? ` — ${name}` : ''}</h1>
-      <p class="lead">من الصفحة ${start} إلى الصفحة ${end}، ويضم ${surahs.length} سورة. صفحات مصوّرة كاملة في الروايات الستة، مع فهرس دقيق وانتقال مباشر إلى أي صفحة.</p>
+      <p class="lead">من الصفحة ${start} إلى الصفحة ${end}، ويضم ${surahs.length} سورة. صفحات مصوّرة كاملة في 21 إصداراً، مع فهرس دقيق وانتقال مباشر إلى أي صفحة.</p>
     </header>
 
     <section class="panel">
@@ -359,7 +460,7 @@ function juzPage(number) {
     </section>
 
     <section class="panel">
-      <h2>معاينة صفحات الجزء ${number} في الروايات الستة</h2>
+      <h2>معاينة صفحات الجزء ${number} في المصاحف والترجمات</h2>
       <p class="lead">اضغط على أي صفحة لفتحها في قارئ الرواية المقابلة بحجم كامل.</p>
         ${galleries}
     </section>
@@ -388,8 +489,8 @@ function juzPage(number) {
 /* ---------- صفحات الروايات (6) ---------- */
 function riwayahPage(mushaf) {
   const canonical = `${SITE}/riwayah/${mushaf.id}`
-  const title = `مصحف المدينة النبوية برواية ${mushaf.riwayah} — 604 صفحة مصوّرة | Quran Complex`
-  const description = `مصحف المدينة النبوية برواية ${mushaf.riwayah}: 604 صفحة مصوّرة بجودة عالية، فهرس كامل للسور والأجزاء، انتقال مباشر إلى أي صفحة، وقراءة دون اتصال.`
+  const title = `${editionLabel(mushaf)} — ${pageCount(mushaf)} صفحة مصوّرة | Quran Complex`
+  const description = `${editionLabel(mushaf)}: ${pageCount(mushaf)} صفحة مصوّرة بجودة عالية، فهرس كامل للسور والأجزاء، انتقال مباشر إلى أي صفحة، وقراءة دون اتصال.`
 
   const juzCards = []
   for (let number = 1; number <= 30; number++) {
@@ -401,6 +502,10 @@ function riwayahPage(mushaf) {
         ${thumb ? `<img class="thumb-image" src="${xml(thumb)}" alt="صفحة ${range.start} من جزء ${number} برواية ${xml(mushaf.riwayah)}" loading="lazy" decoding="async" width="80">` : ''}
       </a>`)
   }
+
+  const juzAmmaPage = mushaf.kind === 'translation'
+    ? mushaf.index.juz[mushaf.index.juz.length - 1].page
+    : 582
 
   const other = data.filter((item) => item.id !== mushaf.id).map((item) => (
     `<a class="mushaf-card" href="${SITE}/riwayah/${item.id}"><span><strong>${xml(item.short)}</strong><small>فتح فهرس الرواية</small></span><span aria-hidden="true">←</span></a>`
@@ -439,16 +544,17 @@ function riwayahPage(mushaf) {
   }
 
   const body = `    <header>
-      <span class="eyebrow">مصحف المدينة النبوية · ${xml(mushaf.short)}</span>
-      <h1>رواية ${xml(mushaf.riwayah)}</h1>
-      <p class="lead">604 صفحة مصوّرة من مصحف المدينة النبوية برواية ${xml(mushaf.riwayah)}، مع فهرس السور والأجزاء، وتصفّح مباشر لكل جزء على حدة.</p>
+      <span class="eyebrow">${mushaf.kind === 'translation' ? 'ترجمات مصحف المدينة النبوية' : 'مصحف المدينة النبوية'} · ${xml(mushaf.short)}</span>
+      <h1>${xml(editionLabel(mushaf))}</h1>
+      <p class="lead">${pageCount(mushaf)} صفحة مصوّرة في ${xml(editionLabel(mushaf))}، مع فهرس السور والأجزاء، وتصفّح مباشر لكل جزء على حدة.</p>
+      ${mushaf.index.juzApproximate ? '<p class="lead">تنبيه: أرقام صفحات الأجزاء في هذه الترجمة تقديرية لأنها لا تحمل ترقيم المصحف العربي. أرقام السور مأخوذة من إشارات ملف المصدر وهي المعتمدة.</p>' : ''}
     </header>
 
     <section class="panel">
       <h2>ابدأ القراءة</h2>
       <div class="mushaf-grid">
         <a class="mushaf-card" href="${readerUrl(mushaf, 1)}"><span><strong>الفاتحة — الصفحة 1</strong><small>افتح القارئ مباشرة</small></span><span aria-hidden="true">←</span></a>
-        <a class="mushaf-card" href="${readerUrl(mushaf, 582)}"><span><strong>جزء عم — الصفحة 582</strong><small>افتح القارئ مباشرة</small></span><span aria-hidden="true">←</span></a>
+        <a class="mushaf-card" href="${readerUrl(mushaf, juzAmmaPage)}"><span><strong>جزء عم — الصفحة ${juzAmmaPage}</strong><small>افتح القارئ مباشرة</small></span><span aria-hidden="true">←</span></a>
       </div>
     </section>
 
@@ -479,8 +585,8 @@ function riwayahPage(mushaf) {
 /* ---------- صفحتا الفهرس ---------- */
 function juzHubPage() {
   const canonical = `${SITE}/juz`
-  const title = 'فهرس أجزاء القرآن الكريم — 30 جزءاً مصوّراً بالروايات الستة | Quran Complex'
-  const description = 'فهرس كامل لأجزاء القرآن الكريم الثلاثين من مصحف المدينة النبوية، مع صفحات مصوّرة لكل جزء في روايات حفص وقالون وورش وشعبة والسوسي والدوري.'
+  const title = 'فهرس أجزاء القرآن الكريم — 30 جزءاً في 21 مصحفاً وترجمة | Quran Complex'
+  const description = 'فهرس كامل لأجزاء القرآن الكريم الثلاثين، مع صفحات مصوّرة لكل جزء في ست روايات وثلاثة مصاحف عربية واثنتي عشرة ترجمة.'
   const cards = Array.from({ length: 30 }, (_, index) => {
     const number = index + 1
     const range = juzRange(data[0], number)
@@ -511,7 +617,7 @@ function juzHubPage() {
   const body = `    <header>
       <span class="eyebrow">مصحف المدينة النبوية · 604 صفحة</span>
       <h1>فهرس الأجزاء</h1>
-      <p class="lead">ثلاثون جزءاً من القرآن الكريم، لكل جزء صفحته الخاصة التي تضم معاينة صفحاته في الروايات الستة وأرقامها حسب ترقيم المدينة.</p>
+      <p class="lead">ثلاثون جزءاً من القرآن الكريم، لكل جزء صفحته الخاصة التي تضم معاينة صفحاته في كل المصاحف والترجمات وأرقامها حسب ترقيم المدينة.</p>
     </header>
     <section class="panel">
       <h2>اختر الجزء</h2>
@@ -524,18 +630,30 @@ function juzHubPage() {
 
 function riwayatHubPage() {
   const canonical = `${SITE}/riwayat`
-  const title = 'مصاحف المدينة النبوية الستة — حفص، قالون، ورش، شعبة، السوسي، الدوري | Quran Complex'
-  const description = 'ست روايات من مصحف المدينة النبوية في قارئ رقمي واحد: حفص عن عاصم، قالون عن نافع، ورش عن نافع، شعبة عن عاصم، السوسي والدوري عن أبي عمرو.'
-  const cards = data.map((mushaf) => (
-    `<a class="mushaf-card" href="${canonical}/${mushaf.id}"><span><strong>${xml(mushaf.riwayah)}</strong><small>604 صفحة مصوّرة</small></span><span aria-hidden="true">←</span></a>`
-  )).join('\n        ')
+  const title = 'المصاحف والترجمات — 21 إصداراً مصوّراً | Quran Complex'
+  const description = 'ست روايات وثلاثة مصاحف عربية واثنتا عشرة ترجمة في قارئ رقمي واحد، مع صور غلاف وفهرس السور والأجزاء وقراءة سريعة على كل الأجهزة.'
+  const card = (mushaf) => `<a class="mushaf-card" href="${canonical}/${mushaf.id}">
+        <img class="mushaf-card__cover" src="${xml(coverUrl(mushaf))}" alt="" loading="lazy" decoding="async" width="36" height="52">
+        <span><strong>${xml(mushaf.short)}</strong><small>${pageCount(mushaf)} صفحة مصوّرة</small></span>
+        <span aria-hidden="true">←</span>
+      </a>`
+  const sections = [
+    ['روايات مصحف المدينة الستة', data.filter((item) => item.kind === 'riwayah')],
+    ['الإصدارات العربية من pdfquran.com', data.filter((item) => item.kind === 'edition')],
+    ['ترجمات القرآن الكريم', data.filter((item) => item.kind === 'translation')],
+  ].map(([heading, items]) => `<section class="panel">
+      <h2>${heading}</h2>
+      <div class="mushaf-grid">
+        ${items.map(card).join('\n        ')}
+      </div>
+    </section>`).join('\n\n    ')
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       websiteSchema(),
       {
         '@type': 'CollectionPage',
-        name: 'الفهرس حسب الرواية',
+        name: 'المصاحف والترجمات',
         url: canonical,
         inLanguage: 'ar',
         mainEntity: {
@@ -543,26 +661,21 @@ function riwayatHubPage() {
           itemListElement: data.map((mushaf, index) => ({
             '@type': 'ListItem',
             position: index + 1,
-            name: mushaf.riwayah,
+            name: mushaf.short,
             url: `${canonical}/${mushaf.id}`,
           })),
         },
       },
-      breadcrumb([{ name: 'الرئيسية', url: `${SITE}/` }, { name: 'الفهرس حسب الرواية', url: canonical }]),
+      breadcrumb([{ name: 'الرئيسية', url: `${SITE}/` }, { name: 'المصاحف والترجمات', url: canonical }]),
     ],
   }
   const body = `    <header>
-      <span class="eyebrow">مجمع القرآن الرقمي</span>
-      <h1>الفهرس حسب الرواية</h1>
-      <p class="lead">اختر روايتك لتصفح مصحف المدينة النبوية كاملاً، أو ابدأ من فهرس الأجزاء الثلاثين.</p>
+      <span class="eyebrow">مجمع القرآن الرقمي · 21 إصداراً</span>
+      <h1>المصاحف والترجمات</h1>
+      <p class="lead">اختر الرواية أو الإصدار أو الترجمة لتصفح الصفحات المصوّرة، أو ابدأ من فهرس الأجزاء الثلاثين.</p>
     </header>
-    <section class="panel">
-      <h2>الروايات الستة</h2>
-      <div class="mushaf-grid">
-        ${cards}
-      </div>
-      <p class="lead"><a href="${SITE}/juz">انتقل إلى فهرس الأجزاء</a></p>
-    </section>`
+    ${sections}
+    <p class="lead"><a href="${SITE}/juz">انتقل إلى فهرس الأجزاء</a></p>`
   return renderPage({ title, description, canonical, schema, body })
 }
 
@@ -577,4 +690,4 @@ writeFileSync(join(seoDir, 'juz.html'), juzHubPage(), 'utf8')
 writeFileSync(join(seoDir, 'riwayat.html'), riwayatHubPage(), 'utf8')
 
 const imageTotal = allImageEntries.reduce((sum, entry) => sum + (entry.match(/<image:image>/g) || []).length, 0)
-console.log(`تم توليد: ${pageEntries.length} رابطاً، ${imageTotal} صورة، 30 جزءاً، 6 روايات، وصفحتا فهرس.`)
+console.log(`تم توليد: ${pageEntries.length} رابطاً، ${pageEntriesForSitemap.length} صفحة مصوّرة مستقلة، ${imageTotal + pageEntriesForSitemap.length} صورة، 30 جزءاً، ${data.length} مصحفاً وترجمة، وصفحتا فهرس.`)

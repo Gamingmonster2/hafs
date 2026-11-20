@@ -29,6 +29,21 @@ function mushafFromHost(): string | null {
     shubah: 'shubah',
     susi: 'susi',
     duri: 'douri',
+    standard1: 'standard1',
+    standard2: 'standard2',
+    big: 'big',
+    anko: 'anko',
+    chinese: 'chinese',
+    english: 'english',
+    french: 'french',
+    hausa: 'hausa',
+    indonesian: 'indonesian',
+    portuguese: 'portuguese',
+    tamil: 'tamil',
+    telugu: 'telugu',
+    turkish: 'turkish',
+    urdu: 'urdu',
+    vietnami: 'vietnami',
   }
   return map[subdomain] ?? null
 }

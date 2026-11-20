@@ -70,7 +70,7 @@ export function Toolbar({
   return (
     <header className="toolbar">
       <div className="toolbar__brand">
-        <div className="brand-mark" aria-hidden="true">ق</div>
+        <img className="mushaf-thumb" src={mushaf.cover} alt="" width="42" height="58" loading="lazy" />
         <div className="brand-text">
           <strong>{mushaf.shortName}</strong>
           <span>Quran Complex</span>

@@ -142,7 +142,7 @@ export function PageViewer({
             key={src}
             data-image-index={page}
             className={`page-image ${status === 'loaded' ? 'is-visible' : ''}`}
-            src={src}
+            src={src || undefined}
             alt={alt}
             decoding="async"
             fetchPriority="high"

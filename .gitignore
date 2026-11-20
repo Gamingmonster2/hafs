@@ -6,3 +6,8 @@ reports/*
 !reports/.gitkeep
 .vite
 *.tsbuildinfo
+__pycache__/
+*.pyc
+# pages SEO مولّدة آلياً من build-seo.mjs (تُعاد في كل بناء)
+public/seo/pages/
+public/sitemap-pages.xml

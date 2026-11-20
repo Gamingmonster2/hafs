@@ -5,15 +5,97 @@
  */
 
 const DEFAULT_READER_BASE = 'https://gamingmonster2.github.io/hafs/'
-const ROUTER_VERSION = '4.0-pdfquran-editions'
+const ROUTER_VERSION = '6.0-per-page-seo'
 
 const RIWAYAHS = ['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri']
+
+const PDF_EDITIONS = [
+  { id: 'standard1', title: 'المصحف العادي 1' },
+  { id: 'standard2', title: 'المصحف العادي 2' },
+  { id: 'big', title: 'المصحف الكبير' },
+]
+
+const TRANSLATIONS = [
+  { id: 'anko', title: 'الترجمة بالأنكو', language: 'الأنكو' },
+  { id: 'chinese', title: 'الترجمة بالصينية', language: 'الصينية' },
+  { id: 'english', title: 'الترجمة بالإنجليزية', language: 'الإنجليزية' },
+  { id: 'french', title: 'الترجمة بالفرنسية', language: 'الفرنسية' },
+  { id: 'hausa', title: 'الترجمة بالهوساوية', language: 'الهوساوية' },
+  { id: 'indonesian', title: 'الترجمة بالإندونيسية', language: 'الإندونيسية' },
+  { id: 'portuguese', title: 'الترجمة بالبرتغالية', language: 'البرتغالية' },
+  { id: 'tamil', title: 'الترجمة بالتاميل', language: 'التاميل' },
+  { id: 'telugu', title: 'الترجمة بالتيلجو', language: 'التيلجو' },
+  { id: 'turkish', title: 'الترجمة بالتركية', language: 'التركية' },
+  { id: 'urdu', title: 'الترجمة بالأوردو', language: 'الأوردو' },
+  { id: 'vietnami', title: 'الترجمة بالفيتنامية', language: 'الفيتنامية' },
+]
+
+const EDITIONS = [
+  ...RIWAYAHS.map((id, index) => ({
+    id,
+    title: [
+      'رواية حفص عن عاصم', 'رواية قالون عن نافع', 'رواية ورش عن نافع',
+      'رواية شعبة عن عاصم', 'رواية السوسي عن أبي عمرو', 'رواية الدوري عن أبي عمرو',
+    ][index],
+    group: 'رواية قرآنية',
+    description: 'مصحف المدينة النبوية المصوّر مع فهرس السور والأجزاء وانتقال مباشر إلى أي صفحة.',
+  })),
+  ...PDF_EDITIONS.map((item) => ({
+    ...item,
+    group: 'إصدار عربي',
+    description: 'إصدار عربي كامل من مصاحف pdfquran.com بجودة عالية وتصفّح سريع.',
+  })),
+  ...TRANSLATIONS.map((item) => ({
+    ...item,
+    group: 'ترجمة',
+    description: `ترجمة مصحف المدينة النبوية إلى ${item.language}، صفحات مصوّرة وفهرس كامل للسور.`,
+  })),
+]
+
+const EDITION_CARDS = EDITIONS.map((item) => `
+      <a href="https://${item.id}.qurancomplex.ly" class="card">
+        <img class="card__cover" src="/images/covers/${item.id}.webp" alt="غلاف ${item.title}" loading="lazy" decoding="async" width="72" height="104">
+        <div class="card__body">
+          <div>
+            <span class="card__eyebrow">${item.group}</span>
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+          </div>
+          <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
+        </div>
+      </a>`).join('')
+
+const LANDING_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://qurancomplex.ly/#website',
+      name: 'مجمع القرآن الرقمي',
+      url: 'https://qurancomplex.ly/',
+      inLanguage: 'ar',
+      description: 'روايات ومصاحف وترجمات مصوّرة في قارئ رقمي سريع يعمل على كل الأجهزة.',
+    },
+    {
+      '@type': 'ItemList',
+      '@id': 'https://qurancomplex.ly/#mushafs',
+      name: 'المصاحف والترجمات',
+      itemListElement: EDITIONS.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.title,
+        url: `https://${item.id}.qurancomplex.ly/`,
+      })),
+    },
+  ],
+}
 
 /** ملفات SEO وملفات تثبيت التطبيق تُولَّد في public/ وتُنشر مع القارئ، ثم يمرّرها الـ Worker على النطاق الرئيسي */
 const SEO_FILES = new Set([
   '/robots.txt',
   '/sitemap.xml',
   '/sitemap-mushafs.xml',
+  '/sitemap-pages.xml',
   '/sitemap-images.xml',
   '/sitemap-images-amma.xml',
   '/sitemap-images-tabarak.xml',
@@ -38,14 +120,27 @@ for (let number = 1; number <= 30; number++) {
   SEO_ALIASES[`/juz-${number}`] = `/seo/juz-${number}.html`
   SEO_ALIASES[`/juz/${number}`] = `/seo/juz-${number}.html`
 }
-for (const id of RIWAYAHS) {
+for (const { id } of EDITIONS) {
   SEO_ALIASES[`/riwayah/${id}`] = `/seo/riwayah-${id}.html`
   SEO_ALIASES[`/riwayah-${id}`] = `/seo/riwayah-${id}.html`
 }
 
-/** أي ملف داخل seo/ يُسمح بتمريره (صفحات مولّدة) */
+/** أي ملف داخل seo/ يُسمح بتمريره (صفحات مولّدة، بما فيها صفحات المصاحف لكل صفحة) */
 function isGeneratedSeoFile(pathname) {
-  return /^\/seo\/[a-z0-9-]+\.html$/.test(pathname)
+  return /^\/seo\/(?:pages\/[a-z0-9-]+\/[0-9]+|[a-z0-9-]+)\.html$/.test(pathname)
+}
+
+const EDITION_IDS = new Set(EDITIONS.map(({ id }) => id))
+
+/** تحويل /page/12 على نطاق فرعي، أو /page/english/12 على النطاق الرئيسي، إلى ملف SEO الثابت */
+function pageSeoAlias(pathname, mushaf) {
+  if (mushaf) {
+    const match = pathname.match(/^\/page\/([0-9]+)\/?$/)
+    return match ? `/seo/pages/${mushaf}/${Number(match[1])}.html` : null
+  }
+  const match = pathname.match(/^\/page\/([a-z0-9-]+)\/([0-9]+)\/?$/)
+  if (!match || !EDITION_IDS.has(match[1])) return null
+  return `/seo/pages/${match[1]}/${Number(match[2])}.html`
 }
 
 const SEO_CONTENT_TYPES = {
@@ -61,31 +156,13 @@ const SEO_CONTENT_TYPES = {
 }
 
 /** اسم النطاق الفرعي → معرّف الرواية في التطبيق */
-const ROUTES = {
-  'hafs.qurancomplex.ly': 'hafs',
-  'qaloon.qurancomplex.ly': 'qaloon',
-  'warsh.qurancomplex.ly': 'warsh',
-  'shubah.qurancomplex.ly': 'shubah',
-  'susi.qurancomplex.ly': 'susi',
-  'duri.qurancomplex.ly': 'douri',
-  'douri.qurancomplex.ly': 'douri',
-  'standard1.qurancomplex.ly': 'standard1',
-  'standard2.qurancomplex.ly': 'standard2',
-  'big.qurancomplex.ly': 'big',
-}
+const ROUTES = Object.fromEntries(EDITIONS.map(({ id }) => [`${id}.qurancomplex.ly`, id]))
+ROUTES['duri.qurancomplex.ly'] = 'douri'
 
 /** بيانات SEO ثابتة لكل مصحف: تُحقن في HTML المُمرَّر قبل تشغيل JavaScript */
-const MUSHAF_SEO = {
-  hafs: { riwayah: 'حفص عن عاصم' },
-  qaloon: { riwayah: 'قالون عن نافع' },
-  warsh: { riwayah: 'ورش عن نافع' },
-  shubah: { riwayah: 'شعبة عن عاصم' },
-  susi: { riwayah: 'السوسي عن أبي عمرو' },
-  douri: { riwayah: 'الدوري عن أبي عمرو' },
-  standard1: { edition: 'المصحف العادي 1' },
-  standard2: { edition: 'المصحف العادي 2' },
-  big: { edition: 'المصحف الكبير' },
-}
+const MUSHAF_SEO = Object.fromEntries(
+  EDITIONS.map(({ id, title }) => [id, { edition: title }]),
+)
 
 function localizeReaderHtml(html, mushafId, hostname) {
   const seo = MUSHAF_SEO[mushafId]
@@ -120,8 +197,8 @@ const landingHtml = `<!DOCTYPE html>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="المصاحف">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="description" content="مجمع القرآن الرقمي - منصة تقنية مستقلة تهدف لأرشفة وعرض مصاحف القراءات والروايات القرآنية بجودة عالية عبر بنية تحتية سحابية متطورة.">
-  <meta name="keywords" content="قرآن كريم, رواية حفص, رواية قالون, رواية ورش, رواية شعبة, رواية السوسي, رواية الدوري, مصحف المدينة, مجمع القرآن الرقمي, قراءات قرآنية">
+  <meta name="description" content="مجمع القرآن الرقمي - 21 إصداراً مصوّراً: ست روايات، ثلاثة مصاحف عربية، واثنتا عشرة ترجمة، مع فهرس السور والأجزاء وقراءة سريعة على كل الأجهزة.">
+  <meta name="keywords" content="قرآن كريم, رواية حفص, رواية قالون, رواية ورش, رواية شعبة, رواية السوسي, رواية الدوري, ترجمة القرآن, مصحف المدينة, مجمع القرآن الرقمي, قراءات قرآنية">
   <meta property="og:title" content="مجمع القرآن الرقمي | QURAN COMPLEX">
   <meta property="og:description" content="ست روايات من مصحف المدينة النبوية في قارئ رقمي سريع يعمل على كل الأجهزة.">
   <meta name="robots" content="index, follow">
@@ -135,7 +212,7 @@ const landingHtml = `<!DOCTYPE html>
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://qurancomplex.ly/#website","name":"مجمع القرآن الرقمي","url":"https://qurancomplex.ly/","inLanguage":"ar","description":"ست روايات من مصحف المدينة النبوية في قارئ رقمي سريع يعمل على كل الأجهزة."},{"@type":"ItemList","@id":"https://qurancomplex.ly/#mushafs","name":"مصاحف المدينة النبوية","itemListElement":[{"@type":"ListItem","position":1,"name":"رواية حفص عن عاصم","url":"https://hafs.qurancomplex.ly/"},{"@type":"ListItem","position":2,"name":"رواية قالون عن نافع","url":"https://qaloon.qurancomplex.ly/"},{"@type":"ListItem","position":3,"name":"رواية ورش عن نافع","url":"https://warsh.qurancomplex.ly/"},{"@type":"ListItem","position":4,"name":"رواية شعبة عن عاصم","url":"https://shubah.qurancomplex.ly/"},{"@type":"ListItem","position":5,"name":"رواية السوسي عن أبي عمرو","url":"https://susi.qurancomplex.ly/"},{"@type":"ListItem","position":6,"name":"رواية الدوري عن أبي عمرو","url":"https://duri.qurancomplex.ly/"}]}]}</script>
+  <script type="application/ld+json">${JSON.stringify(LANDING_SCHEMA)}</script>
   <style>
     @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
@@ -299,8 +376,8 @@ const landingHtml = `<!DOCTYPE html>
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
       width: 100%;
     }
 
@@ -309,12 +386,12 @@ const landingHtml = `<!DOCTYPE html>
       position: relative;
       isolation: isolate;
       overflow: hidden;
-      min-height: 232px;
+      min-height: 168px;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 28px;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 20px;
       border-radius: var(--radius);
       border: 1px solid var(--card-border);
       background: var(--card);
@@ -369,22 +446,38 @@ const landingHtml = `<!DOCTYPE html>
       box-shadow: 0 24px 60px -22px rgba(180, 137, 43, 0.38), var(--shadow);
     }
 
-    .card__icon {
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
+    .card__cover {
+      width: 72px;
+      height: 104px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      background: #fff;
+      box-shadow: 0 8px 20px -10px rgba(0,0,0,.5);
+      flex: 0 0 auto;
+    }
+    .card__body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .card__eyebrow {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
       color: var(--gold);
       border: 1px solid var(--ring);
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.03));
-      font-size: 18px;
-      margin-bottom: 14px;
+      border-radius: 999px;
+      padding: 2px 10px;
+      margin-bottom: 8px;
     }
     .card h3 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-family: 'Amiri', serif;
-      font-size: 1.65rem;
+      font-size: 1.35rem;
       color: var(--gold);
     }
     .card p { margin: 0; font-size: 0.9rem; line-height: 1.85; color: var(--muted); }
@@ -587,7 +680,8 @@ const landingHtml = `<!DOCTYPE html>
     @media (max-width: 600px) {
       .container { padding: 28px 16px 48px; }
       .grid { grid-template-columns: 1fr; }
-      .card { min-height: 200px; padding: 24px; }
+      .card { min-height: 150px; padding: 18px; }
+      .card__cover { width: 62px; height: 90px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -612,30 +706,7 @@ const landingHtml = `<!DOCTYPE html>
     </div>
 
     <div class="grid">
-      <a href="https://hafs.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية حفص عن عاصم</h3><p>تصفح مصحف المدينة النبوية برواية حفص بوضوح تام، مع الحفاظ على التنسيق الأصلي للمصحف الورقي في بيئة رقمية سريعة.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
-      <a href="https://qaloon.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية قالون عن نافع</h3><p>الإصدار الرقمي المعتمد لمصحف المدينة النبوية برواية قالون، مجهز ليعمل على كافة الشاشات والمتصفحات الحديثة.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
-      <a href="https://warsh.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية ورش عن نافع</h3><p>تصفح رقمي متطور وفق طريق الأزرق، تم بناؤه ليوفر تجربة قراءة مريحة لطلاب العلم والقراء المهتمين برواية أهل المغرب.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
-      <a href="https://shubah.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية شعبة عن عاصم</h3><p>المستودع الرقمي المتكامل لرواية شعبة، تم ربط الكود وتجهيز الواجهة لتقديم أفضل عرض لمصحف شعبة عن عاصم.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
-      <a href="https://susi.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية السوسي عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية السوسي عن أبي عمرو البصري، تصفح رقمي سلس وبنية تحتية سريعة لخدمة طلاب العلم والمطورين.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
-      <a href="https://duri.qurancomplex.ly" class="card">
-        <div><span class="card__icon">◈</span><h3>رواية الدوري عن أبي عمرو</h3><p>المستودع الرقمي المتكامل لرواية الدوري عن أبي عمرو البصري، تصفح سلس عبر خوادم حافة سريعة ومستقرة تماماً.</p></div>
-        <span class="badge">تصفح المصحف <span aria-hidden="true">←</span></span>
-      </a>
+${EDITION_CARDS}
     </div>
 
     <nav class="juz-strip" aria-label="أدلة سريعة">
@@ -645,7 +716,7 @@ const landingHtml = `<!DOCTYPE html>
 
     <section class="index-panel" aria-labelledby="index-title">
       <details>
-        <summary id="index-title">فهرس الأجزاء والروايات — 38 صفحة مخصّصة</summary>
+        <summary id="index-title">فهرس الأجزاء والمصاحف والترجمات — 53 صفحة مخصّصة</summary>
         <div class="index-grid">
           <a href="/juz">كل الأجزاء</a>
           <a href="/juz-1">1 · الم</a>
@@ -680,13 +751,8 @@ const landingHtml = `<!DOCTYPE html>
           <a href="/juz-30">30 · عم</a>
         </div>
         <div class="index-grid index-grid--riwayat">
-          <a href="/riwayat">كل الروايات</a>
-          <a href="/riwayah/hafs">حفص عن عاصم</a>
-          <a href="/riwayah/qaloon">قالون عن نافع</a>
-          <a href="/riwayah/warsh">ورش عن نافع</a>
-          <a href="/riwayah/shubah">شعبة عن عاصم</a>
-          <a href="/riwayah/susi">السوسي عن أبي عمرو</a>
-          <a href="/riwayah/douri">الدوري عن أبي عمرو</a>
+          <a href="/riwayat">كل المصاحف والترجمات</a>
+${EDITIONS.map((item) => `          <a href="/riwayah/${item.id}">${item.title}</a>`).join('\n')}
         </div>
       </details>
     </section>
@@ -848,12 +914,16 @@ export default {
     const mushaf = ROUTES[hostname]
 
     // بيانات SEO على النطاق الرئيسي: تُقرأ من نسخة القارئ المنشورة فلا يتكرر تخزينها في الـ Worker.
-    const seoPath = SEO_ALIASES[url.pathname] ?? url.pathname
+    const pageAlias = pageSeoAlias(url.pathname, mushaf)
+    const seoPath = SEO_ALIASES[url.pathname] ?? pageAlias ?? url.pathname
     if (!mushaf && (SEO_FILES.has(seoPath) || isGeneratedSeoFile(seoPath) || url.pathname.startsWith('/images/'))) {
       return serveReaderFile(env, url.pathname.startsWith('/images/') ? url.pathname : seoPath)
     }
 
     if (mushaf) {
+      // صفحة مستقلة لكل صفحة مصوّرة: عنوان ووصف وصورة OG فريدة لنتائج البحث والصور
+      if (pageAlias) return serveReaderFile(env, pageAlias)
+
       const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
       const relativePath = url.pathname.replace(/^\/+/, '')
       const target = new URL(relativePath + url.search, base)

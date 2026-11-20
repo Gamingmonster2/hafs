@@ -18,6 +18,24 @@ const HOSTS: Record<string, string> = {
   standard1: 'standard1.qurancomplex.ly',
   standard2: 'standard2.qurancomplex.ly',
   big: 'big.qurancomplex.ly',
+  anko: 'anko.qurancomplex.ly',
+  chinese: 'chinese.qurancomplex.ly',
+  english: 'english.qurancomplex.ly',
+  french: 'french.qurancomplex.ly',
+  hausa: 'hausa.qurancomplex.ly',
+  indonesian: 'indonesian.qurancomplex.ly',
+  portuguese: 'portuguese.qurancomplex.ly',
+  tamil: 'tamil.qurancomplex.ly',
+  telugu: 'telugu.qurancomplex.ly',
+  turkish: 'turkish.qurancomplex.ly',
+  urdu: 'urdu.qurancomplex.ly',
+  vietnami: 'vietnami.qurancomplex.ly',
+}
+
+function editionLabel(mushaf: Mushaf): string {
+  if (mushaf.kind === 'translation') return mushaf.riwayah
+  if (mushaf.kind === 'edition') return mushaf.shortName
+  return `رواية ${mushaf.riwayah}`
 }
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
@@ -76,7 +94,7 @@ export function applyReaderSeo(
   const surahLabel = surah ? `سورة ${surah.name}` : ''
 
   const title = `صفحة ${pageLabel}${surahLabel ? ` — ${surahLabel}` : ''}${juzLabel ? ` — ${juzLabel}` : ''} | ${mushaf.shortName} | Quran Complex`
-  const description = `صفحة ${pageNumber} من ${surahLabel || 'مصحف المدينة النبوية'}${juzLabel ? ` في ${juzLabel}` : ''} برواية ${mushaf.riwayah} — صورة عالية الجودة للقراءة، وفهرس السور والأجزاء، وانتقال مباشر إلى أي صفحة.`
+  const description = `صفحة ${pageNumber} من ${surahLabel || mushaf.shortName}${juzLabel ? ` في ${juzLabel}` : ''} — ${editionLabel(mushaf)}: صورة عالية الجودة للقراءة، وفهرس السور والأجزاء، وانتقال مباشر إلى أي صفحة.`
   const keywords = [mushaf.riwayah, 'مصحف المدينة النبوية', surahLabel, juzLabel, `صفحة ${pageNumber}`, 'قرآن كريم']
     .filter(Boolean)
     .join('، ')

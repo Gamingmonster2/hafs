@@ -1,0 +1,959 @@
+{
+  "source": "pdfquran.com — ترجمة مصحف المدينة النبوية",
+  "sourceUrl": "https://www.pdfquran.com/download/urdu/urdu-quran.pdf",
+  "generatedAt": "2026-11-20",
+  "note": "بدايات السور مأخوذة من إشارات ملف PDF المرجعي. أرقام صفحات الأجزاء تقديرية لأن الترجمة لا تحمل ترقيم المصحف العربي.",
+  "juzApproximate": true,
+  "surahs": [
+    {
+      "number": 1,
+      "name": "الفاتحة",
+      "localName": "Al-Fatihah",
+      "page": 1,
+      "endPage": 6
+    },
+    {
+      "number": 2,
+      "name": "البقرة",
+      "localName": "Al-Baqarah",
+      "page": 7,
+      "endPage": 128
+    },
+    {
+      "number": 3,
+      "name": "آل عمران",
+      "localName": "Ali-Imran",
+      "page": 129,
+      "endPage": 200
+    },
+    {
+      "number": 4,
+      "name": "النساء",
+      "localName": "An-Nisa",
+      "page": 201,
+      "endPage": 280
+    },
+    {
+      "number": 5,
+      "name": "المائدة",
+      "localName": "Al-Ma'idah",
+      "page": 281,
+      "endPage": 339
+    },
+    {
+      "number": 6,
+      "name": "الأنعام",
+      "localName": "Al-An-'am",
+      "page": 340,
+      "endPage": 405
+    },
+    {
+      "number": 7,
+      "name": "الأعراف",
+      "localName": "Al-A'raf",
+      "page": 406,
+      "endPage": 476
+    },
+    {
+      "number": 8,
+      "name": "الأنفال",
+      "localName": "Al-Anfal",
+      "page": 477,
+      "endPage": 503
+    },
+    {
+      "number": 9,
+      "name": "التوبة",
+      "localName": "At-Tawbah",
+      "page": 504,
+      "endPage": 558
+    },
+    {
+      "number": 10,
+      "name": "يونس",
+      "localName": "Yunus",
+      "page": 559,
+      "endPage": 595
+    },
+    {
+      "number": 11,
+      "name": "هود",
+      "localName": "Hud",
+      "page": 596,
+      "endPage": 636
+    },
+    {
+      "number": 12,
+      "name": "يوسف",
+      "localName": "Yusuf",
+      "page": 637,
+      "endPage": 675
+    },
+    {
+      "number": 13,
+      "name": "الرعد",
+      "localName": "Ar-Ra`d",
+      "page": 676,
+      "endPage": 692
+    },
+    {
+      "number": 14,
+      "name": "ابراهيم",
+      "localName": "Ibrahim",
+      "page": 693,
+      "endPage": 709
+    },
+    {
+      "number": 15,
+      "name": "الحجر",
+      "localName": "Al-Hijr",
+      "page": 710,
+      "endPage": 725
+    },
+    {
+      "number": 16,
+      "name": "النحل",
+      "localName": "An-Nahl",
+      "page": 726,
+      "endPage": 764
+    },
+    {
+      "number": 17,
+      "name": "الإسراء",
+      "localName": "Al-'Isra",
+      "page": 765,
+      "endPage": 797
+    },
+    {
+      "number": 18,
+      "name": "الكهف",
+      "localName": "Al-Kahf",
+      "page": 798,
+      "endPage": 831
+    },
+    {
+      "number": 19,
+      "name": "مريم",
+      "localName": "Maryam",
+      "page": 832,
+      "endPage": 852
+    },
+    {
+      "number": 20,
+      "name": "طه",
+      "localName": "Taha",
+      "page": 853,
+      "endPage": 882
+    },
+    {
+      "number": 21,
+      "name": "الأنبياء",
+      "localName": "Al-'Anbya",
+      "page": 883,
+      "endPage": 909
+    },
+    {
+      "number": 22,
+      "name": "الحج",
+      "localName": "Al-Hajj",
+      "page": 910,
+      "endPage": 938
+    },
+    {
+      "number": 23,
+      "name": "المؤمنون",
+      "localName": "Al-Mu'minun",
+      "page": 939,
+      "endPage": 961
+    },
+    {
+      "number": 24,
+      "name": "النور",
+      "localName": "An-Nur",
+      "page": 962,
+      "endPage": 992
+    },
+    {
+      "number": 25,
+      "name": "الفرقان",
+      "localName": "Al-Furqan",
+      "page": 993,
+      "endPage": 1012
+    },
+    {
+      "number": 26,
+      "name": "الشعراء",
+      "localName": "Ash-Shu`ara",
+      "page": 1013,
+      "endPage": 1042
+    },
+    {
+      "number": 27,
+      "name": "النمل",
+      "localName": "An-Naml",
+      "page": 1043,
+      "endPage": 1067
+    },
+    {
+      "number": 28,
+      "name": "القصص",
+      "localName": "Al-Qasas",
+      "page": 1068,
+      "endPage": 1098
+    },
+    {
+      "number": 29,
+      "name": "العنكبوت",
+      "localName": "Al-'Ankabut",
+      "page": 1099,
+      "endPage": 1122
+    },
+    {
+      "number": 30,
+      "name": "الروم",
+      "localName": "Ar-Rum",
+      "page": 1123,
+      "endPage": 1141
+    },
+    {
+      "number": 31,
+      "name": "لقمان",
+      "localName": "Luqman",
+      "page": 1142,
+      "endPage": 1154
+    },
+    {
+      "number": 32,
+      "name": "السجدة",
+      "localName": "As-Sajdah",
+      "page": 1155,
+      "endPage": 1162
+    },
+    {
+      "number": 33,
+      "name": "الأحزاب",
+      "localName": "Al-'Ahzab",
+      "page": 1163,
+      "endPage": 1195
+    },
+    {
+      "number": 34,
+      "name": "سبإ",
+      "localName": "Saba",
+      "page": 1196,
+      "endPage": 1215
+    },
+    {
+      "number": 35,
+      "name": "فاطر",
+      "localName": "Fatir",
+      "page": 1216,
+      "endPage": 1231
+    },
+    {
+      "number": 36,
+      "name": "يس",
+      "localName": "Ya-Sin",
+      "page": 1232,
+      "endPage": 1248
+    },
+    {
+      "number": 37,
+      "name": "الصافات",
+      "localName": "As-Saffat",
+      "page": 1249,
+      "endPage": 1271
+    },
+    {
+      "number": 38,
+      "name": "ص",
+      "localName": "Sad",
+      "page": 1272,
+      "endPage": 1289
+    },
+    {
+      "number": 39,
+      "name": "الزمر",
+      "localName": "Az-Zumar",
+      "page": 1290,
+      "endPage": 1313
+    },
+    {
+      "number": 40,
+      "name": "غافر",
+      "localName": "Ghafir",
+      "page": 1314,
+      "endPage": 1340
+    },
+    {
+      "number": 41,
+      "name": "فصلت",
+      "localName": "Fussilat",
+      "page": 1341,
+      "endPage": 1359
+    },
+    {
+      "number": 42,
+      "name": "الشورى",
+      "localName": "Ash-Shuraa",
+      "page": 1360,
+      "endPage": 1376
+    },
+    {
+      "number": 43,
+      "name": "الزخرف",
+      "localName": "Az-Zukhruf",
+      "page": 1377,
+      "endPage": 1395
+    },
+    {
+      "number": 44,
+      "name": "الدخان",
+      "localName": "Ad-Dukhan",
+      "page": 1396,
+      "endPage": 1404
+    },
+    {
+      "number": 45,
+      "name": "الجاثية",
+      "localName": "Al-Jathiyah",
+      "page": 1405,
+      "endPage": 1414
+    },
+    {
+      "number": 46,
+      "name": "الأحقاف",
+      "localName": "Al-'Ahqaf",
+      "page": 1415,
+      "endPage": 1427
+    },
+    {
+      "number": 47,
+      "name": "محمد",
+      "localName": "Muhammad",
+      "page": 1428,
+      "endPage": 1440
+    },
+    {
+      "number": 48,
+      "name": "الفتح",
+      "localName": "Al-Fath",
+      "page": 1441,
+      "endPage": 1454
+    },
+    {
+      "number": 49,
+      "name": "الحجرات",
+      "localName": "Al-Hujurat",
+      "page": 1455,
+      "endPage": 1461
+    },
+    {
+      "number": 50,
+      "name": "ق",
+      "localName": "Qaf",
+      "page": 1462,
+      "endPage": 1471
+    },
+    {
+      "number": 51,
+      "name": "الذاريات",
+      "localName": "Adh-Dhariyat",
+      "page": 1472,
+      "endPage": 1481
+    },
+    {
+      "number": 52,
+      "name": "الطور",
+      "localName": "At-Tur",
+      "page": 1482,
+      "endPage": 1489
+    },
+    {
+      "number": 53,
+      "name": "النجم",
+      "localName": "An-Najm",
+      "page": 1490,
+      "endPage": 1499
+    },
+    {
+      "number": 54,
+      "name": "القمر",
+      "localName": "Al-Qamar",
+      "page": 1500,
+      "endPage": 1508
+    },
+    {
+      "number": 55,
+      "name": "الرحمن",
+      "localName": "Ar-Rahman",
+      "page": 1509,
+      "endPage": 1519
+    },
+    {
+      "number": 56,
+      "name": "الواقعة",
+      "localName": "Al-Waqi`ah",
+      "page": 1520,
+      "endPage": 1530
+    },
+    {
+      "number": 57,
+      "name": "الحديد",
+      "localName": "Al-Hadid",
+      "page": 1531,
+      "endPage": 1542
+    },
+    {
+      "number": 58,
+      "name": "المجادلة",
+      "localName": "Al-Mujadila",
+      "page": 1543,
+      "endPage": 1552
+    },
+    {
+      "number": 59,
+      "name": "الحشر",
+      "localName": "Al-Hashr",
+      "page": 1553,
+      "endPage": 1562
+    },
+    {
+      "number": 60,
+      "name": "الممتحنة",
+      "localName": "Al-Mumtahanah",
+      "page": 1563,
+      "endPage": 1570
+    },
+    {
+      "number": 61,
+      "name": "الصف",
+      "localName": "As-Saf",
+      "page": 1571,
+      "endPage": 1575
+    },
+    {
+      "number": 62,
+      "name": "الجمعة",
+      "localName": "Al-Jumu`ah",
+      "page": 1576,
+      "endPage": 1579
+    },
+    {
+      "number": 63,
+      "name": "المنافقون",
+      "localName": "Al-Munafiqun",
+      "page": 1580,
+      "endPage": 1583
+    },
+    {
+      "number": 64,
+      "name": "التغابن",
+      "localName": "At-Taghabun",
+      "page": 1584,
+      "endPage": 1589
+    },
+    {
+      "number": 65,
+      "name": "الطلاق",
+      "localName": "At-Talaq",
+      "page": 1590,
+      "endPage": 1596
+    },
+    {
+      "number": 66,
+      "name": "التحريم",
+      "localName": "At-Tahrim",
+      "page": 1597,
+      "endPage": 1602
+    },
+    {
+      "number": 67,
+      "name": "الملك",
+      "localName": "Al-Mulk",
+      "page": 1603,
+      "endPage": 1609
+    },
+    {
+      "number": 68,
+      "name": "القلم",
+      "localName": "Al-Qalam",
+      "page": 1610,
+      "endPage": 1618
+    },
+    {
+      "number": 69,
+      "name": "الحاقة",
+      "localName": "Al-Haqqah",
+      "page": 1619,
+      "endPage": 1624
+    },
+    {
+      "number": 70,
+      "name": "المعارج",
+      "localName": "Al-Ma`arij",
+      "page": 1625,
+      "endPage": 1630
+    },
+    {
+      "number": 71,
+      "name": "نوح",
+      "localName": "Nuh",
+      "page": 1631,
+      "endPage": 1636
+    },
+    {
+      "number": 72,
+      "name": "الجن",
+      "localName": "Al-Jinn",
+      "page": 1637,
+      "endPage": 1643
+    },
+    {
+      "number": 73,
+      "name": "المزمل",
+      "localName": "Al-Muzzammil",
+      "page": 1644,
+      "endPage": 1648
+    },
+    {
+      "number": 74,
+      "name": "المدثر",
+      "localName": "Al-Muddaththir",
+      "page": 1649,
+      "endPage": 1655
+    },
+    {
+      "number": 75,
+      "name": "القيامة",
+      "localName": "Al-Qiyamah",
+      "page": 1656,
+      "endPage": 1659
+    },
+    {
+      "number": 76,
+      "name": "الانسان",
+      "localName": "Al-'Insan",
+      "page": 1660,
+      "endPage": 1666
+    },
+    {
+      "number": 77,
+      "name": "المرسلات",
+      "localName": "Al-Mursalat",
+      "page": 1667,
+      "endPage": 1672
+    },
+    {
+      "number": 78,
+      "name": "النبإ",
+      "localName": "An-Naba",
+      "page": 1673,
+      "endPage": 1677
+    },
+    {
+      "number": 79,
+      "name": "النازعات",
+      "localName": "An-Nazi`at",
+      "page": 1678,
+      "endPage": 1683
+    },
+    {
+      "number": 80,
+      "name": "عبس",
+      "localName": "Abasa",
+      "page": 1684,
+      "endPage": 1687
+    },
+    {
+      "number": 81,
+      "name": "التكوير",
+      "localName": "At-Takwir",
+      "page": 1688,
+      "endPage": 1691
+    },
+    {
+      "number": 82,
+      "name": "الإنفطار",
+      "localName": "Al-'Infitar",
+      "page": 1692,
+      "endPage": 1694
+    },
+    {
+      "number": 83,
+      "name": "المطففين",
+      "localName": "Al-Mutaffifin",
+      "page": 1695,
+      "endPage": 1698
+    },
+    {
+      "number": 84,
+      "name": "الإنشقاق",
+      "localName": "Al-'Inshiqaq",
+      "page": 1699,
+      "endPage": 1701
+    },
+    {
+      "number": 85,
+      "name": "البروج",
+      "localName": "Al-Buruj",
+      "page": 1702,
+      "endPage": 1705
+    },
+    {
+      "number": 86,
+      "name": "الطارق",
+      "localName": "At-Tariq",
+      "page": 1706,
+      "endPage": 1708
+    },
+    {
+      "number": 87,
+      "name": "الأعلى",
+      "localName": "Al-A`la",
+      "page": 1709,
+      "endPage": 1710
+    },
+    {
+      "number": 88,
+      "name": "الغاشية",
+      "localName": "Al-Ghashiyah",
+      "page": 1711,
+      "endPage": 1713
+    },
+    {
+      "number": 89,
+      "name": "الفجر",
+      "localName": "Al-Fajr",
+      "page": 1714,
+      "endPage": 1717
+    },
+    {
+      "number": 90,
+      "name": "البلد",
+      "localName": "Al-Balad",
+      "page": 1718,
+      "endPage": 1720
+    },
+    {
+      "number": 91,
+      "name": "الشمس",
+      "localName": "Ash-Shams",
+      "page": 1721,
+      "endPage": 1722
+    },
+    {
+      "number": 92,
+      "name": "الليل",
+      "localName": "Al-Layl",
+      "page": 1723,
+      "endPage": 1725
+    },
+    {
+      "number": 93,
+      "name": "الضحى",
+      "localName": "Ad-Duhaa",
+      "page": 1726,
+      "endPage": 1726
+    },
+    {
+      "number": 94,
+      "name": "الشرح",
+      "localName": "Ash-Sharh",
+      "page": 1727,
+      "endPage": 1728
+    },
+    {
+      "number": 95,
+      "name": "التين",
+      "localName": "At-Tin",
+      "page": 1729,
+      "endPage": 1729
+    },
+    {
+      "number": 96,
+      "name": "العلق",
+      "localName": "Al-`Alaq",
+      "page": 1730,
+      "endPage": 1732
+    },
+    {
+      "number": 97,
+      "name": "القدر",
+      "localName": "Al-Qadr",
+      "page": 1733,
+      "endPage": 1733
+    },
+    {
+      "number": 98,
+      "name": "البينة",
+      "localName": "Al-Bayyinah",
+      "page": 1734,
+      "endPage": 1735
+    },
+    {
+      "number": 99,
+      "name": "الزلزلة",
+      "localName": "Az-Zalzalah",
+      "page": 1736,
+      "endPage": 1737
+    },
+    {
+      "number": 100,
+      "name": "العاديات",
+      "localName": "Al-`Adiyat",
+      "page": 1738,
+      "endPage": 1739
+    },
+    {
+      "number": 101,
+      "name": "القارعة",
+      "localName": "Al-Qari`ah",
+      "page": 1740,
+      "endPage": 1740
+    },
+    {
+      "number": 102,
+      "name": "التكاثر",
+      "localName": "At-Takathur",
+      "page": 1741,
+      "endPage": 1742
+    },
+    {
+      "number": 103,
+      "name": "العصر",
+      "localName": "Al-`Asr",
+      "page": 1743,
+      "endPage": 1743
+    },
+    {
+      "number": 104,
+      "name": "الهمزة",
+      "localName": "Al-Humazah",
+      "page": 1744,
+      "endPage": 1744
+    },
+    {
+      "number": 105,
+      "name": "الفيل",
+      "localName": "Al-Fil",
+      "page": 1745,
+      "endPage": 1745
+    },
+    {
+      "number": 106,
+      "name": "قريش",
+      "localName": "Quraysh",
+      "page": 1746,
+      "endPage": 1746
+    },
+    {
+      "number": 107,
+      "name": "الماعون",
+      "localName": "Al-Ma`un",
+      "page": 1747,
+      "endPage": 1747
+    },
+    {
+      "number": 108,
+      "name": "الكوثر",
+      "localName": "Al-Kawthar",
+      "page": 1748,
+      "endPage": 1748
+    },
+    {
+      "number": 109,
+      "name": "الكافرون",
+      "localName": "Al-Kafirun",
+      "page": 1749,
+      "endPage": 1750
+    },
+    {
+      "number": 110,
+      "name": "النصر",
+      "localName": "An-Nasr",
+      "page": 1751,
+      "endPage": 1751
+    },
+    {
+      "number": 111,
+      "name": "المسد",
+      "localName": "Al-Masad",
+      "page": 1751,
+      "endPage": 1752
+    },
+    {
+      "number": 112,
+      "name": "الإخلاص",
+      "localName": "Al-'Ikhlas",
+      "page": 1753,
+      "endPage": 1753
+    },
+    {
+      "number": 113,
+      "name": "الفلق",
+      "localName": "Al-Falaq",
+      "page": 1754,
+      "endPage": 1755
+    },
+    {
+      "number": 114,
+      "name": "الناس",
+      "localName": "An-Nas",
+      "page": 1756,
+      "endPage": 1768
+    }
+  ],
+  "juz": [
+    {
+      "number": 1,
+      "page": 1,
+      "verse": "1:1"
+    },
+    {
+      "number": 2,
+      "page": 58,
+      "verse": "2:142"
+    },
+    {
+      "number": 3,
+      "page": 110,
+      "verse": "2:253"
+    },
+    {
+      "number": 4,
+      "page": 162,
+      "verse": "3:93"
+    },
+    {
+      "number": 5,
+      "page": 215,
+      "verse": "4:24"
+    },
+    {
+      "number": 6,
+      "page": 269,
+      "verse": "4:148"
+    },
+    {
+      "number": 7,
+      "page": 322,
+      "verse": "5:82"
+    },
+    {
+      "number": 8,
+      "page": 381,
+      "verse": "6:111"
+    },
+    {
+      "number": 9,
+      "page": 437,
+      "verse": "7:88"
+    },
+    {
+      "number": 10,
+      "page": 491,
+      "verse": "8:41"
+    },
+    {
+      "number": 11,
+      "page": 542,
+      "verse": "9:93"
+    },
+    {
+      "number": 12,
+      "page": 599,
+      "verse": "11:6"
+    },
+    {
+      "number": 13,
+      "page": 657,
+      "verse": "12:53"
+    },
+    {
+      "number": 14,
+      "page": 710,
+      "verse": "15:1"
+    },
+    {
+      "number": 15,
+      "page": 765,
+      "verse": "17:1"
+    },
+    {
+      "number": 16,
+      "page": 825,
+      "verse": "18:75"
+    },
+    {
+      "number": 17,
+      "page": 883,
+      "verse": "21:1"
+    },
+    {
+      "number": 18,
+      "page": 939,
+      "verse": "23:1"
+    },
+    {
+      "number": 19,
+      "page": 1001,
+      "verse": "25:21"
+    },
+    {
+      "number": 20,
+      "page": 1058,
+      "verse": "27:56"
+    },
+    {
+      "number": 21,
+      "page": 1116,
+      "verse": "29:46"
+    },
+    {
+      "number": 22,
+      "page": 1177,
+      "verse": "33:31"
+    },
+    {
+      "number": 23,
+      "page": 1238,
+      "verse": "36:28"
+    },
+    {
+      "number": 24,
+      "page": 1300,
+      "verse": "39:32"
+    },
+    {
+      "number": 25,
+      "page": 1359,
+      "verse": "41:47"
+    },
+    {
+      "number": 26,
+      "page": 1414,
+      "verse": "46:1"
+    },
+    {
+      "number": 27,
+      "page": 1478,
+      "verse": "51:31"
+    },
+    {
+      "number": 28,
+      "page": 1543,
+      "verse": "58:1"
+    },
+    {
+      "number": 29,
+      "page": 1603,
+      "verse": "67:1"
+    },
+    {
+      "number": 30,
+      "page": 1673,
+      "verse": "78:1"
+    }
+  ]
+}
