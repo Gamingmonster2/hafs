@@ -24,6 +24,19 @@ const dataDir = join(root, 'src', 'data')
 const publicDir = join(root, 'public')
 const SITE = 'https://qurancomplex.ly'
 const today = new Date().toISOString().slice(0, 10)
+const RIWAYAH_IDS = new Set(['hafs', 'qaloon', 'warsh', 'shubah', 'susi', 'douri'])
+
+/** الاسم النصي لرابط الصورة: يبدأ باسم السورة لا برقم الملف */
+function imageSlug(index, page) {
+  const surah = index.surahs.find((item) => page >= item.page && page <= item.endPage) ?? index.surahs[0]
+  const en = (SURAH_NAMES_EN[surah.number] ?? '').split('—')[0].trim()
+  const slug = (en || `Surah ${surah.number}`)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || `surah-${surah.number}`
+  return `${slug}-page-${page}`
+}
 
 const readJson = (name) => JSON.parse(readFileSync(join(dataDir, name), 'utf8'))
 const write = (rel, data) => {
@@ -73,9 +86,14 @@ const editions = EDITIONS.map(([id, title, titleEn, kind]) => {
     firstPage: `${SITE}/page/${id}/1`,
     juzApproximate: Boolean(index.juzApproximate),
     pageUrl: (n) => `https://${id}.qurancomplex.ly/page/${n}`,
-    imageUrl: (n) => pages[n - 1]
-      ? (String(pages[n - 1]).startsWith('http') ? pages[n - 1] : SITE + pages[n - 1])
-      : null,
+    imageUrl: (n) => {
+      // الروايات الست صورها على Blogger؛ الباقي ملفات محلية مرقّمة على القرص.
+      const covers = RIWAYAH_IDS.has(id) ? 3 : 0
+      const src = pages[n + covers - 1]
+      if (!src) return null
+      if (String(src).startsWith('http')) return src
+      return `${SITE}/images/${id}/${imageSlug(index, n)}.webp`
+    },
     index,
   }
 })

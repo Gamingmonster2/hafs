@@ -86,10 +86,31 @@ const xml = (value) => String(value)
   .replace(/'/g, '&apos;')
 
 const readerUrl = (mushaf, page) => `https://${mushaf.host}/?mushaf=${mushaf.id}&page=${page}`
+
+/** اسم صورة نصي يبدأ باسم السورة، لا برقم الصفحة — ما تقرأه محركات البحث كاسم للصورة */
+function imageName(mushaf, page) {
+  const surah = mushaf.index.surahs.find((item) => page >= item.page && page <= item.endPage)
+    ?? mushaf.index.surahs[0]
+  const en = englishSurah(surah).split('—')[0].trim()
+  return { surah, en, ar: surah.name, label: `سورة ${surah.name}${en ? ` (${en})` : ''}` }
+}
+
+function imageSlug(mushaf, page) {
+  const { en, surah } = imageName(mushaf, page)
+  const slug = (en || `Surah ${surah.number}`)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || `surah-${surah.number}`
+  return `${slug}-page-${page}`
+}
+
+/** رابط الصورة اسمه نصي (يُعاد توجيهه داخلياً إلى الملف الرقمي بواسطة الـ Worker) */
 const imageForPage = (mushaf, page) => {
   const src = mushaf.pages[page + (mushaf.covers ?? COVERS) - 1]
-  // الصور المحلية مسارات نسبية، لكن خرائط المواقع وبيانات OG تحتاج روابط مطلقة
-  return src?.startsWith('/') ? `${SITE}${src}` : src
+  if (!src) return undefined
+  if (!src.startsWith('/')) return src // روابط Blogger للروايات
+  return `${SITE}/images/${mushaf.id}/${imageSlug(mushaf, page)}.webp`
 }
 
 function juzRange(mushaf, number) {
@@ -180,10 +201,11 @@ function imagesForJuz(number) {
     for (let page = start; page <= end; page++) {
       const loc = imageForPage(mushaf, page)
       if (!loc) continue
+      const { label, en } = imageName(mushaf, page)
       images.push({
         loc,
-        title: `صفحة ${page} من جزء ${number} — ${mushaf.short}`,
-        caption: `صفحة ${page} في ${editionLabel(mushaf)}، جزء ${number}، صورة عالية الجودة للقراءة والتصفح.`,
+        title: `${label} — صفحة ${page} — ${mushaf.short}${en ? ` (${en})` : ''}`,
+        caption: `${label} — صفحة ${page} في ${editionLabel(mushaf)}، الجزء ${number}، صورة كاملة عالية الجودة للقراءة والمشاركة.`,
       })
     }
   }
@@ -224,7 +246,7 @@ function pageSeo(mushaf, page) {
   const image = imageForPage(mushaf, page)
   const pageUrl = `https://${mushaf.host}/page/${page}`
   const total = pageCount(mushaf)
-  const title = `صفحة ${page} من سورة ${nameLabel} — ${edition} | Quran Complex`
+  const title = `سورة ${nameLabel} — صفحة ${page} — ${edition} | Quran Complex`
   const description = `${nameLabel} — ${edition} — صفحة ${page}، الجزء ${juz.number}. ${enName ? `Surah ${enName}, ${editionEn}, page ${page}, juz ${juz.number}.` : ''} صورة كاملة عالية الجودة للقراءة والمشاركة.`
   const caption = `${surah.name}${enName ? ` (${enName})` : ''} — ${editionEn} — page ${page} — juz ${juz.number}`
   const schema = {
@@ -239,7 +261,7 @@ function pageSeo(mushaf, page) {
   const notice = mushaf.index.juzApproximate ? '<p>صفحات الأجزاء تقديرية (≈)؛ أرقام السور من ملف المصدر.</p>' : ''
   const body = `<h1>${xml(surah.name)}${enName ? ` (${xml(enName)})` : ''}</h1><p>صفحة ${page} من ${total} — الجزء ${juz.number} — ${xml(edition)}</p>${enLine}<section class="panel"><img src="${xml(image)}" alt="${xml(caption)}" width="640" decoding="async" fetchpriority="high"><p class="cap">${xml(caption)} — pdfquran.com / مجمع الملك فهد</p></section><nav>${prev}${next}</nav><p><a href="${readerUrl(mushaf, page)}">اقرأ الصفحة في القارئ الكامل</a></p>${notice}`
 
-  return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xml(title)}</title><meta name="description" content="${xml(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${pageUrl}"><meta property="og:title" content="${xml(title)}"><meta property="og:description" content="${xml(description)}"><meta property="og:type" content="article"><meta property="og:url" content="${pageUrl}"><meta property="og:image" content="${xml(image)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${xml(image)}"><style>${pageStyles}</style><script type="application/ld+json">${JSON.stringify(schema)}</script></head><body><main class="wrap">${body}<footer><a href="${SITE}/">الرئيسية</a> · <a href="${SITE}/riwayat">كل المصاحف</a></footer></main></body></html>`
+  return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xml(title)}</title><meta name="description" content="${xml(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${pageUrl}"><meta property="og:title" content="${xml(title)}"><meta property="og:description" content="${xml(description)}"><meta property="og:type" content="article"><meta property="og:url" content="${pageUrl}"><meta property="og:image" content="${xml(image)}"><meta property="og:image:alt" content="${xml(caption)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${xml(image)}"><meta name="twitter:image:alt" content="${xml(caption)}"><style>${pageStyles}</style><script type="application/ld+json">${JSON.stringify(schema)}</script></head><body><main class="wrap">${body}<footer><a href="${SITE}/">الرئيسية</a> · <a href="${SITE}/riwayat">كل المصاحف</a></footer></main></body></html>`
 }
 
 const pageEntriesForSitemap = []
@@ -318,7 +340,7 @@ const styles = `
   @media(max-width:600px){.wrap{padding:28px 14px 48px}.panel{padding:20px}}
 `
 
-function renderPage({ title, description, canonical, schema, body, ogImage }) {
+function renderPage({ title, description, canonical, schema, body, ogImage, ogImageAlt }) {
   return `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -334,6 +356,7 @@ function renderPage({ title, description, canonical, schema, body, ogImage }) {
   <meta property="og:locale" content="ar">
   <meta property="og:url" content="${canonical}">
   ${ogImage ? `<meta property="og:image" content="${xml(ogImage)}">` : ''}
+  ${ogImageAlt ? `<meta property="og:image:alt" content="${xml(ogImageAlt)}">` : ''}
   <link rel="manifest" href="/manifest.webmanifest">
   <style>${styles}</style>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
@@ -493,6 +516,7 @@ function juzPage(number) {
     schema,
     body,
     ogImage: imageForPage(sample, start),
+    ogImageAlt: `${imageName(sample, start).label} — صفحة ${start} — ${sample.short}`,
   })
 }
 
@@ -589,6 +613,7 @@ function riwayahPage(mushaf) {
     schema,
     body,
     ogImage: imageForPage(mushaf, 1),
+    ogImageAlt: `${imageName(mushaf, 1).label} — الصفحة الأولى من ${mushaf.short}`,
   })
 }
 

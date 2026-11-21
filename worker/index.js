@@ -945,6 +945,17 @@ function parsePagePath(pathname, mushaf) {
     : null
 }
 
+/** الفهرس يحفظ صورة بداية السورة؛ هنا نستخرج صورة الصفحة المطلوبة داخل السورة نفسها */
+function imageForRequestedPage(imageUrl, page, startPage) {
+  if (!imageUrl) return null
+  const descriptive = imageUrl.match(/^(.*-page-)(\d+)(\.webp)$/)
+  if (descriptive) return `${descriptive[1]}${page}${descriptive[3]}`
+  const numbered = imageUrl.match(/(\d+)(\.[a-z]+)$/i)
+  if (!numbered || page === startPage) return imageUrl
+  const number = String(Number(numbered[1]) + page - startPage).padStart(numbered[1].length, '0')
+  return imageUrl.slice(0, numbered.index) + number + numbered[2]
+}
+
 /** ردّ JSON مضغوط لوكيل ذكي يطلب ?format=json على أي صفحة مصوّرة */
 async function pageJsonResponse(env, edition, page, pathname) {
   const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
@@ -965,7 +976,7 @@ async function pageJsonResponse(env, edition, page, pathname) {
     page,
     host: ed.host,
     title: found
-      ? `${found.nameAr} — ${found.nameEn} · صفحة ${page}`
+      ? `سورة ${found.nameAr} (${found.nameEn}) — صفحة ${page} · ${edition}`
       : `صفحة ${page} · ${edition}`,
     surah: found
       ? { number: found.number, nameAr: found.nameAr, nameEn: found.nameEn }
@@ -974,12 +985,109 @@ async function pageJsonResponse(env, edition, page, pathname) {
     juzApproximate: Boolean(ed.juzApproximate),
     pageUrl: `https://${edition}.qurancomplex.ly/page/${page}`,
     canonicalUrl: `https://qurancomplex.ly${pathname}`,
-    imageUrl: found ? found.imageUrl : null,
+    imageUrl: found ? imageForRequestedPage(found.imageUrl, page, found.page) : null,
     neighbors: {
       prev: page > 1 ? page - 1 : null,
       next: page < maxPage ? page + 1 : null,
     },
   })
+}
+
+/** هروب آمن لقيم الوسوم قبل حقنها في HTML */
+function escAttr(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+function setMetaTag(html, attribute, key, value) {
+  const pattern = new RegExp(`<meta ${attribute}="${key}"[^>]*>`, 'i')
+  const tag = `<meta ${attribute}="${key}" content="${escAttr(value)}" />`
+  return pattern.test(html) ? html.replace(pattern, tag) : html.replace('</head>', `  ${tag}\n</head>`)
+}
+
+/** بيانات صفحة مصوّرة من الفهرس الجاهز، تُحقن في HTML القارئ قبل تشغيل JavaScript */
+async function pageMetaFor(env, edition, page) {
+  const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
+  const source = await fetch(new URL('ai/pages.json', base).toString(), {
+    cf: { cacheEverything: true, cacheTtl: 86400 },
+  })
+  if (!source.ok) return null
+  const data = await source.json()
+  const ed = data.editions?.[edition]
+  if (!ed) return null
+
+  const surah = ed.surahs.find((item) => page >= item.page && page <= item.endPage)
+  const host = ed.host.replace(/^https?:\/\//, '')
+  const canonical = `https://${host}/page/${page}`
+  const surahText = surah ? `سورة ${surah.nameAr}${surah.nameEn ? ` (${surah.nameEn})` : ''}` : ''
+  const title = surahText
+    ? `${surahText} — صفحة ${page} — ${host} | Quran Complex`
+    : `صفحة ${page} — ${host} | Quran Complex`
+  const description = surah
+    ? `${surahText} — صفحة ${page}، الجزء ${surah.juz ?? '—'} من ${host}. صورة كاملة عالية الجودة للقراءة والمشاركة.`
+    : `صفحة ${page} من ${host} — صورة عالية الجودة للقراءة والمشاركة.`
+  const image = surah ? imageForRequestedPage(surah.imageUrl, page, surah.page) : null
+
+  return { title, description, canonical, image, surah, host }
+}
+
+/** حقن عنوان ووصف وصورة وJSON-LD خاصين بالصفحة داخل HTML القارئ */
+function applyPageMeta(html, meta) {
+  let output = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escAttr(meta.title)}</title>`)
+  output = setMetaTag(output, 'name', 'description', meta.description)
+  output = setMetaTag(output, 'property', 'og:title', meta.title)
+  output = setMetaTag(output, 'property', 'og:description', meta.description)
+  output = setMetaTag(output, 'property', 'og:type', 'article')
+  output = setMetaTag(output, 'property', 'og:url', meta.canonical)
+  output = setMetaTag(output, 'property', 'og:site_name', 'مجمع القرآن الرقمي')
+  output = setMetaTag(output, 'name', 'twitter:card', 'summary_large_image')
+  if (meta.image) {
+    output = setMetaTag(output, 'property', 'og:image', meta.image)
+    output = setMetaTag(output, 'property', 'og:image:alt', meta.surah
+      ? `${meta.surah.nameAr} (${meta.surah.nameEn}) — صفحة ${meta.canonical.split('/').pop()}`
+      : `صفحة ${meta.canonical.split('/').pop()}`)
+    output = setMetaTag(output, 'name', 'twitter:image', meta.image)
+  }
+
+  const canonicalTag = `<link rel="canonical" href="${escAttr(meta.canonical)}" />`
+  output = /<link rel="canonical"/i.test(output)
+    ? output.replace(/<link rel="canonical"[^>]*>/i, canonicalTag)
+    : output.replace('</head>', `  ${canonicalTag}\n</head>`)
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url: meta.canonical,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: 'ar',
+    isPartOf: { '@id': 'https://qurancomplex.ly/#website' },
+    ...(meta.image ? {
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        contentUrl: meta.image,
+        name: meta.surah ? `${meta.surah.nameAr} (${meta.surah.nameEn})` : `صفحة ${meta.canonical.split('/').pop()}`,
+      },
+    } : {}),
+    publisher: { '@type': 'Organization', name: 'مجمع القرآن الرقمي — مشروع مستقل' },
+  }
+  const script = `<script type="application/ld+json" id="qurancomplex-deep-link-schema">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>`
+  return output.replace('</head>', `  ${script}\n</head>`)
+}
+
+/**
+ * أسماء الصور في روابط المشاركة والخرائط نصّية (مثلاً al-ankabut-page-441.webp)
+ * لكن الملفات على القرص مرقّمة (0441.webp). نترجم الاسم هنا بلا إعادة تسمية 13,411 ملفاً.
+ */
+function readerImagePath(pathname) {
+  const match = pathname.match(/^\/images\/([a-z0-9-]+)\/([a-z0-9-]+-page-[0-9]+)\.webp$/)
+  if (!match || !EDITION_IDS.has(match[1])) return pathname
+  const page = Number(match[2].slice(match[2].lastIndexOf('-page-') + 6))
+  if (!Number.isFinite(page) || page < 1) return pathname
+  return `/images/${match[1]}/${String(page).padStart(4, '0')}.webp`
 }
 
 /** تمرير ملف ثابت من مبنى القارئ (حيث وُلد) إلى النطاق الرئيسي */
@@ -1034,7 +1142,7 @@ export default {
     const pageAlias = pageSeoAlias(url.pathname, mushaf)
     const seoPath = SEO_ALIASES[url.pathname] ?? pageAlias ?? url.pathname
     if (!mushaf && (SEO_FILES.has(seoPath) || AI_FILES.has(url.pathname) || isGeneratedSeoFile(seoPath) || url.pathname.startsWith('/images/'))) {
-      return serveReaderFile(env, url.pathname.startsWith('/images/') ? url.pathname : seoPath)
+      return serveReaderFile(env, url.pathname.startsWith('/images/') ? readerImagePath(url.pathname) : seoPath)
     }
 
     if (mushaf) {
@@ -1042,7 +1150,8 @@ export default {
       if (pageAlias) return serveReaderFile(env, pageAlias)
 
       const base = new URL(env.READER_BASE || DEFAULT_READER_BASE)
-      const relativePath = url.pathname.replace(/^\/+/, '')
+      // حتى على النطاق الفرعي، روابط الصور النصية تُترجم إلى الملف المرقّم على القرص
+  const relativePath = readerImagePath(url.pathname).replace(/^\/+/, '')
       const target = new URL(relativePath + url.search, base)
 
       // الملفات المجزّأة تُخزَّن طويلاً؛ HTML يُحدَّث دائماً حتى تظهر البنية الجديدة فوراً.
@@ -1056,6 +1165,9 @@ export default {
       })
 
       const headers = new Headers(response.headers)
+      const dot = url.pathname.lastIndexOf('.')
+      const contentType = SEO_CONTENT_TYPES[dot === -1 ? '' : url.pathname.slice(dot)]
+      if (contentType) headers.set('Content-Type', contentType)
       headers.set('X-Content-Type-Options', 'nosniff')
       headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
       headers.set('X-QC-Router', ROUTER_VERSION)
@@ -1064,7 +1176,13 @@ export default {
       if (!isStaticFile && url.pathname === '/') {
         headers.set('Cache-Control', 'no-store')
         headers.delete('content-length')
-        const html = localizeReaderHtml(await response.text(), mushaf, hostname)
+        let html = localizeReaderHtml(await response.text(), mushaf, hostname)
+        // رابط عميق باستعلام صفحة: بياناته المستقلة تُر حقناً قبل تشغيل JavaScript
+        const requestedPage = Number(url.searchParams.get('page'))
+        if (Number.isFinite(requestedPage) && requestedPage > 0) {
+          const meta = await pageMetaFor(env, mushaf, Math.trunc(requestedPage))
+          if (meta) html = applyPageMeta(html, meta)
+        }
         return new Response(html, { status: response.status, statusText: response.statusText, headers })
       }
 
