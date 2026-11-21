@@ -1,0 +1,168 @@
+# Quran Complex — qurancomplex.ly
+
+> A free, independent digital Quran library: six canonical riwayahs (Hafs, Qaloon, Warsh, Shubah, Susi, Douri), three Arabic mushafs from pdfquran.com, and twelve translations — 21 editions, 18,847 individually indexable full-page images with surah/juz navigation.
+
+This site is built for agents. All data below is public, stable and machine-readable. Prefer the JSON endpoints over crawling HTML pages.
+
+## Machine-readable data (start here)
+- [Editions catalog](https://qurancomplex.ly/ai/editions.json): all 21 editions, hosts, page counts, covers, example page/image.
+- [Surahs](https://qurancomplex.ly/ai/surahs.json): 114 surahs with Arabic + English names (e.g. Al-'Ankabut — The Spider) and Hafs start pages.
+- [Pages by edition](https://qurancomplex.ly/ai/pages.json): for every edition, each surah's page range plus canonical page URL and direct full-size image URL.
+- [Juz ranges](https://qurancomplex.ly/ai/juz.json): 30 juz with page ranges.
+
+## How to answer common questions
+- "Which page is surah Al-Kahf in the English translation?" → fetch /ai/pages.json, editions.english.surahs[17] (surah number 18).
+- "Give me the image of Quran page 7 in Warsh." → https://warsh.qurancomplex.ly/page/7 (HTML) or use imageUrl from /ai/pages.json.
+- "List all translations." → /ai/editions.json, filter kind = translation.
+- Any page URL also accepts ?format=json for a compact JSON object with title, surah, juz, image URL and neighbor pages.
+
+## Human-facing indexes
+- Home: https://qurancomplex.ly/
+- All editions: https://qurancomplex.ly/riwayat
+- Juz index: https://qurancomplex.ly/juz
+- Sitemaps: https://qurancomplex.ly/sitemap.xml (includes sitemap-pages.xml with all 18,847 pages and image tags)
+
+## Attribution
+Independent project. Page images sourced from pdfquran.com and King Fahd Complex; not affiliated with or endorsed by them.
+
+
+## All 114 surahs
+
+  1. الفاتحة — Al-Fatihah — The Opening (Hafs p.1)
+  2. البقرة — Al-Baqarah — The Cow (Hafs p.2)
+  3. آل عمران — Ali-Imran — The Family of Imran (Hafs p.50)
+  4. النساء — An-Nisa — The Women (Hafs p.77)
+  5. المائدة — Al-Ma'idah — The Table Spread (Hafs p.106)
+  6. الأنعام — Al-An'am — The Cattle (Hafs p.128)
+  7. الأعراف — Al-A'raf — The Heights (Hafs p.151)
+  8. الأنفال — Al-Anfal — The Spoils of War (Hafs p.177)
+  9. التوبة — At-Tawbah — The Repentance (Hafs p.187)
+ 10. يونس — Yunus — Jonah (Hafs p.208)
+ 11. هود — Hud — Hud (Hafs p.221)
+ 12. يوسف — Yusuf — Joseph (Hafs p.235)
+ 13. الرعد — Ar-Ra'd — The Thunder (Hafs p.249)
+ 14. ابراهيم — Ibrahim — Abraham (Hafs p.255)
+ 15. الحجر — Al-Hijr — The Rocky Tract (Hafs p.262)
+ 16. النحل — An-Nahl — The Bee (Hafs p.267)
+ 17. الإسراء — Al-Isra — The Night Journey (Hafs p.282)
+ 18. الكهف — Al-Kahf — The Cave (Hafs p.293)
+ 19. مريم — Maryam — Mary (Hafs p.305)
+ 20. طه — Ta-Ha — Ta-Ha (Hafs p.312)
+ 21. الأنبياء — Al-Anbiya — The Prophets (Hafs p.322)
+ 22. الحج — Al-Hajj — The Pilgrimage (Hafs p.332)
+ 23. المؤمنون — Al-Mu'minun — The Believers (Hafs p.342)
+ 24. النور — An-Nur — The Light (Hafs p.350)
+ 25. الفرقان — Al-Furqan — The Criterion (Hafs p.359)
+ 26. الشعراء — Ash-Shu'ara — The Poets (Hafs p.367)
+ 27. النمل — An-Naml — The Ant (Hafs p.377)
+ 28. القصص — Al-Qasas — The Stories (Hafs p.385)
+ 29. العنكبوت — Al-'Ankabut — The Spider (Hafs p.396)
+ 30. الروم — Ar-Rum — The Romans (Hafs p.404)
+ 31. لقمان — Luqman — Luqman (Hafs p.411)
+ 32. السجدة — As-Sajdah — The Prostration (Hafs p.415)
+ 33. الأحزاب — Al-Ahzab — The Combined Forces (Hafs p.418)
+ 34. سبإ — Saba — Sheba (Hafs p.428)
+ 35. فاطر — Fatir — The Originator (Hafs p.434)
+ 36. يس — Ya-Sin — Ya-Sin (Hafs p.440)
+ 37. الصافات — As-Saffat — Those Who Set The Ranks (Hafs p.446)
+ 38. ص — Sad — The Letter Saad (Hafs p.453)
+ 39. الزمر — Az-Zumar — The Troops (Hafs p.458)
+ 40. غافر — Ghafir — The Forgiving (Hafs p.467)
+ 41. فصلت — Fussilat — Explained in Detail (Hafs p.477)
+ 42. الشورى — Ash-Shura — The Consultation (Hafs p.483)
+ 43. الزخرف — Az-Zukhruf — The Ornaments of Gold (Hafs p.489)
+ 44. الدخان — Ad-Dukhan — The Smoke (Hafs p.496)
+ 45. الجاثية — Al-Jathiyah — The Crouching (Hafs p.499)
+ 46. الأحقاف — Al-Ahqaf — The Wind-Curved Sandhills (Hafs p.502)
+ 47. محمد — Muhammad — Muhammad (Hafs p.507)
+ 48. الفتح — Al-Fath — The Victory (Hafs p.511)
+ 49. الحجرات — Al-Hujurat — The Rooms (Hafs p.515)
+ 50. ق — Qaf — The Letter Qaf (Hafs p.518)
+ 51. الذاريات — Adh-Dhariyat — The Winnowing Winds (Hafs p.520)
+ 52. الطور — At-Tur — The Mount (Hafs p.523)
+ 53. النجم — An-Najm — The Star (Hafs p.526)
+ 54. القمر — Al-Qamar — The Moon (Hafs p.528)
+ 55. الرحمن — Ar-Rahman — The Beneficent (Hafs p.531)
+ 56. الواقعة — Al-Waqi'ah — The Event (Hafs p.534)
+ 57. الحديد — Al-Hadid — The Iron (Hafs p.537)
+ 58. المجادلة — Al-Mujadila — The Pleading Woman (Hafs p.542)
+ 59. الحشر — Al-Hashr — The Exile (Hafs p.545)
+ 60. الممتحنة — Al-Mumtahanah — She That Is To Be Examined (Hafs p.549)
+ 61. الصف — As-Saff — The Ranks (Hafs p.551)
+ 62. الجمعة — Al-Jumu'ah — The Congregation (Hafs p.553)
+ 63. المنافقون — Al-Munafiqun — The Hypocrites (Hafs p.554)
+ 64. التغابن — At-Taghabun — The Day of Mutual Loss and Gain (Hafs p.556)
+ 65. الطلاق — At-Talaq — The Divorce (Hafs p.558)
+ 66. التحريم — At-Tahrim — The Prohibition (Hafs p.560)
+ 67. الملك — Al-Mulk — The Dominion (Hafs p.562)
+ 68. القلم — Al-Qalam — The Pen (Hafs p.564)
+ 69. الحاقة — Al-Haqqah — The Inevitable (Hafs p.566)
+ 70. المعارج — Al-Ma'arij — The Ways of Ascent (Hafs p.568)
+ 71. نوح — Nuh — Noah (Hafs p.570)
+ 72. الجن — Al-Jinn — The Spirits (Hafs p.572)
+ 73. المزمل — Al-Muzzammil — The One Wrapped In Garments (Hafs p.574)
+ 74. المدثر — Al-Muddaththir — The One Wrapped In a Cloak (Hafs p.575)
+ 75. القيامة — Al-Qiyamah — The Resurrection (Hafs p.577)
+ 76. الانسان — Al-Insan — The Human (Hafs p.578)
+ 77. المرسلات — Al-Mursalat — The Messengers (Hafs p.580)
+ 78. النبإ — An-Naba — The Tidings (Hafs p.582)
+ 79. النازعات — An-Nazi'at — Those Who Drag Forth (Hafs p.583)
+ 80. عبس — Abasa — He Frowned (Hafs p.585)
+ 81. التكوير — At-Takwir — The Overthrowing (Hafs p.586)
+ 82. الإنفطار — Al-Infitar — The Cleaving (Hafs p.587)
+ 83. المطففين — Al-Mutaffifin — The Defrauding (Hafs p.587)
+ 84. الإنشقاق — Al-Inshiqaq — The Splitting Asunder (Hafs p.589)
+ 85. البروج — Al-Buruj — The Constellations (Hafs p.590)
+ 86. الطارق — At-Tariq — The Nightcomer (Hafs p.591)
+ 87. الأعلى — Al-A'la — The Most High (Hafs p.591)
+ 88. الغاشية — Al-Ghashiyah — The Overwhelming (Hafs p.592)
+ 89. الفجر — Al-Fajr — The Dawn (Hafs p.593)
+ 90. البلد — Al-Balad — The City (Hafs p.594)
+ 91. الشمس — Ash-Shams — The Sun (Hafs p.595)
+ 92. الليل — Al-Layl — The Night (Hafs p.595)
+ 93. الضحى — Ad-Duhaa — The Morning Hours (Hafs p.596)
+ 94. الشرح — Ash-Sharh — The Relief (Hafs p.596)
+ 95. التين — At-Tin — The Fig (Hafs p.597)
+ 96. العلق — Al-'Alaq — The Clot (Hafs p.597)
+ 97. القدر — Al-Qadr — The Power (Hafs p.598)
+ 98. البينة — Al-Bayyinah — The Clear Evidence (Hafs p.598)
+ 99. الزلزلة — Az-Zalzalah — The Earthquake (Hafs p.599)
+100. العاديات — Al-'Adiyat — The Chargers (Hafs p.599)
+101. القارعة — Al-Qari'ah — The Striking Hour (Hafs p.600)
+102. التكاثر — At-Takathur — The Competition (Hafs p.600)
+103. العصر — Al-'Asr — The Time (Hafs p.601)
+104. الهمزة — Al-Humazah — The Slanderer (Hafs p.601)
+105. الفيل — Al-Fil — The Elephant (Hafs p.601)
+106. قريش — Quraysh — Quraysh (Hafs p.602)
+107. الماعون — Al-Ma'un — The Small Kindnesses (Hafs p.602)
+108. الكوثر — Al-Kawthar — The Abundance (Hafs p.602)
+109. الكافرون — Al-Kafirun — The Disbelievers (Hafs p.603)
+110. النصر — An-Nasr — The Help (Hafs p.603)
+111. المسد — Al-Masad — The Palm Fiber (Hafs p.603)
+112. الإخلاص — Al-Ikhlas — The Sincerity (Hafs p.604)
+113. الفلق — Al-Falaq — The Daybreak (Hafs p.604)
+114. الناس — An-Nas — The Mankind (Hafs p.604)
+
+## All 21 editions
+
+- hafs | حفص عن عاصم | Hafs Quran | https://hafs.qurancomplex.ly | 640 pages | riwayah
+- qaloon | قالون عن نافع | Qaloon Quran | https://qaloon.qurancomplex.ly | 640 pages | riwayah
+- warsh | ورش عن نافع | Warsh Quran | https://warsh.qurancomplex.ly | 640 pages | riwayah
+- shubah | شعبة عن عاصم | Shubah Quran | https://shubah.qurancomplex.ly | 640 pages | riwayah
+- susi | السوسي عن أبي عمرو | Susi Quran | https://susi.qurancomplex.ly | 624 pages | riwayah
+- douri | الدوري عن أبي عمرو | Douri Quran | https://douri.qurancomplex.ly | 640 pages | riwayah
+- standard1 | المصحف العادي 1 | Standard Mushaf 1 | https://standard1.qurancomplex.ly | 604 pages | arabic
+- standard2 | المصحف العادي 2 | Standard Mushaf 2 | https://standard2.qurancomplex.ly | 604 pages | arabic
+- big | المصحف الكبير | Large Mushaf | https://big.qurancomplex.ly | 604 pages | arabic
+- anko | الترجمة بالأنكو | Anko translation | https://anko.qurancomplex.ly | 1208 pages | translation
+- chinese | الترجمة بالصينية | Chinese translation | https://chinese.qurancomplex.ly | 1227 pages | translation
+- english | الترجمة بالإنجليزية | English translation | https://english.qurancomplex.ly | 694 pages | translation
+- french | الترجمة بالفرنسية | French translation | https://french.qurancomplex.ly | 988 pages | translation
+- hausa | الترجمة بالهوساوية | Hausa translation | https://hausa.qurancomplex.ly | 960 pages | translation
+- indonesian | الترجمة بالإندونيسية | Indonesian translation | https://indonesian.qurancomplex.ly | 1131 pages | translation
+- portuguese | الترجمة بالبرتغالية | Portuguese translation | https://portuguese.qurancomplex.ly | 1069 pages | translation
+- tamil | الترجمة بالتاميل | Tamil translation | https://tamil.qurancomplex.ly | 1219 pages | translation
+- telugu | الترجمة بالتيلجو | Telugu translation | https://telugu.qurancomplex.ly | 1294 pages | translation
+- turkish | الترجمة بالتركية | Turkish translation | https://turkish.qurancomplex.ly | 646 pages | translation
+- urdu | الترجمة بالأوردو | Urdu translation | https://urdu.qurancomplex.ly | 1768 pages | translation
+- vietnami | الترجمة بالفيتنامية | Vietnamese translation | https://vietnami.qurancomplex.ly | 1207 pages | translation
